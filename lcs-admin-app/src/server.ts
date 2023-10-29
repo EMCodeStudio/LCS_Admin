@@ -1,6 +1,6 @@
 import express from 'express'
 import payload from 'payload'
-
+import path from 'path'
 require('dotenv').config()
 const app = express()
 
@@ -20,6 +20,7 @@ const start = async () => {
   })
 
   // Add your own express routes here
+  app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 
   app.listen(3000)
 }

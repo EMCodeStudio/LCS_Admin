@@ -11,10 +11,23 @@ import Categories from './collections/Categories'
 import Subcategories from './collections/Subcategories'
 import Images from './collections/Images'
 
+import Logo from './components/Logo/Logo'
+import Icon from './components/Logo/Icon'
+
 export default buildConfig({
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
+    meta:{
+      titleSuffix: 'LCSoluciones',
+      favicon: '/assets/Icons/Favicon.ico',
+    },
+    components: {
+      graphics: {
+        Logo,
+        Icon
+      }
+    },
   },
   editor: slateEditor({}),
   collections: [
@@ -23,9 +36,10 @@ export default buildConfig({
     Categories,
     Users
   ],
-  localization:{
-    defaultLocale:'es',
-    locales:['es']
+ 
+  localization: {
+    defaultLocale: 'es',
+    locales: ['es']
   },
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
@@ -37,5 +51,5 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
   }),
-  
+
 })
