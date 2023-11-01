@@ -8,7 +8,7 @@ const Categories: CollectionConfig = {
     admin: {
         useAsTitle: 'Categoria',
         defaultColumns: ['Categoria', 'EstadoCategoria'],
-        group: 'CONTENIDO'
+        group: 'INVENTARIO'
     },
     labels: {
         plural: 'Categorias',

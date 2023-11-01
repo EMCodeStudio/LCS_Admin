@@ -21,10 +21,42 @@
 # add assets directory to server.ts 
 - app.use('/assets', express.static(path.resolve(__dirname, './assets')));
 
+
+# Modules 
+
+
+
+## VENTAS
+- Clients
+- Orders
+- Reviews
+
+## CONTENIDO
+- Images *
+- Tags
+- Publications
+
+## INVENTARIO
+- Products *
+- Services *
+- Subcategories *
+- Categories *
+
+## SISTEMA 
+- Users *
+- Empresa 
+
+
+
+
+
 # Commands
 - cd lcs-admin-app
 - npm run dev 
 - npm run build
 - npm run start 
+- http://localhost:3000/admin/login
+
+
 
 

@@ -9,7 +9,7 @@ const Subcategories: CollectionConfig =  {
     admin: {
         useAsTitle: 'Subcategoria',
         defaultColumns: ['Subcategoria'],
-        group: 'CONTENIDO'
+        group: 'INVENTARIO'
     },
     labels: {
         singular: 'Subcategoria',
