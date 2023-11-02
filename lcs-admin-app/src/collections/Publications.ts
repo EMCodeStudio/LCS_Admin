@@ -22,7 +22,11 @@ const Publications: CollectionConfig = {
             name: 'Titulo',
             label: 'Titulo Publicacion',
             type: 'text',
-            required: true
+            required: true,
+            admin:{
+                width:'70%'
+            }
+
         },
         {
             name: "TipoVenta", // required
@@ -57,7 +61,8 @@ const Publications: CollectionConfig = {
                     } else {
                         return false
                     }
-                }
+                },
+                width:'70%'
             },
         },
         {
@@ -73,7 +78,8 @@ const Publications: CollectionConfig = {
                     } else {
                         return false
                     }
-                }
+                },
+                width:'70%'
             }
         },
         {
@@ -99,11 +105,11 @@ const Publications: CollectionConfig = {
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {
-                    label: "Publica",
+                    label: "Disponible",
                     value: "published",
                 },
                 {
-                    label: "No Publica",
+                    label: "No Disponible",
                     value: "draft",
                 },
             ],
