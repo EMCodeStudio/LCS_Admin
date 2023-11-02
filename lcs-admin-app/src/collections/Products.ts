@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Codigo', 'Precio', 'Cantidad', 'Imagen', 'EstadoProducto'],
+        defaultColumns: ['Producto', 'Modelo', 'Codigo', 'Precio', 'Cantidad', 'Imagen', 'EstadoProducto', 'FechaIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -16,17 +16,25 @@ const Products: CollectionConfig = {
         plural: 'Productos',
     },
     fields: [
-
+        {
+            name: 'Producto',
+            label: 'Nombre Producto',
+            type: 'text',
+            required: true,
+            admin: {
+                width: '50%'
+            }
+        },
         {
             type: 'row',
-            fields:[
+            fields: [
                 {
-                    name: 'Producto',
-                    label: 'Nombre Producto',
+                    name: 'Modelo',
+                    label: 'Modelo Producto',
                     type: 'text',
                     required: true,
-                    admin:{
-                        width:'60%'
+                    admin: {
+                        width: '50%'
                     }
                 },
                 {
@@ -34,8 +42,8 @@ const Products: CollectionConfig = {
                     label: 'Codigo Producto',
                     type: 'text',
                     required: true,
-                    admin:{
-                        width:'40%',
+                    admin: {
+                        width: '50%',
                         placeholder: 'SKU'
 
                     }
@@ -54,7 +62,7 @@ const Products: CollectionConfig = {
                     admin: {
                         step: 1,
                         placeholder: '0',
-                        width: '60%'
+                        width: '50%'
                     }
                 },
                 {
@@ -65,17 +73,35 @@ const Products: CollectionConfig = {
                     admin: {
                         step: 1,
                         placeholder: '0',
-                        width: '40%'
+                        width: '50%'
                     }
                 },
             ]
         },
         {
-            name: "Imagen", // required
-            label: "Imagen Producto",
-            type: 'upload', // required
-            relationTo: 'imagenes', //required eg:users
-            required: true
+            name: 'Imagenes',
+            type: 'array',
+            minRows: 1,
+            maxRows: 5,
+            fields: [
+                {
+                    name: "Imagen", // required
+                    label: "Imagen Producto",
+                    type: 'upload', // required
+                    relationTo: 'imagenes', //required eg:users
+                    required: true,
+                    hooks: {
+                        beforeValidate: [
+                            (req): void => {
+                                const image = req.data
+                                if (image && image.width < 720) {
+                                    throw new Error('La Imagen debe ser Igual o Mayor a 720px de Ancho')
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
         },
         {
             name: "EstadoProducto", // required
@@ -97,6 +123,19 @@ const Products: CollectionConfig = {
                 position: 'sidebar'
             }
         },
+        {
+            name: "FechaIngreso", // required
+            type: "date", // required
+            label: "Fecha de Ingreso",
+            //defaultValue: '1988-11-05T8:00:00.000+05:00',
+            admin: {
+                date: {
+                    //Options: dayAndTime, timeOnly, dayOnly
+                    pickerAppearance: 'dayAndTime',
+                },
+                position: "sidebar"
+            }
+        }
     ],
 
     timestamps: true,

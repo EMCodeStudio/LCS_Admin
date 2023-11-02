@@ -24,17 +24,17 @@
 
 # Modules 
 
-
-
 ## VENTAS
 - Clients
 - Orders
 - Reviews
+- Quotes
 
 ## CONTENIDO
 - Images *
-- Tags
-- Publications
+- Tags *
+- Publications *
+- Portraits
 
 ## INVENTARIO
 - Products *
@@ -45,9 +45,6 @@
 ## SISTEMA 
 - Users *
 - Empresa 
-
-
-
 
 
 # Commands

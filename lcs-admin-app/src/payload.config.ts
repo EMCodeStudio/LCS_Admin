@@ -15,6 +15,8 @@ import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
 import Products from './collections/Products'
 import Services from './collections/Services'
+import Tags from './collections/Tags'
+import Publications from './collections/Publications'
 
 export default buildConfig({
   admin: {
@@ -33,6 +35,8 @@ export default buildConfig({
   },
   editor: slateEditor({}),
   collections: [
+    Publications,
+    Tags,
     Images,
     Categories,
     Subcategories,
