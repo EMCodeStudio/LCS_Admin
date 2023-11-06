@@ -94,8 +94,8 @@ const Products: CollectionConfig = {
                         beforeValidate: [
                             (req): void => {
                                 const image = req.data
-                                if (image && image.width < 720) {
-                                    throw new Error('La Imagen debe ser Igual o Mayor a 720px de Ancho')
+                                if (image && image.width < 420) {
+                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
                                 }
                             }
                         ]

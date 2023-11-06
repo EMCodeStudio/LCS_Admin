@@ -17,6 +17,7 @@ import Products from './collections/Products'
 import Services from './collections/Services'
 import Tags from './collections/Tags'
 import Publications from './collections/Publications'
+import Portraits from './collections/Portraits'
 
 export default buildConfig({
   admin: {
@@ -37,6 +38,7 @@ export default buildConfig({
   collections: [
     Publications,
     Tags,
+    Portraits,
     Images,
     Categories,
     Subcategories,

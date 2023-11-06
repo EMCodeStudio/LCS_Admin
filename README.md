@@ -34,7 +34,7 @@
 - Images *
 - Tags *
 - Publications *
-- Portraits
+- Portraits*
 
 ## INVENTARIO
 - Products *
