@@ -18,11 +18,15 @@ const Categories: CollectionConfig = {
         {
             name: "Categoria", // required
             type: "text", // required
-            label: "Nombre Categoria",
+            label: "Nombre de Categoria",
             required: true,
+            admin:{
+              placeholder: "Nombre de Categoria aqui",
+            }
         },
         {
-          name: "EstadoCategoria", // required
+          name: "Estado", // required
+          label: "Estado de Categoria",
           type: "select", // required
           hasMany: false, /// set to true if you want to select multiple
           options: [

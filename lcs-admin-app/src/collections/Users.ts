@@ -20,6 +20,9 @@ const Users: CollectionConfig = {
       type: "text", // required
       label: "Nombre de Usuario",
       required: false,
+      admin: {
+        placeholder: 'Nombre de Usuario aqui'
+      }
     },
   ],
   timestamps: true

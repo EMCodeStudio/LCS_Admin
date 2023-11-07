@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Codigo', 'Precio', 'Cantidad', 'Imagen', 'EstadoProducto', 'FechaIngreso'],
+        defaultColumns: ['Producto', 'Modelo', 'Codigo', 'Precio', 'Cantidad', 'Imagenes', 'Estado', 'FechaIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -18,11 +18,12 @@ const Products: CollectionConfig = {
     fields: [
         {
             name: 'Producto',
-            label: 'Nombre Producto',
+            label: 'Nombre del Producto',
             type: 'text',
             required: true,
             admin: {
-                width: '50%'
+                width: '50%',
+                placeholder:'Nombre de Producto aqui'
             }
         },
         {
@@ -30,16 +31,17 @@ const Products: CollectionConfig = {
             fields: [
                 {
                     name: 'Modelo',
-                    label: 'Modelo Producto',
+                    label: 'Modelo del Producto',
                     type: 'text',
                     required: true,
                     admin: {
-                        width: '50%'
+                        width: '50%',
+                        placeholder:'Modelo aqui'
                     }
                 },
                 {
                     name: 'Codigo',
-                    label: 'Codigo Producto',
+                    label: 'Codigo del Producto',
                     type: 'text',
                     required: true,
                     admin: {
@@ -56,7 +58,7 @@ const Products: CollectionConfig = {
             fields: [
                 {
                     name: "Precio", // required
-                    label: "Precio Producto",
+                    label: "Precio del Producto",
                     type: "number", // required
                     required: true,
                     admin: {
@@ -81,12 +83,13 @@ const Products: CollectionConfig = {
         {
             name: 'Imagenes',
             type: 'array',
+            label:'Ingrese Imagenes de minimo 420px',
             minRows: 1,
             maxRows: 5,
             fields: [
                 {
                     name: "Imagen", // required
-                    label: "Imagen Producto",
+                    label: "Imagen de Producto",
                     type: 'upload', // required
                     relationTo: 'imagenes', //required eg:users
                     required: true,
@@ -104,8 +107,9 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "EstadoProducto", // required
+            name: "Estado", // required
             type: "select", // required
+            label: "Estado de Producto",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

@@ -9,74 +9,104 @@ const Company: CollectionConfig = {
         delete: () => true,
     },
     admin: {
-        useAsTitle: 'Nombre',
-        group:'SISTEMA'
+        useAsTitle: 'Empresa',
+        defaultColumns: ['Empresa', 'Direccion', 'Numero', 'Correo', 'Slogan', 'Nosotros', 'Facebook', 'Ubicacion'],
+        group: 'SISTEMA'
     },
     labels: {
         singular: 'Empresa',
+        plural: 'Empresas',
     },
     fields: [
         {
             type: 'tabs',
             tabs: [
                 {
-                    label: 'Datos',
-                    description: 'Informacion de la Empresa',
+                    label: 'Datos Empresariales',
+                    description: 'Rellene los siguientes Campos',
                     fields: [
                         {
-                            name: "Nombre", // required
+                            name: "Empresa", // required
                             type: "text", // required
                             label: "Nombre de la Empresa",
                             required: true,
+                            admin: {
+                                placeholder: "Nombre de la Empresa aqui",
+                            }
                         },
                         {
                             name: "Direccion", // required
                             type: "text", // required
                             label: "Direccion de la Empresa",
                             required: true,
+                            admin: {
+                                placeholder: "Datos de Direccion aqui",
+                            }
                         },
                         {
                             name: "Numero", // required
                             type: "number", // required
                             label: "Numero Celular de la Empresa",
                             required: true,
+                            admin: {
+                                placeholder: "Numero Celular aqui",
+                            }
                         },
                         {
                             name: "Correo", // required
                             type: "email", // required
-                            label: "Correo de la Empresa",
+                            label: "Correo Electronico de la Empresa",
                             required: true,
+                            admin: {
+                                placeholder: "Correo Electronico aqui",
+                            }
                         },
                     ]
                 },
                 {
-                    label: 'Web',
-                    description: 'Informacion de Adicional',
+                    label: 'Informacion de Adicional',
+                    description: 'Rellene los siguientes Campos',
                     fields: [
                         {
                             name: "Slogan", // required
                             type: "text", // required
                             label: "Lema de la Empresa",
                             required: false,
+                            admin: {
+                                placeholder: "Correo Electronico aqui",
+                            }
                         },
                         {
-                            name: "Acerca", // required
+                            name: "Nosotros", // required
                             type: "textarea", // required
                             label: "Acerca la Empresa",
                             required: false,
+                            admin: {
+                                placeholder: "Descripcion de la Empresa aqui",
+                            }
                         },
                         {
                             name: "Facebook", // required
                             type: "text", // required
                             label: "Facebook de la Empresa",
                             required: false,
+                            admin: {
+                                placeholder: "Link de Red Social aqui",
+                            }
                         },
-
                     ]
                 }
             ]
-        }
-
+        },
+        {
+            name: "Ubicacion", // required
+            type: "point", // required
+            label: "Ubicacion en el Mapa",
+            required: false,
+            admin: {
+                position: 'sidebar'
+            }
+        },
     ],
     timestamps: true,
 };

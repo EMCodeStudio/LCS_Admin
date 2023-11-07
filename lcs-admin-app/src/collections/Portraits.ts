@@ -7,7 +7,8 @@ const Portraits: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Portada',
-
+        defaultColumns: ['Portada', 'Imagen', 'Estado'],
+        group: 'CONTENIDO'
     },
     labels: {
         singular: 'Portada',
@@ -20,14 +21,16 @@ const Portraits: CollectionConfig = {
             type: "text", // required
             label: "Nombre de Portada",
             required: true,
+            admin: {
+                placeholder: 'Nombre de Portada aqui'
+            }
         },
         {
-            name: 'ImagenPortada',
+            name: 'Imagen',
             label: 'Imagen de Portada',
             type: 'upload',
             relationTo: 'imagenes',
             hooks: {
-
                 beforeValidate: [
                     (req): void => {
                         const image = req.data
@@ -38,11 +41,11 @@ const Portraits: CollectionConfig = {
                     }
                 ]
             }
-
         },
         {
-            name: "EstadoPortada", // required
+            name: "Estado", // required
             type: "select", // required
+            label: "Estado de Portada",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

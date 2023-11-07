@@ -8,7 +8,7 @@ const Subcategories: CollectionConfig =  {
     },
     admin: {
         useAsTitle: 'Subcategoria',
-        defaultColumns: ['Subcategoria'],
+        defaultColumns: ['Subcategoria','Categoria','Estado'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -22,18 +22,22 @@ const Subcategories: CollectionConfig =  {
             label: 'Nombre Subcategoria',
             type: 'text',
             required: true,
+            admin:{
+                placeholder: 'Nombre de Subcategoria aqui'
+            }
         },
         {
           name: "Categoria", // required
-          label: "Selecione Categoria",
+          label: "Nombre de Categoria",
           type: 'relationship', // required
           relationTo:'categorias', //required eg:users
           hasMany: false,
           required: false
         },
         {
-            name: "EstadoSubcategoria", // required
+            name: "Estado", // required
             type: "select", // required
+            label:"Estado de Subcategoria",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

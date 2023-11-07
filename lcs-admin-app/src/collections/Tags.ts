@@ -7,7 +7,7 @@ const Tags: CollectionConfig =  {
     },
     admin: {
         useAsTitle: 'Etiqueta',
-        defaultColumns:['Etiqueta','EstadoEtiqueta'],
+        defaultColumns:['Etiqueta','Estado'],
         group: 'CONTENIDO'
     },
    labels: {
@@ -18,12 +18,17 @@ const Tags: CollectionConfig =  {
         //example text field
         {
             name: 'Etiqueta',
-            label: 'Nombre Etiqueta',
+            label: 'Nombre de Etiqueta',
             type: 'text',
+            required:true,
+            admin:{
+                placeholder:'Nombre de Etiqueta aqui'
+            }
         },
         {
-            name: "EstadoEtiqueta", // required
+            name: "Estado", // required
             type: "select", // required
+            label:'Estado de Etiqueta',
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

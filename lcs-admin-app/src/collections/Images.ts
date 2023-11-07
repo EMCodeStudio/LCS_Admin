@@ -4,13 +4,23 @@ const Images: CollectionConfig = {
     slug: 'imagenes',
     admin: {
         useAsTitle: 'Imagen',
-        defaultColumns: ['Imagen', 'EstadoImagen'],
+        defaultColumns: ['Imagen', 'Estado'],
         group: 'CONTENIDO'
+    },
+    labels: {
+        singular: 'Imagen',
+        plural: 'Imagenes',
     },
     upload: {
         staticURL: '/media',
         staticDir: 'media',
         imageSizes: [
+            /* {
+                name: 'Card',
+                width: 400,
+                height: 300,
+                position: 'centre',
+            }, */
             {
                 name: 'Tablet',
                 width: 1024,
@@ -22,25 +32,26 @@ const Images: CollectionConfig = {
                 position: 'centre',
             },
         ],
-        //adminThumbnail: 'Original',
+        //adminThumbnail: 'Card',
         mimeTypes: ['image/*'],
-        crop: true,
+        crop: false,
         focalPoint: true
-    },
-    labels: {
-        singular: 'Imagen',
-        plural: 'Imagenes',
     },
     fields: [
         //example text field
         {
             name: 'Imagen',
-            label: 'Nombre Imagen',
+            label: 'Nombre de Imagen',
             type: 'text',
+            required: true,
+            admin: {
+                placeholder: "Nombre de Imagen aqui",
+            }
         },
         {
-            name: "EstadoImagen", // required
+            name: "Estado", // required
             type: "select", // required
+            label: 'Estado de Imagen',
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

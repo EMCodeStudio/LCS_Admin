@@ -8,7 +8,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Imagenes', 'Descripcion', 'Etiquetas', 'EstadoPublicacion'],
+        defaultColumns: ['Titulo', 'Tipo', 'Producto', 'Servicio', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -16,21 +16,20 @@ const Publications: CollectionConfig = {
         plural: 'Publicaciones',
     },
     fields: [
-
         //example text field
         {
             name: 'Titulo',
-            label: 'Titulo Publicacion',
+            label: 'Titulo de Publicacion',
             type: 'text',
             required: true,
-            admin:{
-                width:'70%'
+            admin: {
+                width: '70%',
+                placeholder: 'Titulo de Publicacion aqui'
             }
-
         },
         {
-            name: "TipoVenta", // required
-            label: "Seleccione Tipo de Venta",
+            name: "Tipo", // required
+            label: "Tipo de Venta",
             type: 'radio', // required
             required: true,
             options: [ // required
@@ -50,7 +49,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "Producto", // required
-            label: "Seleccione un Producto",
+            label: "Nombre de Producto ",
             type: 'relationship', // required
             relationTo: 'productos', //required eg:users
             hasMany: false,
@@ -62,12 +61,12 @@ const Publications: CollectionConfig = {
                         return false
                     }
                 },
-                width:'70%'
+                width: '70%'
             },
         },
         {
             name: "Servicio", // required
-            label: "Seleccione un Servicio",
+            label: "Nombre de Servicio",
             type: 'relationship', // required
             relationTo: 'servicios', //required eg:users
             hasMany: false,
@@ -79,18 +78,18 @@ const Publications: CollectionConfig = {
                         return false
                     }
                 },
-                width:'70%'
+                width: '70%'
             }
         },
         {
             name: "Descripcion", // required
             type: "richText", // required
-            label: "Descripcion Publicacion",
+            label: "Descripcion de Publicacion",
             required: true,
         },
         {
             name: "Etiquetas", // required
-            label: "Agregue Etiquetas",
+            label: "Nombre de Etiquetas",
             type: 'relationship', // required
             relationTo: 'etiquetas', //required eg:users
             hasMany: true,
@@ -100,7 +99,8 @@ const Publications: CollectionConfig = {
             }
         },
         {
-            name: "EstadoPublicacion", // required
+            name: "Estado", // required
+            label: 'Estado de Publicacion',
             type: "select", // required
             hasMany: false, /// set to true if you want to select multiple
             options: [

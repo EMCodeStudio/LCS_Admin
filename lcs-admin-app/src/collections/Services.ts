@@ -7,7 +7,7 @@ const Services: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Servicio',
-        defaultColumns:['Servicio','Imagen','EstadoServicio'],
+        defaultColumns:['Servicio','Imagen','Estado'],
         group:'INVENTARIO'
     },
     labels: {
@@ -18,18 +18,23 @@ const Services: CollectionConfig = {
         //example text field
         {
             name: 'Servicio',
-            label: 'Nombre Servicio',
+            label: 'Nombre del Servicio',
             type: 'text',
+            required:true,
+            admin:{
+                placeholder:'Nombre del Servicio aqui'
+            }
         },
         {
             name: "Imagen", // required
-            label: "Imagen Servicio",
+            label: "Imagen del Servicio",
             type: 'upload', // required
             relationTo: 'imagenes', //required eg:users
             required: true
         },
         {
-            name: "EstadoServicio", // required
+            name: "Estado", // required
+            label:'Estado del Servicio',
             type: "select", // required
             hasMany: false, /// set to true if you want to select multiple
             options: [

@@ -1,24 +1,21 @@
 import path from 'path'
-
 import { payloadCloud } from '@payloadcms/plugin-cloud'
 import { mongooseAdapter } from '@payloadcms/db-mongodb'
 import { webpackBundler } from '@payloadcms/bundler-webpack'
 import { slateEditor } from '@payloadcms/richtext-slate'
 import { buildConfig } from 'payload/config'
-
 import Users from './collections/Users'
 import Categories from './collections/Categories'
 import Subcategories from './collections/Subcategories'
 import Images from './collections/Images'
-
-import Logo from './components/Logo/Logo'
-import Icon from './components/Logo/Icon'
 import Products from './collections/Products'
 import Services from './collections/Services'
 import Tags from './collections/Tags'
 import Publications from './collections/Publications'
 import Portraits from './collections/Portraits'
 import Company from './collections/company'
+import Logo from './components/Logo/Logo'
+import Icon from './components/Logo/Icon'
 
 export default buildConfig({
   admin: {
