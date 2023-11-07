@@ -18,6 +18,7 @@ import Services from './collections/Services'
 import Tags from './collections/Tags'
 import Publications from './collections/Publications'
 import Portraits from './collections/Portraits'
+import Company from './collections/company'
 
 export default buildConfig({
   admin: {
@@ -44,7 +45,8 @@ export default buildConfig({
     Subcategories,
     Products,
     Services,
-    Users
+    Company,
+    Users,
   ],
  
   localization: {
