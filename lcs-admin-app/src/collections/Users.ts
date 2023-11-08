@@ -20,6 +20,7 @@ const Users: CollectionConfig = {
       type: "text", // required
       label: "Nombre de Usuario",
       required: false,
+      unique: true,
       admin: {
         placeholder: 'Nombre de Usuario aqui'
       }

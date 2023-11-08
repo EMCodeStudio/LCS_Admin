@@ -21,6 +21,7 @@ const Services: CollectionConfig = {
             label: 'Nombre del Servicio',
             type: 'text',
             required:true,
+            unique: true,
             admin:{
                 placeholder:'Nombre del Servicio aqui'
             }

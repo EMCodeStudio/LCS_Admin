@@ -10,7 +10,7 @@ const Company: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Empresa',
-        defaultColumns: ['Empresa', 'Direccion', 'Numero', 'Correo', 'Slogan', 'Nosotros', 'Facebook', 'Ubicacion'],
+        defaultColumns: ['Empresa', 'Numero', 'Correo','Direccion', 'Slogan', 'Nosotros','Facebook', 'Ubicacion'],
         group: 'SISTEMA'
     },
     labels: {
@@ -35,30 +35,37 @@ const Company: CollectionConfig = {
                             }
                         },
                         {
+                            type:'row',
+                            fields:[
+                                {
+                                    name: "Numero", // required
+                                    type: "number", // required
+                                    label: "Numero Celular de la Empresa",
+                                    required: true,
+                                    admin: {
+                                        placeholder: "Numero Celular aqui",
+                                        width:'40%'
+                                    }
+                                },
+                                {
+                                    name: "Correo", // required
+                                    type: "email", // required
+                                    label: "Correo Electronico de la Empresa",
+                                    required: true,
+                                    admin: {
+                                        placeholder: "Correo Electronico aqui",
+                                        width:'60%'
+                                    }
+                                },
+                            ]
+                        },
+                        {
                             name: "Direccion", // required
-                            type: "text", // required
+                            type: "textarea", // required
                             label: "Direccion de la Empresa",
                             required: true,
                             admin: {
                                 placeholder: "Datos de Direccion aqui",
-                            }
-                        },
-                        {
-                            name: "Numero", // required
-                            type: "number", // required
-                            label: "Numero Celular de la Empresa",
-                            required: true,
-                            admin: {
-                                placeholder: "Numero Celular aqui",
-                            }
-                        },
-                        {
-                            name: "Correo", // required
-                            type: "email", // required
-                            label: "Correo Electronico de la Empresa",
-                            required: true,
-                            admin: {
-                                placeholder: "Correo Electronico aqui",
                             }
                         },
                     ]

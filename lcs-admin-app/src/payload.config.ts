@@ -13,7 +13,7 @@ import Services from './collections/Services'
 import Tags from './collections/Tags'
 import Publications from './collections/Publications'
 import Portraits from './collections/Portraits'
-import Company from './collections/company'
+import Company from './collections/Company'
 import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
 

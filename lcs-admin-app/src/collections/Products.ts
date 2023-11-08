@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Codigo', 'Precio', 'Cantidad', 'Imagenes', 'Estado', 'FechaIngreso'],
+        defaultColumns: ['Producto', 'Modelo', 'Codigo', 'Precio', 'Cantidad', 'Imagen', 'Estado', 'FechaIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -21,6 +21,7 @@ const Products: CollectionConfig = {
             label: 'Nombre del Producto',
             type: 'text',
             required: true,
+            unique:true,
             admin: {
                 width: '50%',
                 placeholder:'Nombre de Producto aqui'
@@ -80,32 +81,28 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-        {
-            name: 'Imagenes',
-            type: 'array',
-            label:'Ingrese Imagenes de minimo 420px',
-            minRows: 1,
-            maxRows: 5,
-            fields: [
-                {
-                    name: "Imagen", // required
-                    label: "Imagen de Producto",
-                    type: 'upload', // required
-                    relationTo: 'imagenes', //required eg:users
-                    required: true,
-                    hooks: {
-                        beforeValidate: [
-                            (req): void => {
-                                const image = req.data
-                                if (image && image.width < 420) {
-                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
-                                }
-                            }
-                        ]
+       {
+         name: "Imagen", // required
+         type: "upload", // required
+         relationTo:'imagenes',  //required eg:media
+         label: "Imgen de Producto",
+         required: true,
+         unique: true,
+         hooks: {
+            beforeValidate: [
+                (req): void => {
+                    const image = req.data
+                    if (image && image.width < 420) {
+                        throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
                     }
                 }
             ]
         },
+        admin:{
+            description:'Sube Imagen de Minimo 420px de ancho',
+        }
+       },
+       
         {
             name: "Estado", // required
             type: "select", // required

@@ -22,6 +22,7 @@ const Subcategories: CollectionConfig =  {
             label: 'Nombre Subcategoria',
             type: 'text',
             required: true,
+            unique: true,
             admin:{
                 placeholder: 'Nombre de Subcategoria aqui'
             }

@@ -21,6 +21,7 @@ const Portraits: CollectionConfig = {
             type: "text", // required
             label: "Nombre de Portada",
             required: true,
+            unique:true,
             admin: {
                 placeholder: 'Nombre de Portada aqui'
             }

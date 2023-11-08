@@ -44,6 +44,7 @@ const Images: CollectionConfig = {
             label: 'Nombre de Imagen',
             type: 'text',
             required: true,
+            unique: true,
             admin: {
                 placeholder: "Nombre de Imagen aqui",
             }

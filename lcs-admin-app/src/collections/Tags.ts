@@ -21,6 +21,7 @@ const Tags: CollectionConfig =  {
             label: 'Nombre de Etiqueta',
             type: 'text',
             required:true,
+            unique: true,
             admin:{
                 placeholder:'Nombre de Etiqueta aqui'
             }

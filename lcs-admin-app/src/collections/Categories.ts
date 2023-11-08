@@ -7,7 +7,7 @@ const Categories: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Categoria',
-        defaultColumns: ['Categoria', 'EstadoCategoria'],
+        defaultColumns: ['Categoria', 'Estado'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -20,6 +20,7 @@ const Categories: CollectionConfig = {
             type: "text", // required
             label: "Nombre de Categoria",
             required: true,
+            unique:true,
             admin:{
               placeholder: "Nombre de Categoria aqui",
             }

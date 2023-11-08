@@ -8,7 +8,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'Tipo', 'Producto', 'Servicio', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        defaultColumns: ['Titulo', 'Tipo', 'Producto', 'Servicio', 'Portada', 'Oferta','Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -22,6 +22,7 @@ const Publications: CollectionConfig = {
             label: 'Titulo de Publicacion',
             type: 'text',
             required: true,
+            unique:true,
             admin: {
                 width: '70%',
                 placeholder: 'Titulo de Publicacion aqui'
@@ -55,7 +56,7 @@ const Publications: CollectionConfig = {
             hasMany: false,
             admin: {
                 condition: (data, siblingData, { user }) => {
-                    if (data.TipoVenta === 'product') {
+                    if (data.Tipo === 'product') {
                         return true
                     } else {
                         return false
@@ -72,7 +73,7 @@ const Publications: CollectionConfig = {
             hasMany: false,
             admin: {
                 condition: (data, siblingData, { user }) => {
-                    if (data.TipoVenta === 'service') {
+                    if (data.Tipo === 'service') {
                         return true
                     } else {
                         return false
@@ -80,6 +81,55 @@ const Publications: CollectionConfig = {
                 },
                 width: '70%'
             }
+        },
+        {
+            name: "Portada", // required
+            type: "relationship", // required
+            relationTo: 'portadas',  //required eg:media
+            label: "Portada de Publicacion",
+            required: false,
+            admin: {
+                width: '70%'
+            }
+        },
+        {
+            name: "Oferta", // required
+            type: "checkbox", // required
+            label: "Publicacion en Oferta?",
+            defaultValue: false,
+            admin: {
+                description: 'Marque esta casilla si la publicacion es una oferta'
+            }
+        },
+        {
+            name: 'Imagenes',
+            type: 'array',
+            label:'Imagenes de Publicacion',
+            minRows: 1,
+            maxRows: 5,
+            unique:true,
+            admin:{
+                description:'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho '
+            },
+            fields: [
+                {
+                    name: "Imagen", // required
+                    label: "Imagen de Producto",
+                    type: 'upload', // required
+                    relationTo: 'imagenes', //required eg:users
+                    required: true,
+                    hooks: {
+                        beforeValidate: [
+                            (req): void => {
+                                const image = req.data
+                                if (image && image.width < 420) {
+                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                                }
+                            }
+                        ]
+                    }
+                }
+            ]
         },
         {
             name: "Descripcion", // required
