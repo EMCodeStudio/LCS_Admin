@@ -5,6 +5,7 @@ const Clients: CollectionConfig = {
     auth: true,
     access: {
         read: () => true,
+        delete:() => false
     },
     admin: {
         useAsTitle: 'Nombre',
@@ -21,7 +22,7 @@ const Clients: CollectionConfig = {
 
         {
             type: 'collapsible',
-            label: 'Informacion Personal',
+            label: 'Informacion Legal',
             fields: [
                 {
 
@@ -42,6 +43,7 @@ const Clients: CollectionConfig = {
                     defaultValue: 'nature',
                     admin: {
                         layout: 'horizontal',
+                        description:'Si la Persona es Juridica apareceran nuevos Campos'
                     }
                 },
                 {
@@ -55,6 +57,7 @@ const Clients: CollectionConfig = {
                             required: true,
                             admin: {
                                 width: '50%',
+                                placeholder: 'Nombre del Cliente aqui'
                             }
                         },
                         {
@@ -65,15 +68,16 @@ const Clients: CollectionConfig = {
                             required: true,
                             admin: {
                                 width: '50%',
+                                placeholder: 'Apellidos del Cliente aqui'
                             }
                         }
                     ]
                 },
                 {
                     name: "TipoID", // required
-                    label: "Tipo de IDentificacion",
-                    type: 'radio', // required
-                    required: false,
+                    label: "Tipo de Identificacion",
+                    type: 'select', // required
+                    required: true,
                     options: [ // required
                         {
                             label: 'Cedula de Ciudadania',
@@ -85,9 +89,6 @@ const Clients: CollectionConfig = {
                         },
                     ],
                     defaultValue: 'zitizen',
-                    admin: {
-                        layout: 'horizontal',
-                    }
                 },
                 {
                     name: "Cedula", // required
@@ -97,6 +98,7 @@ const Clients: CollectionConfig = {
                     unique: true,
                     admin: {
                         step: 1,
+                        placeholder: 'Numero de Cedula aqui'
                     }
                 },
                 {
@@ -108,37 +110,38 @@ const Clients: CollectionConfig = {
                             type: 'text',
                             admin: {
                                 condition: ({ TipoPersona }) => TipoPersona === 'juristic',
-                                width: '50%'
+                                width: '50%',
+                                placeholder: 'Nombre de la Empresa aqui'
                             }
                         },
                         {
                             name: 'NIT',
                             label: 'NIT de la Empresa',
                             type: 'number',
-                            unique: true,
                             admin: {
                                 condition: ({ TipoPersona }) => TipoPersona === 'juristic',
-                                width: '50%'
+                                width: '50%',
+                                placeholder: 'NIT de la Empresa aqui'
                             }
                         },
                         {
                             name: 'CorreoEmpresa',
                             label: 'Correo de la Empresa',
                             type: 'email',
-                            unique: true,
                             admin: {
                                 condition: ({ TipoPersona }) => TipoPersona === 'juristic',
-                                width: '100%'
+                                width: '100%',
+                                placeholder: 'Correo de la Empresa aqui'
                             }
                         },
                         {
                             name: 'DireccionEmpresa',
                             label: 'Direccion de la Empresa',
                             type: 'textarea',
-                            unique: true,
                             admin: {
                                 condition: ({ TipoPersona }) => TipoPersona === 'juristic',
-                                width: '100%'
+                                width: '100%',
+                                placeholder: 'Direccion de la Empresa aqui'
                             }
                         },
                     ]
@@ -152,9 +155,12 @@ const Clients: CollectionConfig = {
                 {
                     name: "Correo", // required
                     type: "email", // required
-                    label: "Correo Electronico Personal",
+                    label: "Correo del Cliente",
                     required: true,
-                    unique: true
+                    unique: true,
+                    admin:{
+                        placeholder: 'Correo del Cliente aqui'
+                    }
                 },
                 {
                     name: "Numero", // required
@@ -163,6 +169,7 @@ const Clients: CollectionConfig = {
                     required: true,
                     admin: {
                         step: 1,
+                        placeholder: 'Numero Telefonico aqui'
                     }
                 },
             ]

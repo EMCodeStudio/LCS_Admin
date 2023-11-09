@@ -14,9 +14,6 @@
 - mongodb://127.0.0.1/db_lcs
 - Run npm install -g npm@10.2.1 to update!
 
-# Creating User
-- test.admin@lcsoluciones.com
-- 123456789
 
 # add assets directory to server.ts 
 - app.use('/assets', express.static(path.resolve(__dirname, './assets')));
@@ -25,7 +22,7 @@
 # Modules 
 
 ## VENTAS
-- Clients
+- Clients *
 - Orders
 - Reviews
 - Quotes
@@ -52,6 +49,10 @@
 - npm run build
 - npm run start 
 - http://localhost:3000/admin/login
+
+# Creating User
+- test.admin@lcsoluciones.com
+- 123456789
 
 
 
