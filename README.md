@@ -46,7 +46,6 @@
 - Users *
 - Empresa *
 
-
 # Commands
 - cd lcs-admin-app
 - npm run dev 

@@ -16,13 +16,14 @@ import Portraits from './collections/Portraits'
 import Company from './collections/Company'
 import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
+import Clients from './collections/Clients'
 
 export default buildConfig({
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
     meta:{
-      titleSuffix: 'LCSoluciones',
+      titleSuffix: 'LC Soluciones',
       favicon: '/assets/Icons/Favicon.ico',
     },
     components: {
@@ -34,6 +35,7 @@ export default buildConfig({
   },
   editor: slateEditor({}),
   collections: [
+    Clients,
     Publications,
     Tags,
     Portraits,
