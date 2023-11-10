@@ -7,7 +7,7 @@ const Services: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Servicio',
-        defaultColumns:['Servicio','Precio','Imagen','Estado'],
+        defaultColumns:['Servicio','Precio','Subcategoria','Imagen','Estado'],
         group:'INVENTARIO'
     },
     labels: {
@@ -26,18 +26,36 @@ const Services: CollectionConfig = {
                 placeholder:'Nombre del Servicio aqui'
             }
         },
-        {
-            name: "Precio", // required
-            label: "Precio del Servicio",
-            type: "number", // required
-            required: false,
-            admin: {
-                step: 1,
-                placeholder: '$ 0.00',
-                width: '50%',
-                description: 'Este Campo es Opcional'
 
-            }
+        {
+            type:'row',
+            fields:[
+                {
+        
+                    name: "Subcategoria", // required
+                    label: "Subcategoria del Servicio",
+                    type: 'relationship', // required
+                    relationTo: 'subcategorias', //required eg:users
+                    hasMany: false,
+                    required: true,
+                    admin: {
+                        width: '50%',
+                    }
+                },
+                {
+                    name: "Precio", // required
+                    label: "Precio del Servicio",
+                    type: "number", // required
+                    required: false,
+                    admin: {
+                        step: 1,
+                        placeholder: '$ 0.00',
+                        width: '50%',
+                        description: 'Este Campo es Opcional'
+        
+                    }
+                },
+            ]
         },
         {
             name: "Imagen", // required

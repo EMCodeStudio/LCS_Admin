@@ -49,6 +49,7 @@ export default buildConfig({
     Company,
     Users,
   ],
+  
  
   localization: {
     defaultLocale: 'es',

@@ -8,7 +8,7 @@ const Subcategories: CollectionConfig =  {
     },
     admin: {
         useAsTitle: 'Subcategoria',
-        defaultColumns: ['Subcategoria','Categoria','Estado'],
+        defaultColumns: ['Subcategoria','Categoria','Portada','Estado'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -34,6 +34,13 @@ const Subcategories: CollectionConfig =  {
           relationTo:'categorias', //required eg:users
           hasMany: true,
           required: true
+        },
+        {
+            name: "Portada", // required
+            type: "relationship", // required
+            relationTo: 'portadas',  //required eg:media
+            label: "Portada de la Subcategoria",
+            required: false,
         },
         {
             name: "Estado", // required

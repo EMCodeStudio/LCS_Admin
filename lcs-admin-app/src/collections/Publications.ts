@@ -8,7 +8,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Oferta', 'Portada','Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Oferta', 'Descuento', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -22,7 +22,7 @@ const Publications: CollectionConfig = {
             label: 'Titulo de Publicacion',
             type: 'text',
             required: true,
-            unique:true,
+            unique: true,
             admin: {
                 placeholder: 'Titulo de Publicacion aqui'
             }
@@ -61,7 +61,7 @@ const Publications: CollectionConfig = {
                         return false
                     }
                 },
-               
+
             },
         },
         {
@@ -78,7 +78,7 @@ const Publications: CollectionConfig = {
                         return false
                     }
                 },
-                
+
             }
         },
         {
@@ -87,25 +87,43 @@ const Publications: CollectionConfig = {
             label: "Publicacion en Oferta?",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si la publicacion es una oferta'
+                description: 'Marque esta casilla si la publicacion es una oferta y rellene el campo de Descuento'
             }
         },
         {
-            name: "Portada", // required
-            type: "relationship", // required
-            relationTo: 'portadas',  //required eg:media
-            label: "Portada de Publicacion",
+            name: "Descuento", // required
+            label: "Descuento de la Publicacion", // required
+            type: "number", // required
             required: false,
+            admin: {
+                step: 1,
+                placeholder: '% 00',
+                condition: ({ Oferta }) => Oferta === true,
+                width: '50%',
+            },
+            hooks: {
+                beforeChange: [
+                    ({ data }) => {
+                        const twoDigits = /^\d{2}$/;
+                        if (twoDigits.test(data.Descuento)) {
+                            return data.Descuento
+                        }
+                        else {
+                            return 0
+                        }
+                    }
+                ]
+            }
         },
         {
             name: 'Imagenes',
             type: 'array',
-            label:'Imagenes de Publicacion',
+            label: 'Imagenes de Publicacion',
             minRows: 1,
             maxRows: 5,
-            unique:true,
-            admin:{
-                description:'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho '
+            unique: true,
+            admin: {
+                description: 'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho '
             },
             fields: [
                 {
