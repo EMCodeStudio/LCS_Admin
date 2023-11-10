@@ -19,7 +19,7 @@ const Subcategories: CollectionConfig =  {
         //example text field
         {
             name: 'Subcategoria',
-            label: 'Nombre Subcategoria',
+            label: 'Nombre de Subcategoria',
             type: 'text',
             required: true,
             unique: true,

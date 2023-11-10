@@ -64,7 +64,7 @@ const Products: CollectionConfig = {
                     required: true,
                     admin: {
                         step: 1,
-                        placeholder: '0',
+                        placeholder: '$ 0.00',
                         width: '50%'
                     }
                 },

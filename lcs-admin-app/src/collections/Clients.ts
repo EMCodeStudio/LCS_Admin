@@ -5,11 +5,11 @@ const Clients: CollectionConfig = {
     auth: true,
     access: {
         read: () => true,
-        delete:() => false
+        delete: () => false
     },
     admin: {
         useAsTitle: 'Cedula',
-        defaultColumns: ['TipoPersona', 'Nombre', 'Apellidos', 'TipoID', 'Cedula', 'NombreEmpresa', 'NIT','CorreoEmpresa', 'DireccionEmpresa', 'Correo', 'Numero', 'Terminos', 'Estado', 'FechaRegistro'],
+        defaultColumns: ['TipoPersona', 'Nombre', 'Apellidos', 'TipoID', 'Cedula', 'NombreEmpresa', 'NIT', 'CorreoEmpresa', 'DireccionEmpresa', 'Correo', 'Numero', 'Terminos', 'Estado', 'FechaRegistro'],
         group: 'VENTAS'
 
     },
@@ -43,7 +43,7 @@ const Clients: CollectionConfig = {
                     defaultValue: 'nature',
                     admin: {
                         layout: 'horizontal',
-                        description:'Si la Persona es Juridica apareceran nuevos Campos'
+                        description: 'Si la Persona es Juridica apareceran nuevos Campos'
                     }
                 },
                 {
@@ -101,28 +101,38 @@ const Clients: CollectionConfig = {
                         placeholder: 'Numero de Cedula aqui'
                     }
                 },
+
                 {
-                    type: 'row',
+                    type: 'collapsible',
+                    label: 'Datos de la Empresa',
+                    admin: {
+                        condition: ({ TipoPersona }) => TipoPersona === 'juristic',
+                    },
                     fields: [
                         {
-                            name: 'NombreEmpresa',
-                            label: 'Nombre de la Empresa',
-                            type: 'text',
-                            admin: {
-                                condition: ({ TipoPersona }) => TipoPersona === 'juristic',
-                                width: '50%',
-                                placeholder: 'Nombre de la Empresa aqui'
-                            }
-                        },
-                        {
-                            name: 'NIT',
-                            label: 'NIT de la Empresa',
-                            type: 'number',
-                            admin: {
-                                condition: ({ TipoPersona }) => TipoPersona === 'juristic',
-                                width: '50%',
-                                placeholder: 'NIT de la Empresa aqui'
-                            }
+                            type: 'row',
+                            fields: [
+                                {
+                                    name: 'NombreEmpresa',
+                                    label: 'Nombre de la Empresa',
+                                    type: 'text',
+                                    admin: {
+                                        condition: ({ TipoPersona }) => TipoPersona === 'juristic',
+                                        width: '50%',
+                                        placeholder: 'Nombre de la Empresa aqui'
+                                    }
+                                },
+                                {
+                                    name: 'NIT',
+                                    label: 'NIT de la Empresa',
+                                    type: 'number',
+                                    admin: {
+                                        condition: ({ TipoPersona }) => TipoPersona === 'juristic',
+                                        width: '50%',
+                                        placeholder: 'NIT de la Empresa aqui'
+                                    }
+                                },
+                            ]
                         },
                         {
                             name: 'CorreoEmpresa',
@@ -158,7 +168,7 @@ const Clients: CollectionConfig = {
                     label: "Correo del Cliente",
                     required: true,
                     unique: true,
-                    admin:{
+                    admin: {
                         placeholder: 'Correo del Cliente aqui'
                     }
                 },

@@ -8,7 +8,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Portada', 'Oferta','Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Oferta', 'Portada','Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -24,7 +24,6 @@ const Publications: CollectionConfig = {
             required: true,
             unique:true,
             admin: {
-                width: '70%',
                 placeholder: 'Titulo de Publicacion aqui'
             }
         },
@@ -50,46 +49,36 @@ const Publications: CollectionConfig = {
         },
         {
             name: "Producto", // required
-            label: "Nombre de Producto ",
+            label: "Nombre del Producto ",
             type: 'relationship', // required
             relationTo: 'productos', //required eg:users
             hasMany: false,
             admin: {
                 condition: (data, siblingData, { user }) => {
-                    if (data.Tipo === 'product') {
+                    if (data.TipoVenta === 'product') {
                         return true
                     } else {
                         return false
                     }
                 },
-                width: '70%'
+               
             },
         },
         {
             name: "Servicio", // required
-            label: "Nombre de Servicio",
+            label: "Nombre del Servicio",
             type: 'relationship', // required
             relationTo: 'servicios', //required eg:users
             hasMany: false,
             admin: {
                 condition: (data, siblingData, { user }) => {
-                    if (data.Tipo === 'service') {
+                    if (data.TipoVenta === 'service') {
                         return true
                     } else {
                         return false
                     }
                 },
-                width: '70%'
-            }
-        },
-        {
-            name: "Portada", // required
-            type: "relationship", // required
-            relationTo: 'portadas',  //required eg:media
-            label: "Portada de Publicacion",
-            required: false,
-            admin: {
-                width: '70%'
+                
             }
         },
         {
@@ -100,6 +89,13 @@ const Publications: CollectionConfig = {
             admin: {
                 description: 'Marque esta casilla si la publicacion es una oferta'
             }
+        },
+        {
+            name: "Portada", // required
+            type: "relationship", // required
+            relationTo: 'portadas',  //required eg:media
+            label: "Portada de Publicacion",
+            required: false,
         },
         {
             name: 'Imagenes',
@@ -139,7 +135,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "Etiquetas", // required
-            label: "Nombre de Etiquetas",
+            label: "Nombres de Etiquetas",
             type: 'relationship', // required
             relationTo: 'etiquetas', //required eg:users
             hasMany: true,
@@ -150,7 +146,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "Estado", // required
-            label: 'Estado del Producto',
+            label: 'Estado de la Publicacion',
             type: "select", // required
             hasMany: false, /// set to true if you want to select multiple
             options: [

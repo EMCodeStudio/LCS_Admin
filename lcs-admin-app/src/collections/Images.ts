@@ -41,7 +41,7 @@ const Images: CollectionConfig = {
         //example text field
         {
             name: 'Imagen',
-            label: 'Nombre de Imagen',
+            label: 'Nombre de la Imagen',
             type: 'text',
             required: true,
             unique: true,

@@ -71,7 +71,7 @@ const Company: CollectionConfig = {
                     ]
                 },
                 {
-                    label: 'Informacion de Adicional',
+                    label: 'Informacion Adicional',
                     description: 'Rellene los siguientes Campos',
                     fields: [
                         {

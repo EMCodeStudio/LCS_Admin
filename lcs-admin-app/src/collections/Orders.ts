@@ -84,6 +84,7 @@ const Orders: CollectionConfig = {
             type: "number", // required
             required: false,
             admin: {
+                placeholder:'0',
                 condition: (data, siblingData, { user }) => {
                     if (data.TipoVentaPedido === 'product') {
                         return true
