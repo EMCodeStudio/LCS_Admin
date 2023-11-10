@@ -8,7 +8,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'Tipo', 'Producto', 'Servicio', 'Portada', 'Oferta','Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Portada', 'Oferta','Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -29,7 +29,7 @@ const Publications: CollectionConfig = {
             }
         },
         {
-            name: "Tipo", // required
+            name: "TipoVenta", // required
             label: "Tipo de Venta",
             type: 'radio', // required
             required: true,

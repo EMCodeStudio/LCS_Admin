@@ -8,7 +8,7 @@ const Clients: CollectionConfig = {
         delete:() => false
     },
     admin: {
-        useAsTitle: 'Nombre',
+        useAsTitle: 'Cedula',
         defaultColumns: ['TipoPersona', 'Nombre', 'Apellidos', 'TipoID', 'Cedula', 'NombreEmpresa', 'NIT','CorreoEmpresa', 'DireccionEmpresa', 'Correo', 'Numero', 'Terminos', 'Estado', 'FechaRegistro'],
         group: 'VENTAS'
 
