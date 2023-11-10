@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Codigo', 'Precio', 'Cantidad', 'Imagen', 'Estado', 'FechaIngreso'],
+        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Precio', 'Cantidad', 'Imagen', 'Estado', 'FechaIngreso','HoraIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -17,19 +17,19 @@ const Products: CollectionConfig = {
     },
     fields: [
         {
-            name: 'Producto',
-            label: 'Nombre del Producto',
-            type: 'text',
-            required: true,
-            unique:true,
-            admin: {
-                width: '50%',
-                placeholder:'Nombre de Producto aqui'
-            }
-        },
-        {
             type: 'row',
             fields: [
+                {
+                    name: 'Producto',
+                    label: 'Nombre del Producto',
+                    type: 'text',
+                    required: true,
+                    unique: true,
+                    admin: {
+                        width: '50%',
+                        placeholder: 'Nombre de Producto aqui'
+                    }
+                },
                 {
                     name: 'Modelo',
                     label: 'Modelo del Producto',
@@ -37,7 +37,24 @@ const Products: CollectionConfig = {
                     required: true,
                     admin: {
                         width: '50%',
-                        placeholder:'Modelo aqui'
+                        placeholder: 'Modelo aqui'
+                    }
+                },
+            ]
+        },
+        {
+            type: 'row',
+            fields: [
+                {
+
+                    name: "Subcategoria", // required
+                    label: "Subcategoria del Producto",
+                    type: 'relationship', // required
+                    relationTo: 'subcategorias', //required eg:users
+                    hasMany: false,
+                    required: true,
+                    admin: {
+                        width: '50%',
                     }
                 },
                 {
@@ -51,6 +68,7 @@ const Products: CollectionConfig = {
 
                     }
                 },
+
             ]
         },
         //example text field
@@ -81,28 +99,28 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-       {
-         name: "Imagen", // required
-         type: "upload", // required
-         relationTo:'imagenes',  //required eg:media
-         label: "Imgen de Producto",
-         required: true,
-         unique: true,
-         hooks: {
-            beforeValidate: [
-                (req): void => {
-                    const image = req.data
-                    if (image && image.width < 420) {
-                        throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+        {
+            name: "Imagen", // required
+            type: "upload", // required
+            relationTo: 'imagenes',  //required eg:media
+            label: "Imgen de Producto",
+            required: true,
+            unique: true,
+            hooks: {
+                beforeValidate: [
+                    (req): void => {
+                        const image = req.data
+                        if (image && image.width < 420) {
+                            throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                        }
                     }
-                }
-            ]
+                ]
+            },
+            admin: {
+                description: 'Sube Imagen de Minimo 420px de ancho',
+            }
         },
-        admin:{
-            description:'Sube Imagen de Minimo 420px de ancho',
-        }
-       },
-       
+
         {
             name: "Estado", // required
             type: "select", // required
@@ -128,13 +146,28 @@ const Products: CollectionConfig = {
             name: "FechaIngreso", // required
             type: "date", // required
             label: "Fecha de Ingreso",
-            //defaultValue: '1988-11-05T8:00:00.000+05:00',
             admin: {
+                position: "sidebar",
                 date: {
-                    //Options: dayAndTime, timeOnly, dayOnly
-                    pickerAppearance: 'dayAndTime',
+                    pickerAppearance: 'dayOnly',
+                    displayFormat: 'dd-MM-yyyy',
+                   /*  pickerAppearance: 'timeOnly',
+                    displayFormat: 'h:mm:ss a', */
+                    /* pickerAppearance: 'monthOnly',
+                    displayFormat: 'MMMM yyyy', */
                 },
-                position: "sidebar"
+            }
+        },
+        {
+            name: "HoraIngreso", // required
+            type: "date", // required
+            label: "Hora de Ingreso",
+            admin: {
+                position: "sidebar",
+                date: {
+                    pickerAppearance: 'timeOnly',
+                    displayFormat: 'h:mm:ss a', 
+                },
             }
         }
     ],

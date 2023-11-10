@@ -15,12 +15,18 @@ const Images: CollectionConfig = {
         staticURL: '/media',
         staticDir: 'media',
         imageSizes: [
-            /* {
-                name: 'Card',
+            {
+                name: 'thumbnail',
                 width: 400,
                 height: 300,
                 position: 'centre',
-            }, */
+            },
+            {
+                name: 'card',
+                width: 768,
+                height: 1024,
+                position: 'centre',
+            },
             {
                 name: 'Tablet',
                 width: 1024,
@@ -32,10 +38,10 @@ const Images: CollectionConfig = {
                 position: 'centre',
             },
         ],
-        //adminThumbnail: 'Card',
+        adminThumbnail: 'thumbnail',
         mimeTypes: ['image/*'],
         crop: false,
-        focalPoint: true
+        focalPoint: false
     },
     fields: [
         //example text field

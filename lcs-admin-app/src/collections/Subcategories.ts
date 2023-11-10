@@ -32,8 +32,8 @@ const Subcategories: CollectionConfig =  {
           label: "Nombre de Categoria",
           type: 'relationship', // required
           relationTo:'categorias', //required eg:users
-          hasMany: false,
-          required: false
+          hasMany: true,
+          required: true
         },
         {
             name: "Estado", // required
