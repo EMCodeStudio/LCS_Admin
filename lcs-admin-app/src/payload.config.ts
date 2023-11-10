@@ -25,7 +25,7 @@ export default buildConfig({
     bundler: webpackBundler(),
     meta:{
       titleSuffix: 'LC Soluciones',
-      favicon: '/assets/Icons/Favicon.ico',
+      favicon: '/public/assets/Icons/Favicon.ico',
     },
     components: {
       graphics: {

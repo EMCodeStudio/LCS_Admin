@@ -150,7 +150,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "Estado", // required
-            label: 'Estado de Publicacion',
+            label: 'Estado del Producto',
             type: "select", // required
             hasMany: false, /// set to true if you want to select multiple
             options: [

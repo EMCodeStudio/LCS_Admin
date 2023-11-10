@@ -3,7 +3,7 @@ import './Style.scss'
 const Logo: React.FC = () => {
     return (
         <div className="icon">
-            <img src="../../assets/Images/Logo.png" alt="" />
+            <img src="/public/assets/Images/Logo.png" alt="Logo" />
             <h1>LC Soluciones</h1>
         </div>
     );

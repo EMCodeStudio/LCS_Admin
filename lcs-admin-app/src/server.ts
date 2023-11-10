@@ -20,7 +20,7 @@ const start = async () => {
   })
 
   // Add your own express routes here
-  app.use('/assets', express.static(path.resolve(__dirname, './assets')));
+  app.use('/public', express.static(path.resolve(__dirname, './public')));
 
   app.listen(3000)
 }

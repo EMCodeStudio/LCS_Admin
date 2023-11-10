@@ -1,13 +1,15 @@
 import { CollectionConfig } from "payload/types";
 
 const Orders: CollectionConfig = {
-    slug: 'Pedidos',
+    slug: 'pedidos',
     access: {
-        read: () => true
+        read: () => true,
+        delete: () => false
+
     },
     admin: {
         useAsTitle: 'Pedido',
-        defaultColumns: ['Cedula', 'TipoVenta', 'Producto', 'Servicio', 'Cantidad', 'Total', 'EstadoPago', 'EstadoPedido', 'FechaPedido', 'FechaEntrega'],
+        defaultColumns: ['CedulaCliente', 'TipoVentaPedido', 'ProductoPedido', 'ServicioPedido', 'CantidadPedido', 'TotalPEdido', 'EstadoPago', 'EstadoPedido', 'FechaPedido', 'FechaEntrega'],
         group: 'VENTAS'
     },
     labels: {
@@ -17,17 +19,16 @@ const Orders: CollectionConfig = {
     fields: [
         //example text field
         {
-            name: "Cedula", // required
+            name: "CedulaCliente", // required
             label: "Cedula del Cliente",
             type: "relationship", // required
             relationTo: "clientes",
             required: true,
         },
         {
-            name: "Tipo", // required
+            name: "TipoVentaPedido", // required
             label: "Tipo de Venta",
             type: 'radio', // required
-            required: true,
             options: [ // required
                 {
                     label: 'Producto',
@@ -44,39 +45,56 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "Producto", // required
+            name: "ProductoPedido", // required
             label: "Nombre del Producto",
             type: 'relationship', // required
             relationTo: 'productos', //required eg:users
             hasMany: false,
             required: false,
             admin: {
-                condition: ({ Tipoventa }) => Tipoventa === 'product'
+                condition: (data, siblingData, { user }) => {
+                    if (data.TipoVentaPedido === 'product') {
+                        return true
+                    } else {
+                        return false
+                    }
+                },
             }
         },
         {
-            name: "Servicio", // required
+            name: "ServicioPedido", // required
             label: "Nombre del Servicio",
             type: 'relationship', // required
             relationTo: 'servicios', //required eg:users
             hasMany: false,
             required: false,
             admin: {
-                condition: ({ Tipoventa }) => Tipoventa === 'service'
+                condition: (data, siblingData, { user }) => {
+                    if (data.TipoVentaPedido === 'service') {
+                        return true
+                    } else {
+                        return false
+                    }
+                },
             }
         },
         {
-            name: "Cantidad", // required
+            name: "CantidadPedido", // required
             label: "Cantidad Solicitada",
             type: "number", // required
             required: false,
             admin: {
-                step: 1,
-                condition: ({ Tipoventa }) => Tipoventa === 'product'
+                condition: (data, siblingData, { user }) => {
+                    if (data.TipoVentaPedido === 'product') {
+                        return true
+                    } else {
+                        return false
+                    }
+                },
             }
         },
         {
-            name: "Total", // required
+            name: "TotalPedido", // required
             label: "Precio Total",
             type: "number", // required
             required: false,
@@ -101,6 +119,10 @@ const Orders: CollectionConfig = {
                 {
                     label: "Pagado",
                     value: "paid",
+                },
+                {
+                    label: "No Pagado",
+                    value: "noPaid",
                 },
                 {
                     label: "Cancelado",
@@ -134,8 +156,12 @@ const Orders: CollectionConfig = {
                     value: "delivered",
                 },
                 {
+                    label: "En Devolucion",
+                    value: "returning",
+                },
+                {
                     label: "Devuelto",
-                    value: "delivered",
+                    value: "returned",
                 },
                 {
                     label: "Cancelado",
@@ -153,10 +179,6 @@ const Orders: CollectionConfig = {
             localized: true,
             admin: {
                 position: 'sidebar',
-                date: {
-                    //Options: dayAndTime, timeOnly, dayOnly
-                    pickerAppearance: 'dayAndTime',
-                }
             }
         },
         {
@@ -166,12 +188,6 @@ const Orders: CollectionConfig = {
             localized: true,
             admin: {
                 position: 'sidebar',
-                date: {
-                    //Options: dayAndTime, timeOnly, dayOnly
-                    pickerAppearance: 'dayAndTime',
-
-
-                }
             }
         }
     ],
