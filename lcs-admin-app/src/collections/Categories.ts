@@ -21,6 +21,8 @@ const Categories: CollectionConfig = {
             label: "Nombre de Categoria",
             required: true,
             unique:true,
+            index:true,
+            saveToJWT:true,
             admin:{
               placeholder: "Nombre de Categoria aqui",
             }

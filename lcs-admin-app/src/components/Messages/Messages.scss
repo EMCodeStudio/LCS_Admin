@@ -1,0 +1,13 @@
+$error-color-bg: #ff00005e;
+$error-color-primary: #e2e2e2;
+
+.error-message {
+    background-color: $error-color-bg ;
+    padding: 12px;
+    border-radius: 3px;
+
+    p {
+        color: $error-color-primary;
+        margin: 0;
+    }
+}

@@ -1,15 +1,18 @@
 import { CollectionConfig } from "payload/types";
+import ErrorMessages from "../components/Messages/ErrorMessages";
 
 
 const Publications: CollectionConfig = {
     slug: 'publicaciones',
+
     access: {
         read: () => true
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Oferta', 'Descuento', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
-        group: 'CONTENIDO'
+        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Oferta', 'Descuento', 'ErrorMessage', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        group: 'CONTENIDO',
+
     },
     labels: {
         singular: 'Publicacion',
@@ -81,6 +84,7 @@ const Publications: CollectionConfig = {
 
             }
         },
+
         {
             name: "Oferta", // required
             type: "checkbox", // required
@@ -113,6 +117,17 @@ const Publications: CollectionConfig = {
                         }
                     }
                 ]
+            }
+        },
+        {
+            name: 'ErrorMessage',
+            type: 'ui',
+            admin: {
+                /*  condition:({Descuento}) => Descuento === 0, */
+                components: {
+                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de Dos Digitos!' }),
+
+                }
             }
         },
         {

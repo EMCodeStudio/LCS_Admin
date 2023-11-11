@@ -18,6 +18,7 @@ import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
 import Clients from './collections/Clients'
 import Orders from './collections/Orders'
+import Reviews from './collections/Reviews'
 
 export default buildConfig({
   admin: {
