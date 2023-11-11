@@ -10,7 +10,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'Oferta', 'Descuento', 'ErrorMessage', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'esOferta', 'Descuento', 'ErrorMessage', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
         group: 'CONTENIDO',
 
     },
@@ -86,12 +86,12 @@ const Publications: CollectionConfig = {
         },
 
         {
-            name: "Oferta", // required
+            name: "esOferta", // required
             type: "checkbox", // required
-            label: "Publicacion en Oferta?",
+            label: "Oferta de la Publicacion",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si la publicacion es una oferta y rellene el campo de Descuento'
+                description: 'Marque esta casilla si la publicacion es una oferta y rellene el campo de Descuento.'
             }
         },
         {

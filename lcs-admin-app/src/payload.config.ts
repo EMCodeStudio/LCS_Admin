@@ -19,6 +19,7 @@ import Icon from './components/Logo/Icon'
 import Clients from './collections/Clients'
 import Orders from './collections/Orders'
 import Reviews from './collections/Reviews'
+import Colors from './collections/Colors'
 
 export default buildConfig({
   admin: {
@@ -45,6 +46,7 @@ export default buildConfig({
     Images,
     Categories,
     Subcategories,
+    Colors,
     Products,
     Services,
     Company,
