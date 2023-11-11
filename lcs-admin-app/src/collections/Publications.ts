@@ -123,9 +123,9 @@ const Publications: CollectionConfig = {
             name: 'ErrorMessage',
             type: 'ui',
             admin: {
-                /*  condition:({Descuento}) => Descuento === 0, */
+                condition: ({ Descuento }) => Descuento >= 100,
                 components: {
-                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de Dos Digitos!' }),
+                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 0 a 99!', showError: true }),
 
                 }
             }

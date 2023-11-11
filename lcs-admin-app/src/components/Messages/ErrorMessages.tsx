@@ -5,8 +5,8 @@ type Props = {
   showError?: boolean
 }
 const ErrorMessages: React.FC<Props> = (props) => {
-  const { message } = props
-  if (message) {
+  const { message, showError} = props
+  if (showError) {
    // return <p style={{ color: 'white' }}>{message}</p>
    return <div className='error-message'><p>{message}</p></div>
   } else return null;
