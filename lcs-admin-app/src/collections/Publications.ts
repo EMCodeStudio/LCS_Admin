@@ -102,7 +102,7 @@ const Publications: CollectionConfig = {
             admin: {
                 step: 1,
                 placeholder: '% 00',
-                condition: ({ Oferta }) => Oferta === true,
+                condition: ({ esOferta }) => esOferta === true,
                 width: '50%',
             },
             hooks: {

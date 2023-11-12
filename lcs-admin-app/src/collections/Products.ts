@@ -54,7 +54,7 @@ const Products: CollectionConfig = {
                     hasMany: false,
                     required: true,
                     admin: {
-                        width: '50%',
+                        width: '33%',
                     }
                 },
                 {
@@ -63,41 +63,40 @@ const Products: CollectionConfig = {
                     type: 'text',
                     required: true,
                     admin: {
-                        width: '50%',
+                        width: '33%',
                         placeholder: 'SKU'
 
                     }
                 },
 
-
+                {
+                    name: "Tamano", // required
+                    type: "select", // required
+                    hasMany: false, /// set to true if you want to select multiple
+                    label: 'Tamaño del Producto',
+                    admin: {
+                        width: '33%',
+                    },
+                    options: [
+                        {
+                            label: "Pequeño",
+                            value: "small",
+                        },
+                        {
+                            label: "Mediano",
+                            value: "middle",
+                        },
+                        {
+                            label: "Grande",
+                            value: "large",
+                        },
+                    ],
+                    defaultValue: 'small',
+                    required: false,
+                },
             ]
         },
-        {
-            name: "Tamano", // required
-            type: "select", // required
-            hasMany: false, /// set to true if you want to select multiple
-            label: 'Tamaños del Producto',
-            options: [
-                {
-                    label: "Pequeño",
-                    value: "small",
-                },
-                {
-                    label: "Mediano",
-                    value: "middle",
-                },
-                {
-                    label: "Grande",
-                    value: "large",
-                },
-            ],
-            defaultValue: 'small',
-            required: false,
-        },
-
-
-
-
+       
         {
             name: "esMedidasPeso", // required
             type: "checkbox", // required
@@ -107,7 +106,6 @@ const Products: CollectionConfig = {
                 description: 'Marque esta casilla si desea agregar Medidas y Peso al Producto  '
             }
         },
-
         {
             type: 'row',
             admin:{
@@ -120,26 +118,26 @@ const Products: CollectionConfig = {
                     hasMany: false, /// set to true if you want to select multiple
                     options: [
                         {
-                            label: "m - Metros",
+                            label: "(m) Metros",
                             value: "meter",
                         },
                         {
-                            label: "dc - Decimetros",
+                            label: "(dc) Decimetros",
                             value: "decimeter",
                         },
                         {
-                            label: "cm - Centimetros",
+                            label: "(cm) Centimetros",
                             value: "centimeter",
                         },
                         {
-                            label: "mm - Milimetros",
+                            label: "(mm) Milimetros",
                             value: "millimeter",
                         },
                     ],
                     defaultValue: 'millimeter',
                     required: false,
                     admin: {
-                        width:'40%'
+                        width:'33%'
                     }
                 },
                 {
@@ -149,7 +147,8 @@ const Products: CollectionConfig = {
                     required: false,
                     admin: {
                         step: 1,
-                        width:'30%'
+                        width:'33%',
+                        placeholder: '0'
                     }
                 },
                 {
@@ -159,7 +158,8 @@ const Products: CollectionConfig = {
                     required: false,
                     admin: {
                         step: 1,
-                        width:'30%'
+                        width:'33%',
+                        placeholder: '0'
                     }
                 },
 
@@ -178,26 +178,26 @@ const Products: CollectionConfig = {
                     hasMany: false, /// set to true if you want to select multiple
                     options: [
                         {
-                            label: "kg - Kilogramo",
+                            label: "(kg) Kilogramo",
                             value: "meter",
                         },
                         {
-                            label: "hg - Hectogramo",
+                            label: "(hg) Hectogramo",
                             value: "decimeter",
                         },
                         {
-                            label: "dag - Decagramo",
+                            label: "(dag) Decagramo",
                             value: "centimeter",
                         },
                         {
-                            label: "g - Gramo",
+                            label: "(g) Gramo",
                             value: "millimeter",
                         },
                     ],
                     defaultValue: 'millimeter',
                     required: false,
                     admin: {
-                        width:'40%'
+                        width:'50%'
                     }
                 },
                 {
@@ -207,7 +207,8 @@ const Products: CollectionConfig = {
                     required: false,
                     admin: {
                         step: 1,
-                        width:'30%'
+                        width:'50%',
+                        placeholder: '0'
                     }
                 },
             ]
@@ -225,12 +226,12 @@ const Products: CollectionConfig = {
                     fields: [
                         {
                             name: "Color", // required
-                            label: "Codigo Color",
+                            label: "Color del Producto",
                             type: "relationship", // required
                             relationTo: 'colores',
                             required: true,
                             admin: {
-                                width: '50%'
+                                width: '33%'
                             }
                         },
                         {
@@ -241,7 +242,7 @@ const Products: CollectionConfig = {
                             admin: {
                                 step: 1,
                                 placeholder: '0',
-                                width: '50%'
+                                width: '33%'
                             }
                         },
                         {
@@ -252,7 +253,7 @@ const Products: CollectionConfig = {
                             admin: {
                                 step: 1,
                                 placeholder: '$ 0.00',
-                                width: '50%'
+                                width: '33%'
                             }
                         },
                     ]
