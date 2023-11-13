@@ -18,8 +18,8 @@ import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
 import Clients from './collections/Clients'
 import Orders from './collections/Orders'
-import Reviews from './collections/Reviews'
 import Colors from './collections/Colors'
+import Trademarks from './collections/Trademarks'
 
 export default buildConfig({
   admin: {
@@ -43,6 +43,7 @@ export default buildConfig({
     Publications,
     Tags,
     Portraits,
+    Trademarks,
     Images,
     Categories,
     Subcategories,

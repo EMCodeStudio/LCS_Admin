@@ -5,13 +5,13 @@ const Colors: CollectionConfig = {
     slug: 'colores',
     admin: {
         useAsTitle: 'Nombre',
-        defaultColumns: ['Nombre','Color'],
-        group: 'INVENTARIO'
+        defaultColumns: ['Nombre','Color','Estado'],
+        group: 'CONTENIDO'
     },
-    labels: {
+     labels: {
         singular: 'Color',
         plural: 'Colores',
-    },
+    }, 
     fields: [
         //example text field
         {
@@ -21,10 +21,10 @@ const Colors: CollectionConfig = {
             required: true,
             unique: true,
             admin: {
-                placeholder: 'Color aqui'
+                placeholder: 'Color aqui',
+                width:'50%'
             }
         },
-
         colorField,
         {
           name: "Estado", // required

@@ -11,7 +11,7 @@ const Publications: CollectionConfig = {
     admin: {
         useAsTitle: 'Titulo',
         defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'esOferta', 'Descuento', 'ErrorMessage', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
-        group: 'CONTENIDO',
+        group: 'VENTAS',
 
     },
     labels: {

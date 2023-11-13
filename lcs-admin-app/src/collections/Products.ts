@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Colores', 'Cantidad', 'Precio', 'Imagen', 'Estado', 'FechaIngreso', 'HoraIngreso'],
+        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Colores', 'Cantidad', 'Precio', 'Imagen', 'Estado', 'FechaIngreso', 'HoraIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -96,25 +96,45 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-       
+        {
+            name: "esMarca", // required
+            type: "checkbox", // required
+            label: "Marca del Producto",
+            defaultValue: false,
+            admin: {
+                description: 'Marque esta casilla si desea agregar la Marca del Producto.'
+            }
+        },
+        {
+            name: "Marca", // required
+            type: "relationship", // required
+            relationTo: 'marcas',
+            label: "Marca del Producto",
+            required: false,
+            admin: {
+                condition: ({ esMarca }) => esMarca === true,
+                width: '50%'
+            }
+        },
         {
             name: "esMedidasPeso", // required
             type: "checkbox", // required
             label: "Medidas y Peso del Producto",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si desea agregar Medidas y Peso al Producto  '
+                description: 'Marque esta casilla si desea agregar Medidas y Peso al Producto.'
             }
         },
         {
             type: 'row',
-            admin:{
-                condition: ({esMedidasPeso}) => esMedidasPeso === true
+            admin: {
+                condition: ({ esMedidasPeso }) => esMedidasPeso === true
             },
             fields: [
                 {
                     name: "UnidadMedidas", // required
                     type: "select", // required
+                    label: 'Unidad de Medida',
                     hasMany: false, /// set to true if you want to select multiple
                     options: [
                         {
@@ -137,7 +157,7 @@ const Products: CollectionConfig = {
                     defaultValue: 'millimeter',
                     required: false,
                     admin: {
-                        width:'33%'
+                        width: '33%'
                     }
                 },
                 {
@@ -147,7 +167,7 @@ const Products: CollectionConfig = {
                     required: false,
                     admin: {
                         step: 1,
-                        width:'33%',
+                        width: '33%',
                         placeholder: '0'
                     }
                 },
@@ -158,7 +178,7 @@ const Products: CollectionConfig = {
                     required: false,
                     admin: {
                         step: 1,
-                        width:'33%',
+                        width: '33%',
                         placeholder: '0'
                     }
                 },
@@ -168,13 +188,14 @@ const Products: CollectionConfig = {
         },
         {
             type: 'row',
-            admin:{
-                condition: ({esMedidasPeso}) => esMedidasPeso === true
+            admin: {
+                condition: ({ esMedidasPeso }) => esMedidasPeso === true
             },
             fields: [
                 {
                     name: "UnidadPeso", // required
                     type: "select", // required
+                    label: 'Unidad de Peso',
                     hasMany: false, /// set to true if you want to select multiple
                     options: [
                         {
@@ -197,7 +218,7 @@ const Products: CollectionConfig = {
                     defaultValue: 'millimeter',
                     required: false,
                     admin: {
-                        width:'50%'
+                        width: '50%'
                     }
                 },
                 {
@@ -207,7 +228,7 @@ const Products: CollectionConfig = {
                     required: false,
                     admin: {
                         step: 1,
-                        width:'50%',
+                        width: '50%',
                         placeholder: '0'
                     }
                 },

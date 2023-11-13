@@ -1,43 +1,41 @@
 import { CollectionConfig } from "payload/types";
 
-const Tags: CollectionConfig =  {
-    slug: 'etiquetas',
-    access:{
-         read: () => true
-    },
+const Trademarks: CollectionConfig = {
+    slug: 'marcas',
     admin: {
-        useAsTitle: 'Etiqueta',
-        defaultColumns:['Etiqueta','Estado'],
-        group: 'VENTAS'
+        useAsTitle: 'Marca',
+        group: 'CONTENIDO'
     },
    labels: {
-      singular: 'Etiqueta',
-      plural: 'Etiquetas',
+      singular: 'Marca',
+      plural: 'Marcas',
     },
     fields: [
         //example text field
         {
-            name: 'Etiqueta',
-            label: 'Nombre de Etiqueta',
+            name: 'Marca',
+            label: 'Nombre de Marca',
             type: 'text',
-            required:true,
-            unique: true,
-            admin:{
-                placeholder:'Nombre de Etiqueta aqui'
-            }
+        },
+        {
+          name: "Imagen", // required
+          type: "upload", // required
+          relationTo:'imagenes',  //required eg:media
+          label: "Imagen de la Marca",
+          required: false,
         },
         {
             name: "Estado", // required
             type: "select", // required
-            label:'Estado de Etiqueta',
+            label: "Estado de la Marca",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {
-                    label: "Disponible",
+                    label: "Publico",
                     value: "published",
                 },
                 {
-                    label: "No Disponible",
+                    label: "No Publico",
                     value: "draft",
                 },
             ],
@@ -51,4 +49,4 @@ const Tags: CollectionConfig =  {
     timestamps: true,
 };
 
-export default Tags;
+export default Trademarks;

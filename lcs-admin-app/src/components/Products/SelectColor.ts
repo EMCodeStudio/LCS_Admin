@@ -6,11 +6,11 @@ import Cell from './ColorPicker/Cell';
 export const validateHexColor = (value: string): boolean | string => {
     
     if (value === undefined) {
-        return 'Value is undefined';
+        return 'Value es Indefinido';
     }
     const matchResult = value.match(/^#(?:[0-9a-fA-F]{3}){1,2}$/);
     
-    return matchResult && matchResult.length === 1 ? true : `${value} is not a valid hex color`;
+    return matchResult && matchResult.length === 1 ? true : `${value} no es un Color Hexadecimal`;
 }
 
 const colorField: Field = {
