@@ -49,7 +49,7 @@ $style-stroke-width-m: 4px;
 
 .chip {
   border-radius: 50%;
-  border: $style-stroke-width-m solid #fff;
+  border: $style-stroke-width-m solid rgba(208, 244, 255);
   height: base(1.7);
   width: base(1.7);
   margin-right: base(.5);

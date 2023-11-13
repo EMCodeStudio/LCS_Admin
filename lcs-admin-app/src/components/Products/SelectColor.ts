@@ -13,7 +13,6 @@ export const validateHexColor = (value: string): boolean | string => {
     return matchResult && matchResult.length === 1 ? true : `${value} is not a valid hex color`;
 }
 
-
 const colorField: Field = {
     name: 'Color',
     label: 'Color por Defecto',
