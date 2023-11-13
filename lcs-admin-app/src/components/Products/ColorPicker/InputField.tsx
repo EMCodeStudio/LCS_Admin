@@ -25,13 +25,11 @@ import './Styles.scss'
 import { validateHexColor } from '../SelectColor';
 
 const defaultColors = [
-    '#0F0F0F',
-    '#9A9A9A',
-    '#F3F3F3',
-    '#FF6F76',
-    '#FDFFA4',
-    '#B2FFD6',
-    '#F3DDF3',
+    '#ffff00',
+    '#0000ff',
+    '#ff0000',
+    '#008000',
+    '#ffffff',
 ]
 
 const baseClass = 'custom-color-picker'
@@ -64,7 +62,13 @@ const InputField: React.FC<Props> = (props) => {
     const { getPreference, setPreference } = usePreferences();
     const [colorOptions, setColorOptions] = useState(defaultColors);
     const [isAdding, setIsAdding] = useState(false);
+
     const [colorToAdd, setColorToAdd] = useState('');
+
+    const handleChangeColor = (event: ChangeEvent<HTMLInputElement>) => {
+        const newColor = event.target.value;
+        setColorToAdd(newColor)
+    } 
 
     useEffect(() => {
         const mergeColorsFromPreferences = async () => {
@@ -104,13 +108,22 @@ const InputField: React.FC<Props> = (props) => {
 
             {isAdding && (
                 <div>
-                    <input
+                    {/*    <input
                         className={`${baseClass}__input`}
                         type="text"
                         placeholder="#000000"
                         onChange={(e) => setColorToAdd(e.target.value)}
                         value={colorToAdd}
+                    /> */}
+
+                    <input
+                        className={`${baseClass}__input`}
+                        type="color"
+                        onChange={handleChangeColor}
+                        title='color'
+                        value={colorToAdd}
                     />
+
                     <Button
                         className={`${baseClass}__btn`}
                         buttonStyle="primary"
@@ -120,8 +133,9 @@ const InputField: React.FC<Props> = (props) => {
                         onClick={handleAddColor}
                         disabled={validateHexColor(colorToAdd) !== true}
                     >
-                        Add
+                        Agregar Color
                     </Button>
+
                     <Button
                         className={`${baseClass}__btn`}
                         buttonStyle="secondary"
@@ -130,10 +144,12 @@ const InputField: React.FC<Props> = (props) => {
                         size="small"
                         onClick={() => setIsAdding(false)}
                     >
-                        Cancel
+                        Cancelar
                     </Button>
+
                 </div>
             )}
+
             {!isAdding && (
                 <Fragment>
                     <ul className={`${baseClass}__colors`}>
@@ -161,7 +177,9 @@ const InputField: React.FC<Props> = (props) => {
                             setIsAdding(true);
                             setValue('');
                         }}
-                    />
+                    >
+                   <p>Nuevo Color</p>
+                    </Button>
                 </Fragment>
             )}
 

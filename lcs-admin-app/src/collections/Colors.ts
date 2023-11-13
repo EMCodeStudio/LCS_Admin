@@ -21,12 +21,32 @@ const Colors: CollectionConfig = {
             required: true,
             unique: true,
             admin: {
-                placeholder: 'Nombre aqui'
+                placeholder: 'Color aqui'
             }
         },
 
         colorField,
-       
+        {
+          name: "Estado", // required
+          type: "select", // required
+          label:'Estado del Color',
+          hasMany: false, /// set to true if you want to select multiple,
+          admin:{
+            position: 'sidebar'
+          },
+          options: [
+            {
+              label: "Disponible",
+              value: "published",
+            },
+            {
+              label: "No Didponible",
+              value: "draft",
+            },
+          ],
+          defaultValue:'published',
+          required: false,
+        },
     ],
 
     timestamps: true,
