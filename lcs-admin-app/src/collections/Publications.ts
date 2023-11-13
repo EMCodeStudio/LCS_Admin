@@ -108,12 +108,15 @@ const Publications: CollectionConfig = {
             hooks: {
                 beforeChange: [
                     ({ data }) => {
-                        const twoDigits = /^\d{2}$/;
-                        if (twoDigits.test(data.Descuento)) {
-                            return data.Descuento
-                        }
-                        else {
-                            return 0
+                        if (data && data.length) {
+                            const twoDigits = /^\d{2}$/;
+                            const discount = data.Descuento;
+                            if (twoDigits.test(discount)) {
+                                return discount
+                            }
+                            else {
+                                return 0
+                            }
                         }
                     }
                 ]
