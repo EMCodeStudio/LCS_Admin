@@ -5,6 +5,9 @@ type Props = {
   message: string
   showError?: boolean
 }
+
+const baseClass = 'error-message';
+
 const ErrorMessages: React.FC<Props> = (props) => {
 
   const { message, showError } = props
@@ -29,9 +32,9 @@ const ErrorMessages: React.FC<Props> = (props) => {
   if (showError) {
     return (
       isVisible && (
-        <div className='error-message'>
+        <div className={`${baseClass}`}>
           <p>{message}</p>
-          <button type='button' onClick={handleClose}>X</button>
+          <button className={`${baseClass}__close-button`} type='button' onClick={handleClose}>X</button>
         </div>
       )
     )

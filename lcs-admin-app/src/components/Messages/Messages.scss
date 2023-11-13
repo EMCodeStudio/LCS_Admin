@@ -1,12 +1,35 @@
 $error-color-bg: #ff00005e;
 $error-color-primary: #e2e2e2;
+$error-color-secondary: #ac1616;
+$error-text-color: #580b0b;
 
 .error-message {
     background-color: $error-color-bg ;
-    padding: 12px;
+    padding: 20px;
     border-radius: 3px;
+    display: flex;
+    justify-content: space-between;
+
     p {
         color: $error-color-primary;
         margin: 0;
+        order: 1;
     }
+
+    &__close-button {
+        background-color: $error-color-primary;
+        color: $error-text-color;
+        border-radius: 50%;
+        transition: ease-in all 0.2s;
+        order: 2;
+        border-style: none;
+        padding: 0px 8.5px;
+
+        &:hover {
+            background-color: $error-color-secondary;
+            color: $error-color-primary;
+            cursor: pointer;
+        }
+    }
+
 }

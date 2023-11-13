@@ -128,7 +128,7 @@ const Publications: CollectionConfig = {
             admin: {
                 condition: ({ Descuento }) => Descuento >= 100,
                 components: {
-                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 0 a 99!', showError: true }),
+                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 0 a 99.', showError: true }),
 
                 }
             }
