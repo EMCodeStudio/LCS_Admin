@@ -4,25 +4,26 @@ const Trademarks: CollectionConfig = {
     slug: 'marcas',
     admin: {
         useAsTitle: 'Marca',
+        defaultColumns: ['Marca', 'Imagen', 'Estado'],
         group: 'CONTENIDO'
     },
-   labels: {
-      singular: 'Marca',
-      plural: 'Marcas',
+    labels: {
+        singular: 'Marca',
+        plural: 'Marcas',
     },
     fields: [
         //example text field
         {
             name: 'Marca',
-            label: 'Nombre de Marca',
+            label: 'Nombre de la Marca',
             type: 'text',
         },
         {
-          name: "Imagen", // required
-          type: "upload", // required
-          relationTo:'imagenes',  //required eg:media
-          label: "Imagen de la Marca",
-          required: false,
+            name: "Imagen", // required
+            type: "upload", // required
+            relationTo: 'imagenes',  //required eg:media
+            label: "Imagen de la Marca",
+            required: false,
         },
         {
             name: "Estado", // required
