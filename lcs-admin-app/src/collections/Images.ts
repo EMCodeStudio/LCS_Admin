@@ -6,7 +6,7 @@ const Images: CollectionConfig = {
     slug: 'imagenes',
     admin: {
         useAsTitle: 'Imagen',
-        defaultColumns: ['Imagen', 'Estado'],
+        defaultColumns: ['Imagen', 'Descripcion', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -15,41 +15,41 @@ const Images: CollectionConfig = {
     },
 
     upload: {
-      staticDir: path.resolve(__dirname, '../../../media'),
+        staticDir: path.resolve(__dirname, '../media'),
     },
-    
-   /*  upload: {
-        staticURL: '/media',
-        staticDir: 'media',
-        imageSizes: [
-            {
-                name: 'thumbnail',
-                width: 400,
-                height: 300,
-                position: 'centre',
-            },
+
+    /*  upload: {
+         staticURL: '/media',
+         staticDir: 'media',
+         imageSizes: [
              {
-                name: 'card',
-                width: 768,
-                height: 1024,
-                position: 'centre',
-            }, 
-            {
-                name: 'Tablet',
-                width: 1024,
-                // By specifying `undefined` or leaving a height undefined,
-                // the image will be sized to a certain width,
-                // but it will retain its original aspect ratio
-                // and calculate a height automatically.
-                height: undefined,
-                position: 'centre',
-            },
-        ],
-        adminThumbnail: 'thumbnail',
-        mimeTypes: ['image/*'],
-        crop: false,
-        focalPoint: false
-    }, */
+                 name: 'thumbnail',
+                 width: 400,
+                 height: 300,
+                 position: 'centre',
+             },
+              {
+                 name: 'card',
+                 width: 768,
+                 height: 1024,
+                 position: 'centre',
+             }, 
+             {
+                 name: 'Tablet',
+                 width: 1024,
+                 // By specifying `undefined` or leaving a height undefined,
+                 // the image will be sized to a certain width,
+                 // but it will retain its original aspect ratio
+                 // and calculate a height automatically.
+                 height: undefined,
+                 position: 'centre',
+             },
+         ],
+         adminThumbnail: 'thumbnail',
+         mimeTypes: ['image/*'],
+         crop: false,
+         focalPoint: false
+     }, */
 
 
 
@@ -66,12 +66,16 @@ const Images: CollectionConfig = {
             }
         },
         {
-            name: 'caption',
+            name: 'Descripcion',
+            label: 'Descripcion de la Imagen',
             editor: lexicalEditor({
-              features: ({ defaultFeatures }) => [LinkFeature({})],
+                features: ({ defaultFeatures }) => [LinkFeature({})],
             }),
             type: 'richText',
-          },
+            admin:{
+                description: 'Puede darle doble Click al text para agregarle un Link.'
+            }
+        },
         {
             name: "Estado", // required
             type: "select", // required
