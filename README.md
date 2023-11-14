@@ -29,6 +29,7 @@
 
 ## CONTENIDO
 - Images *
+- npm install @payloadcms/richtext-lexical
 - Tags *
 - Publications *
 - Portraits*

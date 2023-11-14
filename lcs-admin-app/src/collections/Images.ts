@@ -1,4 +1,6 @@
 import { CollectionConfig } from "payload/types";
+import { LinkFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+import path from 'path'
 
 const Images: CollectionConfig = {
     slug: 'imagenes',
@@ -11,7 +13,12 @@ const Images: CollectionConfig = {
         singular: 'Imagen',
         plural: 'Imagenes',
     },
+
     upload: {
+      staticDir: path.resolve(__dirname, '../../../media'),
+    },
+    
+   /*  upload: {
         staticURL: '/media',
         staticDir: 'media',
         imageSizes: [
@@ -21,12 +28,12 @@ const Images: CollectionConfig = {
                 height: 300,
                 position: 'centre',
             },
-            /* {
+             {
                 name: 'card',
                 width: 768,
                 height: 1024,
                 position: 'centre',
-            }, */
+            }, 
             {
                 name: 'Tablet',
                 width: 1024,
@@ -42,7 +49,10 @@ const Images: CollectionConfig = {
         mimeTypes: ['image/*'],
         crop: false,
         focalPoint: false
-    },
+    }, */
+
+
+
     fields: [
         //example text field
         {
@@ -55,6 +65,13 @@ const Images: CollectionConfig = {
                 placeholder: "Nombre de Imagen aqui",
             }
         },
+        {
+            name: 'caption',
+            editor: lexicalEditor({
+              features: ({ defaultFeatures }) => [LinkFeature({})],
+            }),
+            type: 'richText',
+          },
         {
             name: "Estado", // required
             type: "select", // required
