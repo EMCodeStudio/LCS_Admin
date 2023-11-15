@@ -2,7 +2,7 @@ import React from "react";
 import './Style.scss'
 const Logo: React.FC = () => {
     return (
-        <div className="icon">
+        <div className="icon-logo">
             <img src="/public/assets/Images/Logo.png" alt="Logo" />
 
             <div className="name">
