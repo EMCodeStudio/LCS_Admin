@@ -234,6 +234,7 @@ const Products: CollectionConfig = {
                 },
             ]
         },
+
         //example text field
         {
             name: 'Colores',
@@ -278,44 +279,45 @@ const Products: CollectionConfig = {
                             }
                         },
                         {
-                            name: 'Imagenes',
-                            type: 'array',
-                            label: 'Imagenes de Publicacion',
-                            minRows: 1,
-                            maxRows: 5,
-                            unique: true,
-                            admin: {
-                                description: 'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho ',
-                                width:'100%'
-                            },
+                            type: 'row',
                             fields: [
                                 {
-                                    name: "Imagen", // required
-                                    label: "Imagen de Producto",
-                                    type: 'upload', // required
-                                    relationTo: 'imagenes', //required eg:users
-                                    required: true,
-                                    hooks: {
-                                        beforeValidate: [
-                                            (req): void => {
-                                                const image = req.data
-                                                if (image && image.width < 420) {
-                                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
-                                                }
+                                    name: 'Imagenes',
+                                    type: 'array',
+                                    label: 'Imagenes del Producto',
+                                    minRows: 1,
+                                    maxRows: 5,
+                                    unique: true,
+                                    admin: {
+                                        description: 'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho ',
+                                        width: '100%'
+                                    },
+                                    fields: [
+                                        {
+                                            name: "Imagen", // required
+                                            label: "Imagen de Producto",
+                                            type: 'upload', // required
+                                            relationTo: 'imagenes', //required eg:users
+                                            required: true,
+                                            hooks: {
+                                                beforeValidate: [
+                                                    (req): void => {
+                                                        const image = req.data
+                                                        if (image && image.width < 420) {
+                                                            throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                                                        }
+                                                    }
+                                                ]
                                             }
-                                        ]
-                                    }
-                                }
+                                        }
+                                    ]
+                                },
                             ]
                         },
-                    ]
+                    ],
                 },
-            ]
+            ],
         },
-
-
-      
-
         {
             name: "Estado", // required
             type: "select", // required
@@ -365,8 +367,9 @@ const Products: CollectionConfig = {
                 },
             }
         }
-    ],
 
+
+    ],
     timestamps: true,
 };
 
