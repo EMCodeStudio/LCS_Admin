@@ -1,12 +1,12 @@
 import { CollectionConfig } from "payload/types";
-import { LinkFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
+//import { LinkFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
 
 const Images: CollectionConfig = {
     slug: 'imagenes',
     admin: {
         useAsTitle: 'Imagen',
-        defaultColumns: ['Imagen', 'Descripcion', 'Estado'],
+        defaultColumns: ['Imagen', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -65,7 +65,7 @@ const Images: CollectionConfig = {
                 placeholder: "Nombre de Imagen aqui",
             }
         },
-        {
+        /* {
             name: 'Descripcion',
             label: 'Descripcion de la Imagen',
             editor: lexicalEditor({
@@ -75,7 +75,7 @@ const Images: CollectionConfig = {
             admin:{
                 description: 'Puede darle doble Click al Texto para agregarle un Link.'
             }
-        },
+        }, */
         {
             name: "Estado", // required
             type: "select", // required

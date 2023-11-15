@@ -282,14 +282,14 @@ const Products: CollectionConfig = {
 
                     ],
                 },
-                
+
                 {
                     type: 'row',
                     fields: [
                         {
                             name: 'Imagenes',
                             type: 'array',
-                            label: 'Imagenes del Producto',
+                            label: 'Imagen del Producto',
                             minRows: 1,
                             maxRows: 5,
                             unique: true,

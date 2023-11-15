@@ -1,11 +1,41 @@
+$lc-color-one: #aa0e1b;
+$lc-color-one-0: #dd1c2c;
+$lc-color-two: #04136a;
+$lc-color-two-0: #1c2aaf;
+$lc-color-three: #f1b11c;
+$lc-color-three-0: #ffc53d;
+$lc-color-four: #bfbfbf;
+$lc-color-four-0: #e0e0e0;
+
+
 .icon {
-    
+
+    width: 450px;
+    text-align: center;
+
     img {
         width: 250px;
         margin: auto;
+      //  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     }
-    h1{
-        text-align: center;
+
+    .name {
+        margin-top: 15px;
+        display: inline-flex;
+
+        &__first {
+            color: $lc-color-one-0;
+        }
+
+        &__second {
+            color: $lc-color-three;
+            margin-right: 15px;
+
+        }
+
+        &__third {
+            color: $lc-color-two;
+        }
     }
 }
 
@@ -13,5 +43,4 @@
     img {
         height: 30px;
     }
-   
 }
