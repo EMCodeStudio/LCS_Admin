@@ -5,7 +5,6 @@ const Orders: CollectionConfig = {
     access: {
         read: () => true,
         delete: () => false
-
     },
     admin: {
         useAsTitle: 'Pedido',
