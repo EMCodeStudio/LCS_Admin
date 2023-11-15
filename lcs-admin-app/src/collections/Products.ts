@@ -113,7 +113,6 @@ const Products: CollectionConfig = {
             required: false,
             admin: {
                 condition: ({ esMarca }) => esMarca === true,
-                width: '50%'
             }
         },
         {
