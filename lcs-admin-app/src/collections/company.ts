@@ -10,7 +10,7 @@ const Company: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Empresa',
-        defaultColumns: ['Empresa', 'Numero', 'Correo','Direccion', 'Slogan', 'Nosotros','Facebook', 'Ubicacion'],
+        defaultColumns: ['Empresa', 'Numero', 'Correo', 'Direccion', 'Slogan', 'Nosotros', 'Facebook', 'Ubicacion','FechaInicios'],
         group: 'SISTEMA'
     },
     labels: {
@@ -35,8 +35,8 @@ const Company: CollectionConfig = {
                             }
                         },
                         {
-                            type:'row',
-                            fields:[
+                            type: 'row',
+                            fields: [
                                 {
                                     name: "Numero", // required
                                     type: "number", // required
@@ -44,7 +44,7 @@ const Company: CollectionConfig = {
                                     required: true,
                                     admin: {
                                         placeholder: "Numero Celular aqui",
-                                        width:'40%'
+                                        width: '40%'
                                     }
                                 },
                                 {
@@ -54,7 +54,7 @@ const Company: CollectionConfig = {
                                     required: true,
                                     admin: {
                                         placeholder: "Correo Electronico aqui",
-                                        width:'60%'
+                                        width: '60%'
                                     }
                                 },
                             ]
@@ -101,6 +101,7 @@ const Company: CollectionConfig = {
                                 placeholder: "Link de Red Social aqui",
                             }
                         },
+
                     ]
                 }
             ]
@@ -108,12 +109,24 @@ const Company: CollectionConfig = {
         {
             name: "Ubicacion", // required
             type: "point", // required
-            label: "Ubicacion en el Mapa",
+            label: "Ubicacion Mapa",
             required: false,
             admin: {
                 position: 'sidebar'
             }
         },
+        {
+            name: "FechaInicios", // required
+            type: "date", // required
+            label: "Fecha de Inicios",
+            admin: {
+                date: {
+                    //Options: dayAndTime, timeOnly, dayOnly
+                    pickerAppearance: 'dayOnly',
+                },
+                position: 'sidebar'
+            }
+        }
     ],
     timestamps: true,
 };

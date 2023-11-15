@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Colores', 'Cantidad', 'Precio', 'Imagen', 'Estado', 'FechaIngreso', 'HoraIngreso'],
+        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Colores', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -277,33 +277,44 @@ const Products: CollectionConfig = {
                                 width: '33%'
                             }
                         },
+                        {
+                            name: 'Imagenes',
+                            type: 'array',
+                            label: 'Imagenes de Publicacion',
+                            minRows: 1,
+                            maxRows: 5,
+                            unique: true,
+                            admin: {
+                                description: 'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho ',
+                                width:'100%'
+                            },
+                            fields: [
+                                {
+                                    name: "Imagen", // required
+                                    label: "Imagen de Producto",
+                                    type: 'upload', // required
+                                    relationTo: 'imagenes', //required eg:users
+                                    required: true,
+                                    hooks: {
+                                        beforeValidate: [
+                                            (req): void => {
+                                                const image = req.data
+                                                if (image && image.width < 420) {
+                                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                                                }
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
                     ]
                 },
             ]
         },
 
 
-        {
-            name: "Imagen", // required
-            type: "upload", // required
-            relationTo: 'imagenes',  //required eg:media
-            label: "Imgen de Producto",
-            required: true,
-            unique: true,
-            hooks: {
-                beforeValidate: [
-                    (req): void => {
-                        const image = req.data
-                        if (image && image.width < 420) {
-                            throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
-                        }
-                    }
-                ]
-            },
-            admin: {
-                description: 'Sube Imagen de Minimo 420px de ancho',
-            }
-        },
+      
 
         {
             name: "Estado", // required

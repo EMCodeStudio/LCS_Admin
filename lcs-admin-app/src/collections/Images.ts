@@ -73,7 +73,7 @@ const Images: CollectionConfig = {
             }),
             type: 'richText',
             admin:{
-                description: 'Puede darle doble Click al text para agregarle un Link.'
+                description: 'Puede darle doble Click al Texto para agregarle un Link.'
             }
         },
         {
