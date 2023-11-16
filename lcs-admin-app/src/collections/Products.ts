@@ -34,7 +34,7 @@ const Products: CollectionConfig = {
                     name: 'Modelo',
                     label: 'Modelo del Producto',
                     type: 'text',
-                    required: true,
+                    required: false,
                     admin: {
                         width: '30%',
                         placeholder: 'Modelo aqui'
@@ -61,7 +61,7 @@ const Products: CollectionConfig = {
                     name: 'Codigo',
                     label: 'Codigo del Producto',
                     type: 'text',
-                    required: true,
+                    required: false,
                     admin: {
                         width: '30%',
                         placeholder: 'SKU'
@@ -102,7 +102,7 @@ const Products: CollectionConfig = {
             label: "Marca del Producto",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si desea agregar la Marca del Producto.'
+                description: 'Marque esta casilla si desea agregar la Marca.'
             }
         },
         {
@@ -121,7 +121,7 @@ const Products: CollectionConfig = {
             label: "Medidas y Peso del Producto",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si desea agregar Medidas y Peso al Producto.'
+                description: 'Marque esta casilla si desea agregar Medidas y Peso.'
             }
         },
         {
@@ -235,14 +235,14 @@ const Products: CollectionConfig = {
         },
 
         {
-            type:'row',
-            fields:[
+            type: 'row',
+            fields: [
                 {
                     name: "Color", // required
                     label: "Color del Producto",
                     type: "relationship", // required
                     relationTo: 'colores',
-                    required: true,
+                    required: false,
                     admin: {
                         width: '40%'
                     }
@@ -271,7 +271,7 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-        
+
         //example text field
         /*   {
               name: 'Colores',
@@ -363,25 +363,28 @@ const Products: CollectionConfig = {
         {
             type: 'array',
             name: 'Imagenes',
-           fields:[
-               {
-                   name: "Imagen", // required
-                   label: "Imagen de Producto",
-                   type: 'upload', // required
-                   relationTo: 'imagenes', //required eg:users
-                   required: true,
-                   hooks: {
-                       beforeValidate: [
-                           (req): void => {
-                               const image = req.data
-                               if (image && image.width < 420) {
-                                   throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
-                               }
-                           }
-                       ]
-                   }
-               },
-           ]
+            required: true,
+            maxRows: 10,
+            minRows:1,
+            fields: [
+                {
+                    name: "Imagen", // required
+                    label: "Imagen de Producto",
+                    type: 'upload', // required
+                    relationTo: 'imagenes', //required eg:users
+                    required: true,
+                    hooks: {
+                        beforeValidate: [
+                            (req): void => {
+                                const image = req.data
+                                if (image && image.width < 420) {
+                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                                }
+                            }
+                        ]
+                    }
+                },
+            ]
         },
 
 
