@@ -7,7 +7,7 @@ const Users: CollectionConfig = {
     read: () => true,
     create: () => false,
     delete: () => false,
-    update:() => false
+    update:() => true
   },
   admin: {
     useAsTitle: 'email',

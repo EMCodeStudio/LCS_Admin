@@ -8,7 +8,7 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Colores', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
+        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Color', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -26,7 +26,7 @@ const Products: CollectionConfig = {
                     required: true,
                     unique: true,
                     admin: {
-                        width: '50%',
+                        width: '70%',
                         placeholder: 'Nombre aqui'
                     }
                 },
@@ -36,7 +36,7 @@ const Products: CollectionConfig = {
                     type: 'text',
                     required: true,
                     admin: {
-                        width: '50%',
+                        width: '30%',
                         placeholder: 'Modelo aqui'
                     }
                 },
@@ -54,7 +54,7 @@ const Products: CollectionConfig = {
                     hasMany: false,
                     required: true,
                     admin: {
-                        width: '33%',
+                        width: '40%',
                     }
                 },
                 {
@@ -63,7 +63,7 @@ const Products: CollectionConfig = {
                     type: 'text',
                     required: true,
                     admin: {
-                        width: '33%',
+                        width: '30%',
                         placeholder: 'SKU'
 
                     }
@@ -75,7 +75,7 @@ const Products: CollectionConfig = {
                     hasMany: false, /// set to true if you want to select multiple
                     label: 'Tamaño del Producto',
                     admin: {
-                        width: '33%',
+                        width: '30%',
                     },
                     options: [
                         {
@@ -234,92 +234,157 @@ const Products: CollectionConfig = {
             ]
         },
 
-        //example text field
         {
-            name: 'Colores',
-            type: 'array',
-            label: 'Detalles del Producto',
-            minRows: 1,
-            maxRows: 5,
-            fields: [  
+            type:'row',
+            fields:[
                 {
-                    type: 'row',
-                    fields: [
-                        {
-                            name: "Color", // required
-                            label: "Color del Producto",
-                            type: "relationship", // required
-                            relationTo: 'colores',
-                            required: true,
-                            admin: {
-                                width: '33%'
-                            }
-                        },
-                        {
-                            name: "Cantidad", // required
-                            label: "Cantidad Disponible",
-                            type: "number", // required
-                            required: true,
-                            admin: {
-                                step: 1,
-                                placeholder: '0',
-                                width: '33%'
-                            }
-                        },
-                        {
-                            name: "Precio", // required
-                            label: "Precio del Producto",
-                            type: "number", // required
-                            required: true,
-                            admin: {
-                                step: 1,
-                                placeholder: '$ 0.00',
-                                width: '33%'
-                            }
-                        },
-
-
-                    ],
+                    name: "Color", // required
+                    label: "Color del Producto",
+                    type: "relationship", // required
+                    relationTo: 'colores',
+                    required: true,
+                    admin: {
+                        width: '40%'
+                    }
                 },
-
                 {
-                    type: 'row',
-                    fields: [
-                        {
-                            name: 'Imagenes',
-                            type: 'array',
-                            label: 'Imagen del Producto',
-                            minRows: 1,
-                            maxRows: 5,
-                            unique: true,
-                            admin: {
-                                description: 'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho ',
-                                width: '100%'
-                            },
-                            fields: [
-                                {
-                                    name: "Imagen", // required
-                                    label: "Imagen de Producto",
-                                    type: 'upload', // required
-                                    relationTo: 'imagenes', //required eg:users
-                                    required: true,
-                                    hooks: {
-                                        beforeValidate: [
-                                            (req): void => {
-                                                const image = req.data
-                                                if (image && image.width < 420) {
-                                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
-                                                }
-                                            }
-                                        ]
-                                    }
-                                }
-                            ]
-                        },
-                    ]
+                    name: "Cantidad", // required
+                    label: "Cantidad Disponible",
+                    type: "number", // required
+                    required: true,
+                    admin: {
+                        step: 1,
+                        placeholder: '0',
+                        width: '30%'
+                    }
                 },
-            ],
+                {
+                    name: "Precio", // required
+                    label: "Precio del Producto",
+                    type: "number", // required
+                    required: true,
+                    admin: {
+                        step: 1,
+                        placeholder: '$ 0.00',
+                        width: '30%'
+                    }
+                },
+            ]
         },
+        
+        //example text field
+        /*   {
+              name: 'Colores',
+              type: 'array',
+              label: 'Detalles del Producto',
+              minRows: 1,
+              maxRows: 5,
+              fields: [  
+                  {
+                      type: 'row',
+                      fields: [
+                          {
+                              name: "Color", // required
+                              label: "Color del Producto",
+                              type: "relationship", // required
+                              relationTo: 'colores',
+                              required: true,
+                              admin: {
+                                  width: '33%'
+                              }
+                          },
+                          {
+                              name: "Cantidad", // required
+                              label: "Cantidad Disponible",
+                              type: "number", // required
+                              required: true,
+                              admin: {
+                                  step: 1,
+                                  placeholder: '0',
+                                  width: '33%'
+                              }
+                          },
+                          {
+                              name: "Precio", // required
+                              label: "Precio del Producto",
+                              type: "number", // required
+                              required: true,
+                              admin: {
+                                  step: 1,
+                                  placeholder: '$ 0.00',
+                                  width: '33%'
+                              }
+                          },
+                      ],
+                  },
+  
+                  {
+                      type: 'row',
+                      fields: [
+                          {
+                              name: 'Imagenes',
+                              type: 'array',
+                              label: 'Imagen del Producto',
+                              minRows: 1,
+                              maxRows: 5,
+                              unique: true,
+                              admin: {
+                                  description: 'Sube entre 1 - 5 Imagenes con Minimo 420px de ancho ',
+                                  width: '100%'
+                              },
+                              fields: [
+  
+                                  {
+                                      name: "Imagen", // required
+                                      label: "Imagen de Producto",
+                                      type: 'upload', // required
+                                      relationTo: 'imagenes', //required eg:users
+                                      required: true,
+                                      hooks: {
+                                          beforeValidate: [
+                                              (req): void => {
+                                                  const image = req.data
+                                                  if (image && image.width < 420) {
+                                                      throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                                                  }
+                                              }
+                                          ]
+                                      }
+                                  }
+  
+  
+                              ]
+                          },
+                      ]
+                  },
+  
+              ],
+          } */
+        {
+            type: 'array',
+            name: 'Imagenes',
+           fields:[
+               {
+                   name: "Imagen", // required
+                   label: "Imagen de Producto",
+                   type: 'upload', // required
+                   relationTo: 'imagenes', //required eg:users
+                   required: true,
+                   hooks: {
+                       beforeValidate: [
+                           (req): void => {
+                               const image = req.data
+                               if (image && image.width < 420) {
+                                   throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                               }
+                           }
+                       ]
+                   }
+               },
+           ]
+        },
+
+
         {
             name: "Estado", // required
             type: "select", // required
@@ -369,8 +434,6 @@ const Products: CollectionConfig = {
                 },
             }
         }
-
-
     ],
     timestamps: true,
 };

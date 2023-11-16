@@ -43,6 +43,7 @@
 ## SISTEMA 
 - Users *
 - Empresa *
+- payload-preferences
 
 # Commands
 - cd lcs-admin-app
@@ -53,7 +54,7 @@
 
 # Creating User
 - test.admin@lcsoluciones.com
-- 123456789
+- lcsoluciones123456
 
 
 
