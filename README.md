@@ -63,17 +63,17 @@
 
 ## AUTHENTICATION
 ### URLS:
-Login	        POST: http://localhost:3000/api/usuarios/login	*
-Logout	        POST: http://localhost:3000/api/usuarios/logout	
+Login	          POST: http://localhost:3000/api/usuarios/login	*
+Logout	        POST: http://localhost:3000/api/usuarios/logout	*
 Unlock	        POST: http://localhost:3000/api/usuarios/unlock	
-Refresh	        POST: http://localhost:3000/api/usuarios/refresh-token	
+Refresh	        POST: http://localhost:3000/api/usuarios/refresh-token *
 Verify user     POST: http://localhost:3000/api/usuarios/verify/{token}	
 Current user    GET:  http://localhost:3000/api/usuarios/me	
 Forgot Password	POST: http://localhost:3000/api/usuarios/forgot-password	
 Reset Password	POST: http://localhost:3000/api/usuarios/reset-password
 
 
-### TEST LOGIN:
+### TEST LOGIN, BODY:
 - {
   "email": "test.admin@lcsoluciones.com",
   "password": "lcsoluciones123456"
@@ -84,12 +84,12 @@ Reset Password	POST: http://localhost:3000/api/usuarios/reset-password
 - FIND       GET:     http://localhost:3000/api/categorias *
 - FIND ID    GET:     http://localhost:3000/api/categorias/id *
 - CREATE     POST:    http://localhost:3000/api/categorias *
-- UPDATE     PATH:    http://localhost:3000/api/categorias/id
-- UPDATE ID  PATH:    http://localhost:3000/api/categorias/id
+- UPDATE     PATH:    http://localhost:3000/api/categorias
+- UPDATE ID  PATH:    http://localhost:3000/api/categorias/id *
 - REMOVE     DELETE:  http://localhost:3000/api/categorias
-- REMOVE ID  DELETE:  http://localhost:3000/api/categorias/id
+- REMOVE ID  DELETE:  http://localhost:3000/api/categorias/id *
 
-### TEST CREATE:
+### TEST CREATE, BODY:
 - {
     "Categoria": "Fabricaciones",
     "Estado": "published",
