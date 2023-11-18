@@ -32,11 +32,11 @@ const Trademarks: CollectionConfig = {
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {
-                    label: "Publico",
+                    label: "Publica",
                     value: "published",
                 },
                 {
-                    label: "No Publico",
+                    label: "No Publica",
                     value: "draft",
                 },
             ],

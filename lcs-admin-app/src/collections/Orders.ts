@@ -7,7 +7,7 @@ const Orders: CollectionConfig = {
         delete: () => false
     },
     admin: {
-        useAsTitle: 'Pedido',
+        useAsTitle: 'CedulaCliente',
         defaultColumns: ['CedulaCliente', 'TipoVentaPedido', 'ProductoPedido', 'ServicioPedido', 'CantidadPedido', 'TotalPEdido', 'EstadoPago', 'EstadoPedido', 'FechaPedido', 'FechaEntrega'],
         group: 'VENTAS'
     },
@@ -20,10 +20,11 @@ const Orders: CollectionConfig = {
         {
             name: "CedulaCliente", // required
             label: "Cedula del Cliente",
-            type: "relationship", // required
-            relationTo: "clientes",
+            type: "text", // required
+            // relationTo: "",
             required: true,
         },
+
         {
             name: "TipoVentaPedido", // required
             label: "Tipo de Venta",
@@ -79,11 +80,11 @@ const Orders: CollectionConfig = {
         },
         {
             name: "CantidadPedido", // required
-            label: "Cantidad Solicitada",
+            label: "Cantidad Requerida",
             type: "number", // required
             required: false,
             admin: {
-                placeholder:'0',
+                placeholder: '0',
                 condition: (data, siblingData, { user }) => {
                     if (data.TipoVentaPedido === 'product') {
                         return true
@@ -95,7 +96,7 @@ const Orders: CollectionConfig = {
         },
         {
             name: "TotalPedido", // required
-            label: "Precio Total",
+            label: "Costo Total",
             type: "number", // required
             required: false,
             admin: {

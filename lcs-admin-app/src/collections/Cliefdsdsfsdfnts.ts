@@ -1,24 +1,20 @@
 import { CollectionConfig } from "payload/types";
 
-const Clients: CollectionConfig = {
-    slug: 'clientes',
-    auth: true,
-    access: {
-        read: () => true,
-        delete: () => false
-    },
-    admin: {
-        useAsTitle: 'Cedula',
-        defaultColumns: ['TipoPersona', 'Nombre', 'Apellidos', 'TipoID', 'Cedula', 'NombreEmpresa', 'NIT', 'CorreoEmpresa', 'DireccionEmpresa', 'Correo', 'Numero', 'Terminos', 'Estado', 'FechaRegistro'],
-        group: 'VENTAS'
-
-    },
-    labels: {
-        singular: 'Cliente',
-        plural: 'Clientes',
-    },
+const lsrfdfksplf: CollectionConfig = {
+    slug: 'asdasdasd',
     fields: [
         //example text field
+        {
+            name: "Cedula", // required
+            label: "Numero de Cedula",
+            type: "text", // required
+            required: true,
+            unique: true,
+            admin: {
+               // step: 1,
+                placeholder: 'Numero de Cedula aqui'
+            }
+        },
 
         {
             type: 'collapsible',
@@ -90,18 +86,7 @@ const Clients: CollectionConfig = {
                     ],
                     defaultValue: 'zitizen',
                 },
-                {
-                    name: "Cedula", // required
-                    label: "Numero de Cedula",
-                    type: "number", // required
-                    required: true,
-                    unique: true,
-                    admin: {
-                        step: 1,
-                        placeholder: 'Numero de Cedula aqui'
-                    }
-                },
-
+               
                 {
                     type: 'collapsible',
                     label: 'Datos de la Empresa',
@@ -158,6 +143,7 @@ const Clients: CollectionConfig = {
                 },
             ]
         },
+
         {
             type: 'collapsible',
             label: 'Informacion de Contacto',
@@ -184,6 +170,7 @@ const Clients: CollectionConfig = {
                 },
             ]
         },
+
         {
             name: "Terminos", // required
             type: "checkbox", // required
@@ -193,6 +180,7 @@ const Clients: CollectionConfig = {
                 description: 'Marque esta casilla si el cliente acepta los Terminos y Condiciones'
             }
         },
+
         {
             name: "Estado", // required
             type: "select", // required
@@ -214,6 +202,7 @@ const Clients: CollectionConfig = {
                 position: 'sidebar'
             }
         },
+
         {
             name: "FechaRegistro", // required
             type: "date", // required
@@ -223,8 +212,10 @@ const Clients: CollectionConfig = {
                 position: "sidebar"
             }
         }
+ 
+
     ],
     timestamps: true,
 };
 
-export default Clients;
+export default lsrfdfksplf;

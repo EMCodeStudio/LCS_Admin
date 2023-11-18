@@ -369,7 +369,7 @@ const Products: CollectionConfig = {
             fields: [
                 {
                     name: "Imagen", // required
-                    label: "Imagen de Producto",
+                    label: "Imagen del Producto",
                     type: 'upload', // required
                     relationTo: 'imagenes', //required eg:users
                     required: true,

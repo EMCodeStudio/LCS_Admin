@@ -59,3 +59,30 @@
 
 
 
+# REST API QUERY
+
+## AUTHENTICATION
+### URLS:
+Login	        POST: http://localhost:3000/api/{user}/login	
+Logout	        POST: http://localhost:3000/api/{user}/logout	
+Unlock	        POST: http://localhost:3000/api/{user}/unlock	
+Refresh	        POST: http://localhost:3000/api/{user}/refresh-token	
+Verify User	    POST: http://localhost:3000/api/{user}/verify/{token}	
+Current User	GET:  http://localhost:3000/api/{user}/me	
+Forgot Password	POST: http://localhost:3000/api/{user}/forgot-password	
+Reset Password	POST: http://localhost:3000/api/{user}/reset-password
+
+## CATEGORIES
+### URLS:
+- FIND       GET:     http://localhost:3000/api/categories 
+- FIND ID    GET:     http://localhost:3000/api/categories/id
+- CREATE     POST:    http://localhost:3000/api/categories
+- UPDATE     PATH:    http://localhost:3000/api/categories/id
+- UPDATE ID  PATH:    http://localhost:3000/api/categories/id
+- REMOVE     DELETE:  http://localhost:3000/api/categories
+- REMOVE ID  DELETE:  http://localhost:3000/api/categories/id
+
+
+
+
+
