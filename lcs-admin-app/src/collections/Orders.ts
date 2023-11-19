@@ -20,11 +20,11 @@ const Orders: CollectionConfig = {
         {
             name: "CedulaCliente", // required
             label: "Cedula del Cliente",
-            type: "text", // required
-            // relationTo: "",
+            type: "relationship", // required
+            relationTo: "clientes",
             required: true,
         },
-
+       
         {
             name: "TipoVentaPedido", // required
             label: "Tipo de Venta",
@@ -44,6 +44,7 @@ const Orders: CollectionConfig = {
                 layout: 'horizontal',
             }
         },
+
         {
             name: "ProductoPedido", // required
             label: "Nombre del Producto",
@@ -134,7 +135,6 @@ const Orders: CollectionConfig = {
             defaultValue: 'pending',
             required: false,
         },
-
         {
             name: "EstadoPedido", // required
             type: "select", // required
