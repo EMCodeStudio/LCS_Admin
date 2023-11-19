@@ -30,11 +30,9 @@ const Customers: CollectionConfig = {
             required: false,
             hooks: {
                 beforeChange: [({ siblingData }) => {
-                    siblingData.CedulaNombre;
+                    siblingData.CedulaNombre = undefined;
                 }],
-                afterRead: [
-                    formatCedulaNombre,
-                ]
+                afterRead: [formatCedulaNombre,]
             },
             access: {
                 create: () => false,

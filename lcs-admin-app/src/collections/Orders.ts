@@ -1,14 +1,20 @@
-import { CollectionConfig } from "payload/types";
+import { CollectionConfig, FieldHook } from "payload/types";
+
+const getTotalPrice: FieldHook = async ({ data }) => {
+    const { CostoProducto, CantidadProducto, PorcentajeIva, CostoEnvio } = data.DetallesPago
+    const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio;
+    return totalPrice;
+}
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
         read: () => true,
-        delete: () => false
+        delete: () => true
     },
     admin: {
         useAsTitle: 'CedulaCliente',
-        defaultColumns: ['CedulaCliente', 'TipoVentaPedido', 'ProductoPedido', 'ServicioPedido', 'CantidadPedido', 'TotalPEdido', 'EstadoPago', 'EstadoPedido', 'FechaPedido', 'FechaEntrega'],
+        defaultColumns: ['CedulaCliente', 'TipoVentaPedido', 'ProductoPedido', 'ServicioPedido'],
         group: 'VENTAS'
     },
     labels: {
@@ -24,7 +30,6 @@ const Orders: CollectionConfig = {
             relationTo: "clientes",
             required: true,
         },
-       
         {
             name: "TipoVentaPedido", // required
             label: "Tipo de Venta",
@@ -44,7 +49,6 @@ const Orders: CollectionConfig = {
                 layout: 'horizontal',
             }
         },
-
         {
             name: "ProductoPedido", // required
             label: "Nombre del Producto",
@@ -79,31 +83,114 @@ const Orders: CollectionConfig = {
                 },
             }
         },
+
         {
-            name: "CantidadPedido", // required
-            label: "Cantidad Requerida",
-            type: "number", // required
-            required: false,
-            admin: {
-                placeholder: '0',
-                condition: (data, siblingData, { user }) => {
-                    if (data.TipoVentaPedido === 'product') {
-                        return true
-                    } else {
-                        return false
+            type: 'group',
+            name: 'DetallesPago',
+            label: 'Detalles de Pago',
+            fields: [
+                {
+                    name: "CostoProducto", // required
+                    label: "Costo del Producto",
+                    type: "number", // required
+                    required: false,
+                    admin: {
+                        placeholder: '$ 0.00',
+                        condition: (data, siblingData, { user }) => {
+                            if (data.TipoVentaPedido === 'product') {
+                                return true
+                            } else {
+                                return false
+                            }
+                        },
                     }
                 },
-            }
-        },
-        {
-            name: "TotalPedido", // required
-            label: "Costo Total",
-            type: "number", // required
-            required: false,
-            admin: {
-                step: 1,
-                placeholder: '$ 0.00'
-            }
+                {
+                    name: "CostoServicio", // required
+                    label: "Costo del Producto",
+                    type: "number", // required
+                    required: false,
+                    admin: {
+                        placeholder: '$ 0.00',
+                        condition: (data, siblingData, { user }) => {
+                            if (data.TipoVentaPedido === 'service') {
+                                return true
+                            } else {
+                                return false
+                            }
+                        },
+                    }
+                },
+                {
+                    name: "CantidadProducto", // required
+                    label: "Cantidad Requerida",
+                    type: "number", // required
+                    required: false,
+                    admin: {
+                        placeholder: '0',
+                        condition: (data, siblingData, { user }) => {
+                            if (data.TipoVentaPedido === 'product') {
+                                return true
+                            } else {
+                                return false
+                            }
+
+                        }
+                    }
+                },
+                {
+                    name: "CostoEnvio", // required
+                    label: "Costo de Envio",
+                    type: "number", // required
+                    required: false,
+                    admin: {
+                        placeholder: '$ 0.00',
+                        condition: (data, siblingData, { user }) => {
+                            if (data.TipoVentaPedido === 'product') {
+                                return true
+                            } else {
+                                return false
+                            }
+                        },
+                    }
+                },
+                {
+                    name: "PorcentajeIva", // required
+                    label: "Porcentaje de IVA",
+                    type: "number", // required
+                    required: false,
+                    admin: {
+                        placeholder: '% 00',
+                        condition: (data, siblingData, { user }) => {
+                            if (data.TipoVentaPedido === 'product') {
+                                return true
+                            } else {
+                                return false
+                            }
+                        },
+                    }
+                },
+                {
+                    name: "TotalPrice", // required
+                    label: "Costo Total",
+                    type: "number", // required
+                    required: false,
+                    access: {
+                        create: () => false,
+                        update: () => false
+                    },
+                    hooks: {
+                        beforeChange: [({ siblingData }) => {
+                            siblingData.totalPrice = undefined
+                        }],
+                        afterRead: [getTotalPrice]
+                    },
+                    admin: {
+                        step: 1,
+                        placeholder: '$ 0.00'
+                    }
+                },
+            ]
         },
         {
             name: "EstadoPago", // required
