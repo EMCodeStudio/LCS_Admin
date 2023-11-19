@@ -90,106 +90,132 @@ const Orders: CollectionConfig = {
             label: 'Detalles de Pago',
             fields: [
                 {
-                    name: "CostoProducto", // required
-                    label: "Costo del Producto",
-                    type: "number", // required
-                    required: false,
-                    admin: {
-                        placeholder: '$ 0.00',
-                        condition: (data, siblingData, { user }) => {
-                            if (data.TipoVentaPedido === 'product') {
-                                return true
-                            } else {
-                                return false
+                    type: 'row',
+                    fields: [
+                        {
+                            name: "CostoProducto", // required
+                            label: "Costo del Producto",
+                            type: "number", // required
+                            required: false,
+                            admin: {
+                                width:'50%',
+                                placeholder: '$ 0.00',
+                                condition: (data, siblingData, { user }) => {
+                                    if (data.TipoVentaPedido === 'product') {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
+                                },
                             }
                         },
-                    }
-                },
-                {
-                    name: "CostoServicio", // required
-                    label: "Costo del Producto",
-                    type: "number", // required
-                    required: false,
-                    admin: {
-                        placeholder: '$ 0.00',
-                        condition: (data, siblingData, { user }) => {
-                            if (data.TipoVentaPedido === 'service') {
-                                return true
-                            } else {
-                                return false
+                        {
+                            name: "CostoServicio", // required
+                            label: "Costo del Producto",
+                            type: "number", // required
+                            required: false,
+                            admin: {
+                                width:'50%',
+                                placeholder: '$ 0.00',
+                                condition: (data, siblingData, { user }) => {
+                                    if (data.TipoVentaPedido === 'service') {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
+                                },
                             }
                         },
-                    }
-                },
-                {
-                    name: "CantidadProducto", // required
-                    label: "Cantidad Requerida",
-                    type: "number", // required
-                    required: false,
-                    admin: {
-                        placeholder: '0',
-                        condition: (data, siblingData, { user }) => {
-                            if (data.TipoVentaPedido === 'product') {
-                                return true
-                            } else {
-                                return false
-                            }
+                        {
+                            name: "CantidadProducto", // required
+                            label: "Cantidad Requerida",
+                            type: "number", // required
+                            required: false,
+                            admin: {
+                                width:'50%',
+                                placeholder: '0',
+                                condition: (data, siblingData, { user }) => {
+                                    if (data.TipoVentaPedido === 'product') {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
 
-                        }
-                    }
-                },
-                {
-                    name: "CostoEnvio", // required
-                    label: "Costo de Envio",
-                    type: "number", // required
-                    required: false,
-                    admin: {
-                        placeholder: '$ 0.00',
-                        condition: (data, siblingData, { user }) => {
-                            if (data.TipoVentaPedido === 'product') {
-                                return true
-                            } else {
-                                return false
+                                }
                             }
                         },
-                    }
+                    ]
                 },
+
                 {
-                    name: "PorcentajeIva", // required
-                    label: "Porcentaje de IVA",
-                    type: "number", // required
-                    required: false,
-                    admin: {
-                        placeholder: '% 00',
-                        condition: (data, siblingData, { user }) => {
-                            if (data.TipoVentaPedido === 'product') {
-                                return true
-                            } else {
-                                return false
+                    type: 'row',
+                    fields: [
+
+                      
+                        {
+                            name: "CostoEnvio", // required
+                            label: "Costo de Envio",
+                            type: "number", // required
+                            required: false,
+                            admin: {
+                                width:'50%',
+                                placeholder: '$ 0.00',
+                                condition: (data, siblingData, { user }) => {
+                                    if (data.TipoVentaPedido === 'product') {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
+                                },
                             }
                         },
-                    }
+                        {
+                            name: "PorcentajeIva", // required
+                            label: "Porcentaje de IVA",
+                            type: "number", // required
+                            required: false,
+                            admin: {
+                                width:'50%',
+                                placeholder: '% 00',
+                                condition: (data, siblingData, { user }) => {
+                                    if (data.TipoVentaPedido === 'product') {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
+                                },
+                            }
+                        },
+                    ]
                 },
+
                 {
-                    name: "TotalPrice", // required
-                    label: "Costo Total",
-                    type: "number", // required
-                    required: false,
-                    access: {
-                        create: () => false,
-                        update: () => false
-                    },
-                    hooks: {
-                        beforeChange: [({ siblingData }) => {
-                            siblingData.totalPrice = undefined
-                        }],
-                        afterRead: [getTotalPrice]
-                    },
-                    admin: {
-                        step: 1,
-                        placeholder: '$ 0.00'
-                    }
+                    type: 'row',
+                    fields: [
+                        {
+                            name: "TotalPrice", // required
+                            label: "Costo Total",
+                            type: "number", // required
+                            required: false,
+                            access: {
+                                create: () => false,
+                                update: () => false
+                            },
+                            hooks: {
+                                beforeChange: [({ siblingData }) => {
+                                    siblingData.totalPrice = undefined
+                                }],
+                                afterRead: [getTotalPrice]
+                            },
+                            admin: {
+                                width:'50%',
+                                step: 1,
+                                placeholder: '$ 0.00'
+                            }
+                        },
+                    ]
                 },
+
             ]
         },
         {
