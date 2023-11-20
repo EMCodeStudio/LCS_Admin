@@ -1,6 +1,7 @@
 import payload from "payload";
 import { CollectionConfig, FieldHook } from "payload/types";
 
+
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -20,9 +21,21 @@ const Orders: CollectionConfig = {
         //example text field
         {
             name: 'Cliente',
-            label: 'Cedula y Nombre',
+            label: 'Nombre y Cedula',
             type: 'relationship',
-            relationTo: 'clientes'
+            relationTo: 'clientes',
+            validate: async (val, { operation }) => {
+                if (operation !== 'create') {
+                    // skip validation on update
+                    return true
+                }
+                const response = await fetch(`http://localhost:3000/api/clientes/${val}`)
+                if (response.ok) {
+                    return true
+                }
+
+                return 'Nombre y Cedula no Corresponde con ningun Cliente.'
+            },
         },
         {
             name: "ProductoServicio", // required
@@ -42,7 +55,8 @@ const Orders: CollectionConfig = {
                         EstadoServicio: { equals: 'published' }
                     }
                 }
-            }
+            },
+            
         },
         {
             name: "CantidadProducto", // required

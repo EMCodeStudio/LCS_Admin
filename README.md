@@ -23,6 +23,7 @@
 
 ## VENTAS
 - Clients *
+- npm i @payloadcms/plugin-nested-docs
 - Orders
 - Reviews
 - Quotes

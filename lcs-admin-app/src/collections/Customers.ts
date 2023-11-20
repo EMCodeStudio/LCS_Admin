@@ -2,7 +2,7 @@ import { CollectionConfig, FieldHook } from "payload/types";
 
 
 const formatCedulaNombre: FieldHook = async ({ data }) => (
-    `${data.Cedula} - ${data.Nombre} ${data.Apellidos}`
+    `${data.Nombre} ${data.Apellidos} - ${data.Cedula}`
 )
 
 const Customers: CollectionConfig = {
@@ -20,6 +20,7 @@ const Customers: CollectionConfig = {
         singular: 'Cliente',
         plural: 'Clientes',
     },
+    
     fields: [
         //example text field
         {
@@ -63,11 +64,11 @@ const Customers: CollectionConfig = {
         },
         {
             name: 'Apellidos',
-            label: 'Nombre del Cliente',
+            label: 'Apellidos del Cliente',
             type: 'text',
             required: true,
             admin: {
-                placeholder: 'Nombre aqui'
+                placeholder: 'Apellidos aqui'
             }
         },
     ],
