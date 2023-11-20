@@ -14,12 +14,13 @@ import Tags from './collections/Tags'
 import Publications from './collections/Publications'
 import Portraits from './collections/Portraits'
 import Company from './collections/Company'
-import Orders from './collections/Orders'
 import Colors from './collections/Colors'
 import Trademarks from './collections/Trademarks'
 import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
 import Customers from './collections/Customers'
+import Orders from './collections/Orders'
+
 
 export default buildConfig({
   admin: {
@@ -38,16 +39,16 @@ export default buildConfig({
   },
   editor: slateEditor({}),
   collections: [
-    Customers,
     Orders,
+    Customers,
     Publications,
     Tags,
     Portraits,
     Trademarks,
+    Colors,
     Images,
     Categories,
     Subcategories,
-    Colors,
     Products,
     Services,
     Company,

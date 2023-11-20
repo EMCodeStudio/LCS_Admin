@@ -5,7 +5,6 @@ const formatCedulaNombre: FieldHook = async ({ data }) => (
     `${data.Cedula} - ${data.Nombre} ${data.Apellidos}`
 )
 
-
 const Customers: CollectionConfig = {
     slug: 'clientes',
     access: {

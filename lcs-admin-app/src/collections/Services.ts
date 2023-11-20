@@ -22,6 +22,7 @@ const Services: CollectionConfig = {
             type: 'text',
             required:true,
             unique: true,
+            index: true,
             admin:{
                 placeholder:'Nombre del Servicio aqui'
             }

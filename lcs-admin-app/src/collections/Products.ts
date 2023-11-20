@@ -8,7 +8,11 @@ const Products: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Producto',
-        defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Color', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
+
+        /*  defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Color', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
+        */
+        defaultColumns: ['Producto', 'Color','Cantidad','Precio'],
+
         group: 'INVENTARIO'
     },
     labels: {
@@ -25,6 +29,7 @@ const Products: CollectionConfig = {
                     type: 'text',
                     required: true,
                     unique: true,
+                    index: true,
                     admin: {
                         width: '70%',
                         placeholder: 'Nombre aqui'
@@ -365,7 +370,7 @@ const Products: CollectionConfig = {
             name: 'Imagenes',
             required: true,
             maxRows: 10,
-            minRows:1,
+            minRows: 1,
             fields: [
                 {
                     name: "Imagen", // required
