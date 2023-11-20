@@ -7,7 +7,7 @@ import { CollectionConfig, FieldHook } from "payload/types";
 } */
 
 const Orders: CollectionConfig = {
-    slug: 'pedidos',
+    slug: '',
     access: {
         read: () => true,
         delete: () => true

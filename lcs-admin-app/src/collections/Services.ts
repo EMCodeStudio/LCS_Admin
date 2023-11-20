@@ -7,7 +7,7 @@ const Services: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Servicio',
-        defaultColumns:['Servicio','Precio','Subcategoria','Imagen','Estado'],
+        defaultColumns:['Servicio','Precio','Subcategoria','Imagen','EstadoServicio'],
         group:'INVENTARIO'
     },
     labels: {
@@ -67,21 +67,21 @@ const Services: CollectionConfig = {
             
         },
         {
-            name: "Estado", // required
+            name: "EstadoServicio", // required
             label:'Estado del Servicio',
             type: "select", // required
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {
                     label: "Disponible",
-                    value: "enable",
+                    value: "published",
                 },
                 {
                     label: "No Disponible",
-                    value: "disable",
+                    value: "dratf",
                 },
             ],
-            defaultValue: 'enable',
+            defaultValue: 'published',
             required: false,
             admin: {
                 position: 'sidebar'

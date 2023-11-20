@@ -1,4 +1,5 @@
-import { CollectionConfig } from "payload/types";
+import payload from "payload";
+import { CollectionConfig, FieldHook } from "payload/types";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -7,10 +8,9 @@ const Orders: CollectionConfig = {
         create: () => true
     },
     admin: {
-        useAsTitle: 'Cliente',
-        defaultColumns: ['Cliente','ProductoServicio'],
+        useAsTitle: 'producto',
+        defaultColumns: ['Cliente', 'ProductoServicio'],
         group: 'VENTAS'
-
     },
     labels: {
         singular: 'Pedido',
@@ -24,16 +24,36 @@ const Orders: CollectionConfig = {
             type: 'relationship',
             relationTo: 'clientes'
         },
-
         {
-          name: "ProductoServicio", // required
-          label: "Producto o Servicio",
-          type: 'relationship', // required
-          relationTo:['productos','servicios'], //required eg:users
-          hasMany: false,
-          required: false
+            name: "ProductoServicio", // required
+            label: "Producto o Servicio",
+            type: 'relationship', // required
+            relationTo: ['productos', 'servicios'], //required eg:users
+            hasMany: false,
+            required: false,
+            filterOptions: ({ relationTo, siblingData, }) => {
+                if (relationTo === 'productos') {
+                    return {
+                        Cantidad: { greater_than_equal: 1 },
+                    }
+                }
+                if (relationTo === 'servicios') {
+                    return {
+                        EstadoServicio: { equals: 'published' }
+                    }
+                }
+            }
         },
-        
+        {
+            name: "CantidadProducto", // required
+            label: "Cantidad Requrida",
+            type: "number", // required
+            min: 0,
+            required: false,
+            admin: {
+                step: 1,
+            }
+        },
     ],
     timestamps: true,
 };

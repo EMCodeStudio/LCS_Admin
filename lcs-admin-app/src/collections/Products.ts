@@ -11,7 +11,7 @@ const Products: CollectionConfig = {
 
         /*  defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Color', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
         */
-        defaultColumns: ['Producto', 'Color','Cantidad','Precio'],
+        defaultColumns: ['NombreProducto', 'Color','Cantidad','Precio'],
 
         group: 'INVENTARIO'
     },
@@ -24,7 +24,7 @@ const Products: CollectionConfig = {
             type: 'row',
             fields: [
                 {
-                    name: 'Producto',
+                    name: 'NombreProducto',
                     label: 'Nombre del Producto',
                     type: 'text',
                     required: true,
@@ -391,12 +391,10 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-
-
         {
             name: "Estado", // required
             type: "select", // required
-            label: "Estado de Producto",
+            label: "Estado del Producto",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

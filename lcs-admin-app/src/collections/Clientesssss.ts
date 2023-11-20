@@ -1,7 +1,7 @@
 import { CollectionConfig } from "payload/types";
 
 const lsrfdfksplf: CollectionConfig = {
-    slug: 'asdasdasd',
+    slug: '',
     fields: [
         //example text field
         {
