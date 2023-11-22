@@ -1,4 +1,6 @@
-import { CollectionConfig } from "payload/types";
+import payload from "payload";
+import { CollectionConfig, FieldHook } from "payload/types";
+
 
 
 const Products: CollectionConfig = {
@@ -6,12 +8,13 @@ const Products: CollectionConfig = {
     access: {
         read: () => true,
     },
+
     admin: {
-        useAsTitle: 'Producto',
+        useAsTitle: 'NombreProducto',
 
         /*  defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Color', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
         */
-        defaultColumns: ['NombreProducto', 'Color','Cantidad','Precio'],
+        defaultColumns: ['NombreProducto', 'Color', 'Cantidad', 'Precio'],
 
         group: 'INVENTARIO'
     },
@@ -23,6 +26,8 @@ const Products: CollectionConfig = {
         {
             type: 'row',
             fields: [
+
+               
                 {
                     name: 'NombreProducto',
                     label: 'Nombre del Producto',

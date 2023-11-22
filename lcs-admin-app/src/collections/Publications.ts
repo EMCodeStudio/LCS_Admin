@@ -1,7 +1,6 @@
 import { CollectionConfig } from "payload/types";
 import ErrorMessages from "../components/Messages/ErrorMessages";
 
-
 const Publications: CollectionConfig = {
     slug: 'publicaciones',
 

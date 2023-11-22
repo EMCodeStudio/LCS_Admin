@@ -1,6 +1,30 @@
-import payload from "payload";
+
 import { CollectionConfig, FieldHook } from "payload/types";
 
+const handleProductPrice: FieldHook = async({ data }) => {
+
+    if (data && data.ProductoServicio) {
+        
+        const productId = data.ProductoServicio.value;
+        const response = await fetch(`http://localhost:3000/api/productos/${productId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`Error al obtener el Precio del Producto. Código de estado: ${response.status}`);
+                }
+                return response.json();
+            })
+            .then(productData => {
+                const productName = productData.Precio; 
+                return productName;
+            })
+            .catch(error => {
+                console.error('Error al obtener el Ptrcio del Producto:', error);
+                return 'No se puede obtener el Precio del Producto.'; 
+            });
+
+            return response;
+    }
+}
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -19,31 +43,30 @@ const Orders: CollectionConfig = {
     },
     fields: [
         //example text field
+
         {
             name: 'Cliente',
+            /*  label: {es: 'Nombre y Cedula' , en: 'Name and Document'}, */
             label: 'Nombre y Cedula',
             type: 'relationship',
             relationTo: 'clientes',
-            validate: async (val, { operation }) => {
-                if (operation !== 'create') {
-                    // skip validation on update
-                    return true
-                }
-                const response = await fetch(`http://localhost:3000/api/clientes/${val}`)
-                if (response.ok) {
-                    return true
-                }
-
-                return 'Nombre y Cedula no Corresponde con ningun Cliente.'
-            },
         },
         {
             name: "ProductoServicio", // required
             label: "Producto o Servicio",
             type: 'relationship', // required
+            /*  hooks: {
+                 beforeChange: [
+                   ({ data, value, operation }) => {
+                     data.PrecioProducto = typeof value === 'string' ? value.split(' ')[0] : '';
+                     return value;
+                   },
+                 ],
+               }, */
             relationTo: ['productos', 'servicios'], //required eg:users
             hasMany: false,
             required: false,
+            maxDepth: 0,
             filterOptions: ({ relationTo, siblingData, }) => {
                 if (relationTo === 'productos') {
                     return {
@@ -56,18 +79,23 @@ const Orders: CollectionConfig = {
                     }
                 }
             },
-            
         },
         {
-            name: "CantidadProducto", // required
-            label: "Cantidad Requrida",
+            name: "PrecioProducto", // required
             type: "number", // required
-            min: 0,
+            label: "Precio del Producto",
             required: false,
             admin: {
-                step: 1,
-            }
+                readOnly: true
+            },
+            hooks: {
+                beforeChange: [({ siblingData }) => {
+                    return siblingData.PrecioProducto = undefined
+                }],
+                afterRead: [handleProductPrice]
+            },
         },
+
     ],
     timestamps: true,
 };

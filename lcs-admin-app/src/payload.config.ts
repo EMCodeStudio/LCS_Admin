@@ -26,9 +26,10 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
-    meta:{
+    meta: {
       titleSuffix: 'LC Soluciones',
       favicon: '/public/assets/Icons/Favicon.ico',
+    
     },
     components: {
       graphics: {
@@ -54,13 +55,29 @@ export default buildConfig({
     Company,
     Users,
   ],
-  
-  
- 
+
+  i18n: {
+    fallbackLng: 'es', // default
+    debug: false, // default
+    /*    resources: {
+         en: {
+           custom: {
+             // namespace can be anything you want
+             key1: 'Translation with {{variable}}', // translation
+           },
+           // override existing translation keys
+           general: {
+             dashboard: 'Home',
+           },
+         },
+       }, */
+  },
+
   localization: {
     defaultLocale: 'es',
-    locales: ['es']
+    locales: ['es','en']
   },
+
   typescript: {
     outputFile: path.resolve(__dirname, 'payload-types.ts'),
   },
