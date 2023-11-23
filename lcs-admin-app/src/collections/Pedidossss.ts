@@ -1,10 +1,10 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 
-/* const getTotalPrice: FieldHook = async ({ data }) => {
+ const getTotalPrice: FieldHook = async ({ data }) => {
     const { CostoProducto, CantidadProducto, PorcentajeIva, CostoEnvio } = data.DetallesPago
     const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio;
     return totalPrice;
-} */
+} 
 
 const Orders: CollectionConfig = {
     slug: '',
@@ -53,7 +53,7 @@ const Orders: CollectionConfig = {
         },
 
 
-     /*    {
+       {
             type: 'group',
             name: 'DetallesPago',
             label: 'Detalles de Pago',
@@ -280,7 +280,7 @@ const Orders: CollectionConfig = {
             admin: {
                 position: 'sidebar',
             }
-        } */
+        } 
     ],
     timestamps: true,
 };

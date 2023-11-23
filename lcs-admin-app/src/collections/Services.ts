@@ -53,7 +53,7 @@ const Services: CollectionConfig = {
                         placeholder: '$ 0.00',
                         width: '50%',
                         description: 'Este Campo es Opcional'
-        
+
                     }
                 },
             ]

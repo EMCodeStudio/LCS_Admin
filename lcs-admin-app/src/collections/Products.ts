@@ -281,6 +281,7 @@ const Products: CollectionConfig = {
                 },
             ]
         },
+        
 
         //example text field
         /*   {
