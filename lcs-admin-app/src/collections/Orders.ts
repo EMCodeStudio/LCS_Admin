@@ -35,8 +35,8 @@ const handleProductServicePrice: FieldHook = async ({ data }) => {
                 return serviceResponse.json();
             })
             .then(serviceData => {
-                const serviceName = serviceData.Precio;
-                return serviceName;
+                const servicePrice = serviceData.Precio;
+                return servicePrice;
             })
             .catch(error => {
                 console.error('Error del Servicio:', error);
@@ -61,21 +61,18 @@ const getTotal: FieldHook = async ({ data }) => {
                 return productResponse.json();
             })
             .then(productData => {
-                const productName = productData.Precio;
-                return productName;
+                const productPrice = productData.Precio;
+                return productPrice;
             })
             .catch(error => {
                 console.error('Error del Producto:', error);
                 return 'No se puede obtener el Costo del Producto.';
                 // return '';
             });
-        // return productResponse ? productResponse : null;
+
         const { PrecioPS = productResponse, CantidadProducto, CostoEnvio } = data.DetallesPago;
         console.log('PRECIO: ', PrecioPS)
-        /* const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio; */
-        /* 
-            const QtyProduct = CantidadProducto.value;
-            QtyProduct <= 0? QtyProduct == 1 : QtyProduct */
+        /* const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio; */   
         const totalPrice = Math.round((CantidadProducto * PrecioPS) + CostoEnvio);
         console.log('TOTAL: ', totalPrice)
         return totalPrice;
