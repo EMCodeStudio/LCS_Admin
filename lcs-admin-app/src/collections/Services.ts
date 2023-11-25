@@ -6,8 +6,8 @@ const Services: CollectionConfig = {
         read: () => true
     },
     admin: {
-        useAsTitle: 'Servicio',
-        defaultColumns:['Servicio','Precio','Subcategoria','Imagen','EstadoServicio'],
+        useAsTitle: 'NombreServicio',
+        defaultColumns:['NombreServicio','Precio','Subcategoria','Imagen','EstadoServicio'],
         group:'INVENTARIO'
     },
     labels: {
@@ -17,7 +17,7 @@ const Services: CollectionConfig = {
     fields: [
         //example text field
         {
-            name: 'Servicio',
+            name: 'NombreServicio',
             label: 'Nombre del Servicio',
             type: 'text',
             required:true,

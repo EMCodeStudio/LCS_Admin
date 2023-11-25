@@ -109,18 +109,39 @@ const Orders: CollectionConfig = {
             hasMany: false,
             required: false,
             maxDepth: 0,
-            
-            filterOptions: ({ relationTo, siblingData, }) => {
+
+            filterOptions: ({ data, relationTo, siblingData, }) => {
+
+
                 if (relationTo === 'productos') {
-                    return {
-                        Cantidad: { greater_than_equal: 1 },
+                    if (data.TipoVenta === 'product') {
+                        console.log('TIPO VENTA:', data.TipoVenta)
+                        return {
+                            Cantidad: { greater_than_equal: 1 },
+                        }
+                    } else {
+                        return {
+                            NombreProducto: { exists: false },
+                        }
                     }
                 }
+
                 if (relationTo === 'servicios') {
-                    return {
-                        EstadoServicio: { equals: 'published' }
+                    if (data.TipoVenta === 'service') {
+                        console.log('TIPO VENTA:', data.TipoVenta)
+                        return {
+                            EstadoServicio: { equals: 'published' }
+                        }
+                    } else {
+                        return {
+                            NombreServicio: { exists: false },
+                        }
                     }
                 }
+
+
+
+
             },
         },
 
