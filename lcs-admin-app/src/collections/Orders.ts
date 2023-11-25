@@ -48,30 +48,40 @@ const handleProductServicePrice: FieldHook = async ({ data }) => {
 
     return null;
 }
-/* 
-const handleServicePrice: FieldHook = async ({ data }) => {
-    if (data && data.ProductoServicio) {
+
+const getTotal: FieldHook = async ({ data }) => {
+    
+    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
         const fieldID = data.ProductoServicio.value;
-        const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
-            .then(serviceResponse => {
-                if (!serviceResponse.ok) {
-                    throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
+        const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
+            .then(productResponse => {
+                if (!productResponse.ok) {
+                    throw new Error(`Error al obtener el Costo del Producto. Código de estado: ${productResponse.status}`);
                 }
-                return serviceResponse.json();
+                return productResponse.json();
             })
-            .then(serviceData => {
-                const serviceName = serviceData.Precio;
-                return serviceName;
+            .then(productData => {
+                const productName = productData.Precio;
+                return productName;
             })
             .catch(error => {
-                console.error('Error del Servicio:', error);
-                return 'No se puede obtener el Costo del Servicio.';
-                //return '';
+                console.error('Error del Producto:', error);
+                return 'No se puede obtener el Costo del Producto.';
+                // return '';
             });
-        return serviceResponse ? serviceResponse : null;
+        // return productResponse ? productResponse : null;
+        const { PrecioPS = productResponse, CantidadProducto, CostoEnvio } = data.DetallesPago;
+        console.log('PRECIO: ', PrecioPS)
+        /* const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio; */
+        /* 
+            const QtyProduct = CantidadProducto.value;
+            QtyProduct <= 0? QtyProduct == 1 : QtyProduct */
+        const totalPrice = Math.round((CantidadProducto * PrecioPS) + CostoEnvio);
+        console.log('TOTAL: ', totalPrice)
+        return totalPrice;
     }
 }
- */
+
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -92,7 +102,7 @@ const Orders: CollectionConfig = {
         {
             name: 'Cliente',
             /*  label: {es: 'Nombre y Cedula' , en: 'Name and Document'}, */
-            label: 'Nombre y Cedula',
+            label: 'Identificacion del Cliente',
             type: 'relationship',
             relationTo: 'clientes',
         },
@@ -116,7 +126,6 @@ const Orders: CollectionConfig = {
                 layout: 'horizontal',
             }
         },
-
         {
             name: "ProductoServicio", // required
             label: "Producto o Servicio",
@@ -133,9 +142,7 @@ const Orders: CollectionConfig = {
             hasMany: false,
             required: false,
             maxDepth: 0,
-
             filterOptions: ({ data, relationTo, siblingData, }) => {
-
 
                 if (relationTo === 'productos') {
                     if (data.TipoVenta === 'product') {
@@ -143,10 +150,9 @@ const Orders: CollectionConfig = {
                         return {
                             Cantidad: { greater_than_equal: 1 },
                         }
-                    } else {
-                        return {
-                            NombreProducto: { exists: false },
-                        }
+                    }
+                    return {
+                        NombreProducto: { exists: false },
                     }
                 }
 
@@ -156,67 +162,125 @@ const Orders: CollectionConfig = {
                         return {
                             EstadoServicio: { equals: 'published' }
                         }
-                    } else {
-                        return {
-                            NombreServicio: { exists: false },
-                        }
+                    }
+                    return {
+                        NombreServicio: { exists: false },
                     }
                 }
-
-
-
-
             },
         },
-
         {
-            name: "DetallePago", // required
+
+
+            name: "DetallesPago", // required
             type: "group", // required
             label: "Detalles de Pago",
-            fields: [ // required
-                {
-                    name: "PrecioPS", // required
-                    type: "number", // required
-                    label: "Costo de Venta",
-                    required: false,
-                    admin: {
-                        readOnly: true,
-                        width: '50%'
-                    },
-                    access: {
-                        create: () => false,
-                        update: () => false,
-                    },
-                    hooks: {
-                        beforeChange: [({ siblingData }) => {
-                            return siblingData.PrecioPS = undefined
-                        }],
-                        afterRead: [handleProductServicePrice]
-                    },
-                },
-                /* {
-                    name: "PrecioServicio", // required
-                    type: "number", // required
-                    label: "Costo del Servicio",
-                    required: false,
-                    admin: {
-                        readOnly: true,
-                        width: '50%'
-                    },
-                    hooks: {
-                        beforeChange: [({ siblingData }) => {
-                            return siblingData.PrecioProducto = undefined
-                        }],
-                        afterRead: [handleServicePrice]
-                    },
-                }, */
 
+
+            fields: [ // required
+
+                {
+                    type: 'row',
+                    fields: [
+                        {
+                            name: "PrecioPS", // required
+                            type: "number", // required
+                            label: "Costo de Venta",
+                            required: false,
+                            admin: {
+                                readOnly: true,
+                                width: '50%',
+                                placeholder: '$ 0.00',
+                            },
+                            access: {
+                                create: () => false,
+                                update: () => false,
+                            },
+                            hooks: {
+                                beforeChange: [({ siblingData }) => {
+                                    return siblingData.PrecioPS = undefined
+                                }],
+                                afterRead: [handleProductServicePrice]
+                            },
+                        },
+
+
+                        {
+                            name: "CantidadProducto", // required
+                            label: "Cantidad del Producto",
+                            type: "number", // required
+                            required: false,
+                            defaultValue: 0,
+                            admin: {
+                                width: '50%',
+                                condition: (data, siblingData, { user }) => {
+                                    if (data.TipoVenta === 'product') {
+                                        return true
+                                    } else {
+                                        return false
+                                    }
+
+                                }
+                            }
+                        },
+
+                    ],
+                },
+                {
+                    type: 'row',
+                    admin: {
+                        condition: (data, siblingData, { user }) => {
+                            if (data.TipoVenta === 'product') {
+                                return true
+                            } else {
+                                return false
+                            }
+                        },
+                    },
+                    fields: [
+                        {
+                            name: "CostoEnvio", // required
+                            label: "Costo de Envio",
+                            type: "number", // required
+                            required: false,
+                            admin: {
+                                width: '50%',
+                                placeholder: '$ 0.00',
+
+                            }
+                        },
+                        {
+                            name: "TotalPrice", // required
+                            label: " Total a Pagar",
+                            type: "number", // required
+                            required: false,
+                            access: {
+                                create: () => false,
+                                update: () => false
+                            },
+                            hooks: {
+                                beforeChange: [({ siblingData }) => {
+                                    siblingData.TotalPrice = undefined
+                                }],
+                                afterRead: [getTotal]
+                            },
+                            admin: {
+                                width: '50%',
+                                step: 1,
+                                placeholder: '$ 0.00',
+                                /*  condition: (data, siblingData, { user }) => {
+                                     if (data.TipoVenta === 'product') {
+                                         return true
+                                     } else {
+                                         return false
+                                     }
+                                 }, */
+                            }
+                        },
+                    ]
+                }
             ],
         },
-
-
-
-
     ],
     timestamps: true,
 };

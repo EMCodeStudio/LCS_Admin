@@ -139,6 +139,8 @@ const Orders: CollectionConfig = {
                                 },
                             }
                         },
+
+                        
                         {
                             name: "PorcentajeIva", // required
                             label: "Porcentaje de IVA",
