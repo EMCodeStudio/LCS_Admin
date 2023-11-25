@@ -2,8 +2,9 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 
 
-const handleProductPrice: FieldHook = async ({ data }) => {
-    if (data && data.ProductoServicio) {
+const handleProductServicePrice: FieldHook = async ({ data }) => {
+
+    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
         const fieldID = data.ProductoServicio.value;
         const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
             .then(productResponse => {
@@ -23,8 +24,31 @@ const handleProductPrice: FieldHook = async ({ data }) => {
             });
         return productResponse ? productResponse : null;
     }
-}
 
+    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
+        const fieldID = data.ProductoServicio.value;
+        const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
+            .then(serviceResponse => {
+                if (!serviceResponse.ok) {
+                    throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
+                }
+                return serviceResponse.json();
+            })
+            .then(serviceData => {
+                const serviceName = serviceData.Precio;
+                return serviceName;
+            })
+            .catch(error => {
+                console.error('Error del Servicio:', error);
+                return 'No se puede obtener el Costo del Servicio.';
+                //return '';
+            });
+        return serviceResponse ? serviceResponse : null;
+    }
+
+    return null;
+}
+/* 
 const handleServicePrice: FieldHook = async ({ data }) => {
     if (data && data.ProductoServicio) {
         const fieldID = data.ProductoServicio.value;
@@ -47,7 +71,7 @@ const handleServicePrice: FieldHook = async ({ data }) => {
         return serviceResponse ? serviceResponse : null;
     }
 }
-
+ */
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -151,22 +175,26 @@ const Orders: CollectionConfig = {
             label: "Detalles de Pago",
             fields: [ // required
                 {
-                    name: "PrecioProducto", // required
+                    name: "PrecioPS", // required
                     type: "number", // required
-                    label: "Costo del Producto",
+                    label: "Costo de Venta",
                     required: false,
                     admin: {
                         readOnly: true,
                         width: '50%'
                     },
+                    access: {
+                        create: () => false,
+                        update: () => false,
+                    },
                     hooks: {
                         beforeChange: [({ siblingData }) => {
-                            return siblingData.PrecioProducto = undefined
+                            return siblingData.PrecioPS = undefined
                         }],
-                        afterRead: [handleProductPrice]
+                        afterRead: [handleProductServicePrice]
                     },
                 },
-                {
+                /* {
                     name: "PrecioServicio", // required
                     type: "number", // required
                     label: "Costo del Servicio",
@@ -181,7 +209,7 @@ const Orders: CollectionConfig = {
                         }],
                         afterRead: [handleServicePrice]
                     },
-                },
+                }, */
 
             ],
         },
