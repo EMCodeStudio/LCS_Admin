@@ -1,16 +1,15 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 
-
 const formatCedulaNombre: FieldHook = async ({ data }) => (
     `${data.Nombre} ${data.Apellidos} - ${data.Cedula}`
 )
-
 const Customers: CollectionConfig = {
     slug: 'clientes',
     access: {
         read: () => true,
         update: () => true
     },
+    auth: true,
     admin: {
         useAsTitle: 'CedulaNombre',
         defaultColumns: ['Cedula', 'Nombre', 'Apellidos'],
@@ -20,12 +19,12 @@ const Customers: CollectionConfig = {
         singular: 'Cliente',
         plural: 'Clientes',
     },
-    
+
     fields: [
         //example text field
         {
-            name: "CedulaNombre", // required
-            type: "text", // required
+            name: "CedulaNombre", 
+            type: "text", 
             label: 'Cedula - Nombre y Apellidos',
             required: false,
             hooks: {
@@ -42,35 +41,210 @@ const Customers: CollectionConfig = {
                 hidden: true,
             }
         },
+        {
+            type: 'row',
+            fields: [
+                {
+                    name: "TipoID", 
+                    label: "Tipo de Identificacion",
+                    type: 'select', 
+                    required: true,
+                    options: [ 
+                        {
+                            label: 'Cedula de Ciudadania',
+                            value: 'zitizen',
+                        },
+                        {
+                            label: 'Cedula de Extranjeria',
+                            value: 'foreign',
+                        },
+                    ],
+                    defaultValue: 'zitizen',
+                    admin: {
+                        width: '50%'
+                    }
+                },
+                {
+                    name: 'Cedula',
+                    label: 'Cedula del Cliente',
+                    type: 'text',
+                    required: true,
+                    unique: true,
+                    admin: {
+                        placeholder: 'Cedula aqui',
+                        width: '50%'
+                    }
+                },
+            ]
+        },
+        {
+            type: 'row',
+            fields: [
+                {
+                    name: 'Nombre',
+                    label: 'Nombre del Cliente',
+                    type: 'text',
+                    required: true,
+                    admin: {
+                        placeholder: 'Nombre aqui'
+                    }
+                },
+                {
+                    name: 'Apellidos',
+                    label: 'Apellidos del Cliente',
+                    type: 'text',
+                    required: true,
+                    admin: {
+                        placeholder: 'Apellidos aqui'
+                    }
+                },
+            ]
+        },
+        {
+            name: "TipoPersona", 
+            label: "Tipo de Persona",
+            type: 'radio', 
+            required: false,
+            options: [ 
+                {
+                    label: 'Natural',
+                    value: 'nature',
+                },
+                {
+                    label: 'Juridica',
+                    value: 'juristic',
+                },
+            ],
+            defaultValue: 'nature',
+            admin: {
+                layout: 'horizontal',
+                description: 'Si la Persona es Juridica apareceran nuevos campos.'
+            }
+        },
+        {
+            type: 'collapsible',
+            label: 'Datos de la Empresa',
+            admin: {
+                condition: ({ TipoPersona }) => TipoPersona === 'juristic',
+            },
+            fields: [
+                {
+                    type: 'row',
+                    fields: [
+                        {
+                            name: 'NombreEmpresa',
+                            label: 'Nombre de la Empresa',
+                            type: 'text',
+                            admin: {
+
+                                width: '50%',
+                                placeholder: 'Nombre aqui'
+                            }
+                        },
+                        {
+                            name: 'NIT',
+                            label: 'NIT de la Empresa',
+                            type: 'number',
+                            admin: {
+
+                                width: '50%',
+                                placeholder: 'NIT aqui'
+                            }
+                        },
+                    ]
+                },
+                {
+                    name: 'CorreoEmpresa',
+                    label: 'Correo de la Empresa',
+                    type: 'email',
+                    admin: {
+
+                        width: '100%',
+                        placeholder: 'Correo  aqui'
+                    }
+                },
+                {
+                    name: 'DireccionEmpresa',
+                    label: 'Direccion de la Empresa',
+                    type: 'textarea',
+                    admin: {
+                        width: '100%',
+                        placeholder: 'Direccion aqui'
+                    }
+                },
+            ]
+        },
+        
+        {
+            type: 'collapsible',
+            label: 'Informacion Contacto del Cliente',
+            fields: [
+                {
+                    name: "CorreoCliente", 
+                    type: "email", 
+                    label: "Correo del Cliente",
+                    required: true,
+                    unique: true,
+                    admin: {
+                        placeholder: 'Correo aqui'
+                    }
+                },
+                {
+                    name: "NumeroCelular", 
+                    label: "Numero Telefonico",
+                    type: "number", 
+                    required: true,
+                    admin: {
+                        step: 1,
+                        placeholder: 'Numero aqui'
+                    }
+                },
+            ]
+        },
 
         {
-            name: 'Cedula',
-            label: 'Cedula del Cliente',
-            type: 'text',
-            required: true,
-            unique: true,
+            name: "Terminos", 
+            type: "checkbox", 
+            label: "Acepta Terminos y Condiciones?",
+            defaultValue: false,
             admin: {
-                placeholder: 'Cedula aqui'
+                description: 'Marque esta casilla si el cliente acepta los Terminos y Condiciones'
             }
         },
         {
-            name: 'Nombre',
-            label: 'Nombre del Cliente',
-            type: 'text',
-            required: true,
+            name: "Estado", 
+            type: "select", 
+            label: "Estado del Cliente",
+            hasMany: false, 
+            options: [
+                {
+                    label: "Habilitado",
+                    value: "published",
+                },
+                {
+                    label: "Inhabilitado",
+                    value: "draft",
+                },
+            ],
+            defaultValue: 'draft',
+            required: false,
             admin: {
-                placeholder: 'Nombre aqui'
+                position: 'sidebar'
             }
         },
         {
-            name: 'Apellidos',
-            label: 'Apellidos del Cliente',
-            type: 'text',
+            name: "FechaRegistro", 
+            type: "date", 
+            label: "Fecha de Registro",
             required: true,
             admin: {
-                placeholder: 'Apellidos aqui'
+                position: "sidebar",
+                date:{
+                    pickerAppearance: 'dayOnly',
+                    displayFormat: 'dd-MM-yyyy'
+                }
             }
-        },
+        }
     ],
 
     timestamps: true,

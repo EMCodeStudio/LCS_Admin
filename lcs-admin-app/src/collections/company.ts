@@ -10,7 +10,7 @@ const Company: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Empresa',
-        defaultColumns: ['Empresa', 'Numero', 'Correo', 'Direccion', 'Slogan', 'Nosotros', 'Facebook', 'Ubicacion','FechaInicios'],
+        defaultColumns: ['Empresa', 'Numero', 'Correo', 'Direccion', 'Slogan', 'Nosotros', 'Facebook', 'Ubicacion', 'FechaInicios'],
         group: 'SISTEMA'
     },
     labels: {
@@ -121,8 +121,10 @@ const Company: CollectionConfig = {
             label: "Fecha de Inicios",
             admin: {
                 date: {
-                    //Options: dayAndTime, timeOnly, dayOnly
                     pickerAppearance: 'dayOnly',
+                    displayFormat: 'dd-MM-yyyy'
+                    //Options: dayAndTime, timeOnly, dayOnly
+
                 },
                 position: 'sidebar'
             }

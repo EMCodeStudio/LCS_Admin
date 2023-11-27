@@ -3,7 +3,6 @@ import { CollectionConfig, FieldHook } from "payload/types";
 
 
 const handleProductServicePrice: FieldHook = async ({ data }) => {
-
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
         const fieldID = data.ProductoServicio.value;
         const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
@@ -24,7 +23,6 @@ const handleProductServicePrice: FieldHook = async ({ data }) => {
             });
         return productResponse ? productResponse : null;
     }
-
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
         const fieldID = data.ProductoServicio.value;
         const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
@@ -45,12 +43,10 @@ const handleProductServicePrice: FieldHook = async ({ data }) => {
             });
         return serviceResponse ? serviceResponse : null;
     }
-
     return null;
 }
-
 const getTotal: FieldHook = async ({ data }) => {
-    
+
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
         const fieldID = data.ProductoServicio.value;
         const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
@@ -70,15 +66,16 @@ const getTotal: FieldHook = async ({ data }) => {
                 // return '';
             });
 
-        const { PrecioPS = productResponse, CantidadProducto, CostoEnvio } = data.DetallesPago;
+        const { PrecioPS = productResponse, CantidadProducto, /* CostoEnvio */ } = data.DetallesPago;
         console.log('PRECIO: ', PrecioPS)
-        /* const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio; */   
-        const totalPrice = Math.round((CantidadProducto * PrecioPS) + CostoEnvio);
+        /* const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio; */
+        const validatePrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS /* + CostoEnvio */
+        const totalPrice = Math.round(validatePrice);
         console.log('TOTAL: ', totalPrice)
+
         return totalPrice;
     }
 }
-
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -87,7 +84,7 @@ const Orders: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'producto',
-        defaultColumns: ['Cliente', 'ProductoServicio'],
+        defaultColumns: ['Cliente','TipoVenta', 'ProductoServicio', 'EstadoPago','EstadoPedido'],
         group: 'VENTAS'
     },
     labels: {
@@ -95,20 +92,20 @@ const Orders: CollectionConfig = {
         plural: 'Pedidos',
     },
     fields: [
-        //example text field
         {
             name: 'Cliente',
             /*  label: {es: 'Nombre y Cedula' , en: 'Name and Document'}, */
             label: 'Identificacion del Cliente',
             type: 'relationship',
             relationTo: 'clientes',
+            required: true
         },
         {
-            name: "TipoVenta", // required
+            name: "TipoVenta", 
             label: "Tipo de Venta",
-            type: 'radio', // required
+            type: 'radio', 
             required: false,
-            options: [ // required
+            options: [ 
                 {
                     label: 'Producto',
                     value: 'product',
@@ -124,9 +121,9 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "ProductoServicio", // required
+            name: "ProductoServicio", 
             label: "Producto o Servicio",
-            type: 'relationship', // required
+            type: 'relationship', 
             /*  hooks: {
                  beforeChange: [
                    ({ data, value, operation }) => {
@@ -135,9 +132,9 @@ const Orders: CollectionConfig = {
                    },
                  ],
                }, */
-            relationTo: ['productos', 'servicios'], //required eg:users
+            relationTo: ['productos', 'servicios'],
             hasMany: false,
-            required: false,
+            required: true,
             maxDepth: 0,
             filterOptions: ({ data, relationTo, siblingData, }) => {
 
@@ -152,7 +149,6 @@ const Orders: CollectionConfig = {
                         NombreProducto: { exists: false },
                     }
                 }
-
                 if (relationTo === 'servicios') {
                     if (data.TipoVenta === 'service') {
                         console.log('TIPO VENTA:', data.TipoVenta)
@@ -167,21 +163,16 @@ const Orders: CollectionConfig = {
             },
         },
         {
-
-
-            name: "DetallesPago", // required
-            type: "group", // required
+            name: "DetallesPago", 
+            type: "group", 
             label: "Detalles de Pago",
-
-
-            fields: [ // required
-
+            fields: [ 
                 {
                     type: 'row',
                     fields: [
                         {
-                            name: "PrecioPS", // required
-                            type: "number", // required
+                            name: "PrecioPS", 
+                            type: "number", 
                             label: "Costo de Venta",
                             required: false,
                             admin: {
@@ -200,12 +191,10 @@ const Orders: CollectionConfig = {
                                 afterRead: [handleProductServicePrice]
                             },
                         },
-
-
                         {
-                            name: "CantidadProducto", // required
+                            name: "CantidadProducto", 
                             label: "Cantidad del Producto",
-                            type: "number", // required
+                            type: "number", 
                             required: false,
                             defaultValue: 0,
                             admin: {
@@ -236,20 +225,9 @@ const Orders: CollectionConfig = {
                     },
                     fields: [
                         {
-                            name: "CostoEnvio", // required
-                            label: "Costo de Envio",
-                            type: "number", // required
-                            required: false,
-                            admin: {
-                                width: '50%',
-                                placeholder: '$ 0.00',
-
-                            }
-                        },
-                        {
-                            name: "TotalPrice", // required
+                            name: "TotalPrice", 
                             label: " Total a Pagar",
-                            type: "number", // required
+                            type: "number", 
                             required: false,
                             access: {
                                 create: () => false,
@@ -262,22 +240,100 @@ const Orders: CollectionConfig = {
                                 afterRead: [getTotal]
                             },
                             admin: {
-                                width: '50%',
+                                width: '100%',
                                 step: 1,
-                                placeholder: '$ 0.00',
-                                /*  condition: (data, siblingData, { user }) => {
-                                     if (data.TipoVenta === 'product') {
-                                         return true
-                                     } else {
-                                         return false
-                                     }
-                                 }, */
+                                placeholder: '0.00',
+                                description:'$.'
                             }
                         },
                     ]
                 }
+
             ],
         },
+        {
+            name: "EstadoPago", 
+            type: "select", 
+            label: 'Estado de Pago',
+            hasMany: false, /// set to true if you want to select multiple
+            admin: {
+                position: 'sidebar',
+            },
+            options: [
+                {
+                    label: "Pendiente",
+                    value: "pending",
+                },
+                {
+                    label: "Realizado",
+                    value: "paid",
+                },
+
+                {
+                    label: "Cancelado",
+                    value: "canceled",
+                },
+
+            ],
+            defaultValue: 'pending',
+            required: false,
+        },
+        {
+            name: "EstadoPedido", 
+            type: "select", 
+            label: 'Estado del Pedido',
+            hasMany: false,
+            admin: {
+                position: 'sidebar',
+            },
+            options: [
+                {
+                    label: "En Proceso",
+                    value: "processing",
+                },
+                {
+                    label: "En Envio",
+                    value: "shipping",
+                },
+                {
+                    label: "Entregado",
+                    value: "delivered",
+                },
+                {
+                    label: "Cancelado",
+                    value: "canceled",
+                },
+
+            ],
+            defaultValue: 'processing',
+            required: false,
+        },
+        {
+            name: "FechaPedido", 
+            type: "date", 
+            label: "Fecha del Pedido",
+            localized: true,
+            admin: {
+                position: 'sidebar',
+                date:{
+                    pickerAppearance:'dayOnly',
+                    displayFormat: 'dd-MM-yyyy'
+                }
+            }
+        },
+        {
+            name: "FechaEntrega", 
+            type: "date", 
+            label: "Fecha de Entrega",
+            localized: true,
+            admin: {
+                position: 'sidebar',
+                date:{
+                    pickerAppearance:'dayOnly',
+                    displayFormat: 'dd-MM-yyyy'
+                }
+            }
+        } 
     ],
     timestamps: true,
 };
