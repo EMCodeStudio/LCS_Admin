@@ -9,9 +9,8 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'Producto', 'Servicio', 'esOferta', 'Descuento', 'ErrorMessage', 'Imagenes', 'Descripcion', 'Etiquetas', 'Estado'],
+        defaultColumns: ['Titulo', 'TipoVenta', 'ProductoServicio', 'esOferta', 'Estado'],
         group: 'VENTAS',
-
     },
     labels: {
         singular: 'Publicacion',
@@ -29,12 +28,66 @@ const Publications: CollectionConfig = {
                 placeholder: 'Titulo de Publicacion aqui'
             }
         },
+        /*  {
+             name: "TipoVenta", // required
+             label: "Tipo de Venta",
+             type: 'radio', // required
+             required: true,
+             options: [ // required
+                 {
+                     label: 'Producto',
+                     value: 'product',
+                 },
+                 {
+                     label: 'Servicio',
+                     value: 'service',
+                 },
+             ],
+             defaultValue: 'product',
+             admin: {
+                 layout: 'horizontal',
+             }
+         },
+         {
+             name: "Producto", // required
+             label: "Nombre del Producto ",
+             type: 'relationship', // required
+             relationTo: 'productos', //required eg:users
+             hasMany: false,
+             admin: {
+                 condition: (data, siblingData, { user }) => {
+                     if (data.TipoVenta === 'product') {
+                         return true
+                     } else {
+                         return false
+                     }
+                 },
+ 
+             },
+         },
+         {
+             name: "Servicio", // required
+             label: "Nombre del Servicio",
+             type: 'relationship', // required
+             relationTo: 'servicios', //required eg:users
+             hasMany: false,
+             admin: {
+                 condition: (data, siblingData, { user }) => {
+                     if (data.TipoVenta === 'service') {
+                         return true
+                     } else {
+                         return false
+                     }
+                 },
+ 
+             }
+         }, */
         {
-            name: "TipoVenta", // required
+            name: "TipoVenta",
             label: "Tipo de Venta",
-            type: 'radio', // required
-            required: true,
-            options: [ // required
+            type: 'radio',
+            required: false,
+            options: [
                 {
                     label: 'Producto',
                     value: 'product',
@@ -50,47 +103,45 @@ const Publications: CollectionConfig = {
             }
         },
         {
-            name: "Producto", // required
-            label: "Nombre del Producto ",
-            type: 'relationship', // required
-            relationTo: 'productos', //required eg:users
+            name: "ProductoServicio",
+            label: "Producto o Servicio",
+            type: 'relationship',
+            relationTo: ['productos', 'servicios'],
             hasMany: false,
-            admin: {
-                condition: (data, siblingData, { user }) => {
-                    if (data.TipoVenta === 'product') {
-                        return true
-                    } else {
-                        return false
-                    }
-                },
+            required: true,
+            maxDepth: 0,
+            filterOptions: ({ data, relationTo, siblingData, }) => {
 
+                if (relationTo === 'productos') {
+                    if (data.TipoVenta === 'product') {
+
+                        return {
+                            Cantidad: { greater_than_equal: 1 },
+                        }
+                    }
+                    return {
+                        NombreProducto: { exists: false },
+                    }
+                }
+                if (relationTo === 'servicios') {
+                    if (data.TipoVenta === 'service') {
+                        return {
+                            EstadoServicio: { equals: 'published' }
+                        }
+                    }
+                    return {
+                        NombreServicio: { exists: false },
+                    }
+                }
             },
         },
-        {
-            name: "Servicio", // required
-            label: "Nombre del Servicio",
-            type: 'relationship', // required
-            relationTo: 'servicios', //required eg:users
-            hasMany: false,
-            admin: {
-                condition: (data, siblingData, { user }) => {
-                    if (data.TipoVenta === 'service') {
-                        return true
-                    } else {
-                        return false
-                    }
-                },
-
-            }
-        },
-
         {
             name: "esOferta", // required
             type: "checkbox", // required
             label: "Oferta de la Publicacion",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si la publicacion es una oferta y rellene el campo de Descuento.'
+                description: 'Marque esta casilla si la publicacion estara en oferta y rellene el campo de Descuento.'
             }
         },
         {
@@ -130,7 +181,8 @@ const Publications: CollectionConfig = {
                     Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 0 a 99.', showError: true }),
 
                 }
-            }
+            },
+
         },
         {
             name: "Descripcion", // required
@@ -173,5 +225,4 @@ const Publications: CollectionConfig = {
     ],
     timestamps: true,
 };
-
 export default Publications;

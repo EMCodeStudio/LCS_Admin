@@ -434,6 +434,7 @@ const Products: CollectionConfig = {
                 },
             }
         },
+        
         {
             name: "HoraIngreso", // required
             type: "date", // required

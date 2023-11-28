@@ -1,5 +1,6 @@
 
 import { CollectionConfig, FieldHook } from "payload/types";
+import ErrorMessages from "../components/Messages/ErrorMessages";
 
 
 const handleProductServicePrice: FieldHook = async ({ data }) => {
@@ -63,18 +64,44 @@ const getTotal: FieldHook = async ({ data }) => {
             .catch(error => {
                 console.error('Error del Producto:', error);
                 return 'No se puede obtener el Costo del Producto.';
+            });
+        const { PrecioPS = productResponse, CantidadProducto } = data.DetallesPago;
+        console.log('PRECIO: ', PrecioPS)
+        const validatePrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS
+        const validateDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? validatePrice * (1 - (data.DescuentoPedido / 100)) : validatePrice
+        const totalProdPrice = Math.round(validateDiscount);
+        console.log('TOTAL PROD: ', totalProdPrice)
+        return totalProdPrice;
+    }
+
+    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
+        const fieldID = data.ProductoServicio.value;
+        const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
+            .then(serviceResponse => {
+                if (!serviceResponse.ok) {
+                    throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
+                }
+                return serviceResponse.json();
+            })
+            .then(serviceData => {
+                const productPrice = serviceData.Precio;
+                return productPrice;
+            })
+            .catch(error => {
+                console.error('Error del Servicio:', error);
+                return 'No se puede obtener el Costo del Servicio.';
                 // return '';
             });
-
-        const { PrecioPS = productResponse, CantidadProducto, /* CostoEnvio */ } = data.DetallesPago;
+        const PrecioPS = serviceResponse
         console.log('PRECIO: ', PrecioPS)
-        /* const totalPrice = Math.round(CostoProducto * CantidadProducto * (1 + (PorcentajeIva / 100))) + CostoEnvio; */
-        const validatePrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS /* + CostoEnvio */
-        const totalPrice = Math.round(validatePrice);
-        console.log('TOTAL: ', totalPrice)
-
-        return totalPrice;
+        const validateDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioPS * (1 - (data.DescuentoPedido / 100)) : PrecioPS
+        const totalServPrice = Math.round(validateDiscount);
+        console.log('TOTAL SERV: ', totalServPrice)
+        return totalServPrice;
     }
+
+    return null;
+
 }
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -84,7 +111,7 @@ const Orders: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'producto',
-        defaultColumns: ['Cliente','TipoVenta', 'ProductoServicio', 'EstadoPago','EstadoPedido'],
+        defaultColumns: ['Cliente', 'TipoVenta', 'ProductoServicio', 'EstadoPago', 'EstadoPedido'],
         group: 'VENTAS'
     },
     labels: {
@@ -95,17 +122,17 @@ const Orders: CollectionConfig = {
         {
             name: 'Cliente',
             /*  label: {es: 'Nombre y Cedula' , en: 'Name and Document'}, */
-            label: 'Identificacion del Cliente',
+            label: 'Datos del Cliente',
             type: 'relationship',
             relationTo: 'clientes',
             required: true
         },
         {
-            name: "TipoVenta", 
+            name: "TipoVenta",
             label: "Tipo de Venta",
-            type: 'radio', 
+            type: 'radio',
             required: false,
-            options: [ 
+            options: [
                 {
                     label: 'Producto',
                     value: 'product',
@@ -121,9 +148,9 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "ProductoServicio", 
+            name: "ProductoServicio",
             label: "Producto o Servicio",
-            type: 'relationship', 
+            type: 'relationship',
             /*  hooks: {
                  beforeChange: [
                    ({ data, value, operation }) => {
@@ -163,16 +190,81 @@ const Orders: CollectionConfig = {
             },
         },
         {
-            name: "DetallesPago", 
-            type: "group", 
+            type: 'row',
+            fields: [
+                {
+                    name: "OfertaPedido", // required
+                    label: "Aplicar Descuento?",
+                    type: 'radio', // required
+                    required: false,
+                    options: [ // required
+                        {
+                            label: 'Si',
+                            value: 'apply',
+                        },
+                        {
+                            label: 'No',
+                            value: 'noApply',
+                        },
+                    ],
+                    defaultValue: 'noApply',
+                    admin: {
+                        layout: 'horizontal',
+                        width: '30%'
+                    }
+                },
+                {
+                    name: "DescuentoPedido", // required
+                    type: "number", // required
+                    label: "% Descuento",
+                    required: false,
+                    admin: {
+                        condition: ({ OfertaPedido }) => OfertaPedido === 'apply',
+                        width: '70%'
+                    },
+                    hooks: {
+                        beforeChange: [
+                            ({ data }) => {
+                                if (data && data.length) {
+                                    const twoDigits = /^\d{2}$/;
+                                    const discount = data.DescuentoPedido;
+                                    if (twoDigits.test(discount)) {
+                                        return discount;
+                                    }
+                                    else {
+                                        return 0
+                                    }
+                                }
+                            }
+                        ]
+                    }
+                },
+            ]
+        },
+        {
+            name: 'ErrorMessage',
+            type: 'ui',
+            admin: {
+                condition: ({ DescuentoPedido }) => DescuentoPedido >= 100,
+                width: '100%',
+                components: {
+                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 1 a 99.', showError: true }),
+
+                }
+            },
+
+        },
+        {
+            name: "DetallesPago",
+            type: "group",
             label: "Detalles de Pago",
-            fields: [ 
+            fields: [
                 {
                     type: 'row',
                     fields: [
                         {
-                            name: "PrecioPS", 
-                            type: "number", 
+                            name: "PrecioPS",
+                            type: "number",
                             label: "Costo de Venta",
                             required: false,
                             admin: {
@@ -192,9 +284,9 @@ const Orders: CollectionConfig = {
                             },
                         },
                         {
-                            name: "CantidadProducto", 
+                            name: "CantidadProducto",
                             label: "Cantidad del Producto",
-                            type: "number", 
+                            type: "number",
                             required: false,
                             defaultValue: 0,
                             admin: {
@@ -209,25 +301,15 @@ const Orders: CollectionConfig = {
                                 }
                             }
                         },
-
                     ],
                 },
                 {
                     type: 'row',
-                    admin: {
-                        condition: (data, siblingData, { user }) => {
-                            if (data.TipoVenta === 'product') {
-                                return true
-                            } else {
-                                return false
-                            }
-                        },
-                    },
                     fields: [
                         {
-                            name: "TotalPrice", 
-                            label: " Total a Pagar",
-                            type: "number", 
+                            name: "TotalPrice",
+                            label: "$ Total a Pagar",
+                            type: "number",
                             required: false,
                             access: {
                                 create: () => false,
@@ -243,7 +325,7 @@ const Orders: CollectionConfig = {
                                 width: '100%',
                                 step: 1,
                                 placeholder: '0.00',
-                                description:'$.'
+
                             }
                         },
                     ]
@@ -252,8 +334,8 @@ const Orders: CollectionConfig = {
             ],
         },
         {
-            name: "EstadoPago", 
-            type: "select", 
+            name: "EstadoPago",
+            type: "select",
             label: 'Estado de Pago',
             hasMany: false, /// set to true if you want to select multiple
             admin: {
@@ -279,8 +361,8 @@ const Orders: CollectionConfig = {
             required: false,
         },
         {
-            name: "EstadoPedido", 
-            type: "select", 
+            name: "EstadoPedido",
+            type: "select",
             label: 'Estado del Pedido',
             hasMany: false,
             admin: {
@@ -300,6 +382,10 @@ const Orders: CollectionConfig = {
                     value: "delivered",
                 },
                 {
+                    label: "Finalizado",
+                    value: "done",
+                },
+                {
                     label: "Cancelado",
                     value: "canceled",
                 },
@@ -309,31 +395,31 @@ const Orders: CollectionConfig = {
             required: false,
         },
         {
-            name: "FechaPedido", 
-            type: "date", 
+            name: "FechaPedido",
+            type: "date",
             label: "Fecha del Pedido",
             localized: true,
             admin: {
                 position: 'sidebar',
-                date:{
-                    pickerAppearance:'dayOnly',
+                date: {
+                    pickerAppearance: 'dayOnly',
                     displayFormat: 'dd-MM-yyyy'
                 }
             }
         },
         {
-            name: "FechaEntrega", 
-            type: "date", 
+            name: "FechaEntrega",
+            type: "date",
             label: "Fecha de Entrega",
             localized: true,
             admin: {
                 position: 'sidebar',
-                date:{
-                    pickerAppearance:'dayOnly',
+                date: {
+                    pickerAppearance: 'dayOnly',
                     displayFormat: 'dd-MM-yyyy'
                 }
             }
-        } 
+        }
     ],
     timestamps: true,
 };
