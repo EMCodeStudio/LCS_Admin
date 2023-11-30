@@ -20,6 +20,7 @@ import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
 import Customers from './collections/Customers'
 import Orders from './collections/Orders'
+import Locations from './collections/Locations'
 
 
 export default buildConfig({
@@ -52,6 +53,7 @@ export default buildConfig({
     Subcategories,
     Products,
     Services,
+    Locations,
     Company,
     Users,
   ],

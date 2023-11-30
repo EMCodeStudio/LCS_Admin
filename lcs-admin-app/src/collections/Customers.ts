@@ -31,7 +31,7 @@ const Customers: CollectionConfig = {
                 beforeChange: [({ siblingData }) => {
                     siblingData.CedulaNombre = undefined;
                 }],
-                afterRead: [formatCedulaNombre,]
+                afterRead: [formatCedulaNombre]
             },
             access: {
                 create: () => false,
@@ -200,6 +200,23 @@ const Customers: CollectionConfig = {
                     }
                 },
             ]
+        },
+        {
+          name: "UbicacionCliente", // required
+          label: "Ubicacion",
+          type: 'relationship', // required
+          relationTo:'ubicaciones', //required eg:users
+          hasMany: false,
+          required: true
+        },
+        {
+            name: 'DireccionCliente',
+            label: 'Direccion del Cliente',
+            type: 'textarea',
+            admin: {
+                width: '100%',
+                placeholder: 'Direccion aqui'
+            }
         },
 
         {
