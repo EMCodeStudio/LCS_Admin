@@ -62,35 +62,19 @@ const Locations: CollectionConfig = {
         },
         {
             name: "Departamento", // required
-            type: "select", // required
-            hasMany: false, /// set to true if you want to select multiple
-            options: [
-                {
-                    label: "Bolivar",
-                    value: "Bolivar",
-                },
-
-            ],
-            defaultValue: 'Bolivar',
+            type: 'text',
             required: false,
+            admin:{
+                placeholder: 'Nombre aqui'
+            }
         },
         {
             name: "Municipio", // required
-            type: "select", // required
-            label: "Nombre del Municiopio",
+            type: 'text',
             required: false,
-            options: [
-                {
-                    label: 'Turbaco',
-                    value: 'Turbaco',
-                },
-                {
-                    label: 'Cartagena de Indias',
-                    value: 'Cartagena',
-                }
-            ],
-            defaultValue: 'Turbaco',
-
+            admin:{
+                placeholder: 'Nombre aqui'
+            }
         },
         {
             name: "EstadoUbicacion", // required

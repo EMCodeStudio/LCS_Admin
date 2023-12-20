@@ -373,7 +373,7 @@ const Products: CollectionConfig = {
           } */
         {
             type: 'array',
-            name: 'Imagenes',
+            name: 'ImagenProducto',
             required: true,
             maxRows: 10,
             minRows: 1,
@@ -389,7 +389,7 @@ const Products: CollectionConfig = {
                             (req): void => {
                                 const image = req.data
                                 if (image && image.width < 420) {
-                                    throw new Error('La Imagen debe ser Igual o Mayor a 420px de Ancho')
+                                    throw new Error('La Imagen del Producto debe ser Igual o Mayor a 420px de Ancho')
                                 }
                             }
                         ]
@@ -446,7 +446,18 @@ const Products: CollectionConfig = {
                     displayFormat: 'h:mm:ss a',
                 },
             }
-        }
+        },
+        {
+            name: "UbicacionProducto", // required
+            label: "Ubicaciones Disponibles",
+            type: 'relationship', // required
+            relationTo: 'ubicaciones', //required eg:users
+            hasMany: true,
+            required: false,
+            admin: {
+                position: 'sidebar'
+            }
+        },
     ],
     timestamps: true,
 };

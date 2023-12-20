@@ -10,7 +10,7 @@ const Company: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Empresa',
-        defaultColumns: ['Empresa', 'Numero', 'Correo', 'Direccion', 'Slogan', 'Nosotros', 'Facebook', 'Ubicacion', 'FechaInicios'],
+        defaultColumns: ['Empresa', 'Numero', 'Correo'],
         group: 'SISTEMA'
     },
     labels: {

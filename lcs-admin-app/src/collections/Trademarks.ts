@@ -4,7 +4,7 @@ const Trademarks: CollectionConfig = {
     slug: 'marcas',
     admin: {
         useAsTitle: 'Marca',
-        defaultColumns: ['Marca', 'Imagen', 'Estado'],
+        defaultColumns: ['Marca', 'Estado'],
         group: 'CONTENIDO'
     },
     labels: {

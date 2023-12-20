@@ -9,7 +9,7 @@ const Publications: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'ProductoServicio', 'esOferta', 'Estado'],
+        defaultColumns: ['Titulo', 'TipoVenta', 'ProductoServicio', 'Estado'],
         group: 'VENTAS',
     },
     labels: {

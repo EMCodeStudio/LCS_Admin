@@ -7,8 +7,8 @@ const Services: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'NombreServicio',
-        defaultColumns:['NombreServicio','Precio','Subcategoria','Imagen','EstadoServicio'],
-        group:'INVENTARIO'
+        defaultColumns: ['NombreServicio', 'Precio', 'Subcategoria', 'EstadoServicio'],
+        group: 'INVENTARIO'
     },
     labels: {
         singular: 'Servicio',
@@ -20,19 +20,19 @@ const Services: CollectionConfig = {
             name: 'NombreServicio',
             label: 'Nombre del Servicio',
             type: 'text',
-            required:true,
+            required: true,
             unique: true,
             index: true,
-            admin:{
-                placeholder:'Nombre del Servicio aqui'
+            admin: {
+                placeholder: 'Nombre del Servicio aqui'
             }
         },
 
         {
-            type:'row',
-            fields:[
+            type: 'row',
+            fields: [
                 {
-        
+
                     name: "Subcategoria", // required
                     label: "Subcategoria del Servicio",
                     type: 'relationship', // required
@@ -45,7 +45,7 @@ const Services: CollectionConfig = {
                 },
                 {
                     name: "Precio", // required
-                    label: "Precio del Servicio",
+                    label: "Costo del Servicio",
                     type: "number", // required
                     required: false,
                     admin: {
@@ -58,17 +58,36 @@ const Services: CollectionConfig = {
                 },
             ]
         },
+
         {
-            name: "Imagen", // required
-            label: "Imagen del Servicio",
-            type: 'upload', // required
-            relationTo: 'imagenes', //required eg:users
-            required: false
-            
+            type: 'array',
+            name:'ImagenServicio',
+            required: true,
+            maxRows: 10,
+            minRows: 1,
+            fields: [
+                {
+                    name: "Imagen", // required
+                    label: "Imagen del Servicio",
+                    type: 'upload', // required
+                    relationTo: 'imagenes', //required eg:users
+                    required: false,
+                    hooks: {
+                        beforeValidate: [
+                            (req): void => {
+                                const image = req.data
+                                if (image && image.width < 420) {
+                                    throw new Error('La Imagen del Servivio debe ser Igual o Mayor a 420px de Ancho')
+                                }
+                            }
+                        ]
+                    }
+                },
+            ]
         },
         {
             name: "EstadoServicio", // required
-            label:'Estado del Servicio',
+            label: 'Estado del Servicio',
             type: "select", // required
             hasMany: false, /// set to true if you want to select multiple
             options: [
@@ -87,6 +106,18 @@ const Services: CollectionConfig = {
                 position: 'sidebar'
             }
         },
+        {
+            name: "UbicacionServicio", // required
+            label: "Ubicaciones Disponibles",
+            type: 'relationship', // required
+            relationTo: 'ubicaciones', //required eg:users
+            hasMany: true,
+            required: false,
+            admin: {
+                position: 'sidebar'
+            }
+        },
+
     ],
     timestamps: true,
 };
