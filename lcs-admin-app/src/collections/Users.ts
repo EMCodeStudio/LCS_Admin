@@ -28,7 +28,7 @@ const Users: CollectionConfig = {
       required: false,
       unique: true,
       admin: {
-        placeholder: 'Nombre de Usuario aqui'
+        placeholder: 'Nombre aqui'
       }
     },
   ],

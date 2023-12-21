@@ -112,7 +112,7 @@ const Products: CollectionConfig = {
             label: "Marca del Producto",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si desea agregar la Marca.'
+                description: 'Marque esta casilla si desea agregar una Marca.'
             }
         },
         {

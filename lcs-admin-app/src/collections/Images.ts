@@ -62,7 +62,7 @@ const Images: CollectionConfig = {
             required: true,
             unique: true,
             admin: {
-                placeholder: "Nombre de Imagen aqui",
+                placeholder: "Nombre aqui",
             }
         },
         /* {
@@ -79,7 +79,7 @@ const Images: CollectionConfig = {
         {
             name: "Estado", // required
             type: "select", // required
-            label: 'Estado de Imagen',
+            label: 'Estado de la Imagen',
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

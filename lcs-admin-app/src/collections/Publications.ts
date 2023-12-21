@@ -20,12 +20,12 @@ const Publications: CollectionConfig = {
         //example text field
         {
             name: 'Titulo',
-            label: 'Titulo de Publicacion',
+            label: 'Titulo de la Publicacion',
             type: 'text',
             required: true,
             unique: true,
             admin: {
-                placeholder: 'Titulo de Publicacion aqui'
+                placeholder: 'Titulo aqui'
             }
         },
         /*  {
@@ -104,7 +104,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "ProductoServicio",
-            label: "Producto o Servicio",
+            label: "Productos - Servicios",
             type: 'relationship',
             relationTo: ['productos', 'servicios'],
             hasMany: false,
@@ -134,6 +134,9 @@ const Publications: CollectionConfig = {
                     }
                 }
             },
+            admin:{
+                description: 'Seleccione un Producto o Servicio de la Lista.'
+            }
         },
         {
             name: "esOferta", // required
@@ -187,7 +190,7 @@ const Publications: CollectionConfig = {
         {
             name: "Descripcion", // required
             type: "richText", // required
-            label: "Descripcion de Publicacion",
+            label: "Descripcion de la Publicacion",
             required: true,
         },
         {

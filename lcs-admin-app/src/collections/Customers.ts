@@ -25,7 +25,7 @@ const Customers: CollectionConfig = {
         {
             name: "CedulaNombre", 
             type: "text", 
-            label: 'Cedula - Nombre y Apellidos',
+            label: 'Nombre y Apellidos - Cedula',
             required: false,
             hooks: {
                 beforeChange: [({ siblingData }) => {

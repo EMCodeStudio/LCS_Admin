@@ -24,7 +24,7 @@ const Services: CollectionConfig = {
             unique: true,
             index: true,
             admin: {
-                placeholder: 'Nombre del Servicio aqui'
+                placeholder: 'Nombre aqui'
             }
         },
 

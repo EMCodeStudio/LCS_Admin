@@ -149,7 +149,7 @@ const Orders: CollectionConfig = {
         },
         {
             name: "ProductoServicio",
-            label: "Producto o Servicio",
+            label: "Productos - Servicios",
             type: 'relationship',
             /*  hooks: {
                  beforeChange: [
@@ -188,6 +188,9 @@ const Orders: CollectionConfig = {
                     }
                 }
             },
+            admin:{
+                description:'Seleccione un Producto o Servicio de la Lista'
+            }
         },
         {
             type: 'row',
@@ -336,7 +339,7 @@ const Orders: CollectionConfig = {
         {
             name: "EstadoPago",
             type: "select",
-            label: 'Estado de Pago',
+            label: 'Estado del Pago',
             hasMany: false, /// set to true if you want to select multiple
             admin: {
                 position: 'sidebar',

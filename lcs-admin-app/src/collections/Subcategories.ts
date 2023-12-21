@@ -19,17 +19,17 @@ const Subcategories: CollectionConfig =  {
         //example text field
         {
             name: 'Subcategoria',
-            label: 'Nombre de Subcategoria',
+            label: 'Nombre de la Subcategoria',
             type: 'text',
             required: true,
             unique: true,
             admin:{
-                placeholder: 'Nombre de Subcategoria aqui'
+                placeholder: 'Nombre aqui'
             }
         },
         {
           name: "Categoria", // required
-          label: "Nombre de Categoria",
+          label: "Nombre de la Categoria",
           type: 'relationship', // required
           relationTo:'categorias', //required eg:users
           hasMany: true,
@@ -45,7 +45,7 @@ const Subcategories: CollectionConfig =  {
         {
             name: "Estado", // required
             type: "select", // required
-            label:"Estado de Subcategoria",
+            label:"Estado de la Subcategoria",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

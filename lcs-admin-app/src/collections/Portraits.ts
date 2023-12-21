@@ -19,16 +19,16 @@ const Portraits: CollectionConfig = {
         {
             name: "Portada", // required
             type: "text", // required
-            label: "Nombre de Portada",
+            label: "Nombre de la Portada",
             required: true,
             unique:true,
             admin: {
-                placeholder: 'Nombre de Portada aqui'
+                placeholder: 'Nombre aqui'
             }
         },
         {
             name: 'Imagen',
-            label: 'Imagen de Portada',
+            label: 'Imagen de la Portada',
             type: 'upload',
             relationTo: 'imagenes',
             hooks: {
@@ -46,7 +46,7 @@ const Portraits: CollectionConfig = {
         {
             name: "Estado", // required
             type: "select", // required
-            label: "Estado de Portada",
+            label: "Estado de la Portada",
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {

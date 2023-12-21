@@ -18,18 +18,18 @@ const Tags: CollectionConfig =  {
         //example text field
         {
             name: 'Etiqueta',
-            label: 'Nombre de Etiqueta',
+            label: 'Nombre de la Etiqueta',
             type: 'text',
             required:true,
             unique: true,
             admin:{
-                placeholder:'Nombre de Etiqueta aqui'
+                placeholder:'Nombre aqui'
             }
         },
         {
             name: "Estado", // required
             type: "select", // required
-            label:'Estado de Etiqueta',
+            label:'Estado de la Etiqueta',
             hasMany: false, /// set to true if you want to select multiple
             options: [
                 {
