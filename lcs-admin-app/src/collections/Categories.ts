@@ -32,21 +32,21 @@ const Categories: CollectionConfig = {
 
       name: "Categoria", // required
       type: "text", // required
-      label: "Nombre de Categoria",
+      label: "Nombre de la Categoria",
       required: true,
       unique: true,
       index: true,
       saveToJWT: true,
 
       admin: {
-        placeholder: "Nombre de Categoria aqui",
+        placeholder: "Nombre aqui",
 
       },
 
     },
     {
       name: "Estado", // required
-      label: "Estado de Categoria",
+      label: "Estado de la Categoria",
       type: "select", // required
       hasMany: false, /// set to true if you want to select multiple
       options: [

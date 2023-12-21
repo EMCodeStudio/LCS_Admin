@@ -29,7 +29,7 @@ const Locations: CollectionConfig = {
         {
             name: "UbicacionDatos", // required
             type: "text", // required
-            label: "Datos de Ubicacion",
+            label: "Datos de la Ubicacion",
             required: false,
             admin: {
                 hidden: true

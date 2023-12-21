@@ -31,7 +31,7 @@ const Company: CollectionConfig = {
                             label: "Nombre de la Empresa",
                             required: true,
                             admin: {
-                                placeholder: "Nombre de la Empresa aqui",
+                                placeholder: "Nombre aqui",
                             }
                         },
                         {
@@ -43,7 +43,7 @@ const Company: CollectionConfig = {
                                     label: "Numero Celular de la Empresa",
                                     required: true,
                                     admin: {
-                                        placeholder: "Numero Celular aqui",
+                                        placeholder: "Numero aqui",
                                         width: '40%'
                                     }
                                 },
@@ -53,7 +53,7 @@ const Company: CollectionConfig = {
                                     label: "Correo Electronico de la Empresa",
                                     required: true,
                                     admin: {
-                                        placeholder: "Correo Electronico aqui",
+                                        placeholder: "Correo aqui",
                                         width: '60%'
                                     }
                                 },
@@ -65,7 +65,7 @@ const Company: CollectionConfig = {
                             label: "Direccion de la Empresa",
                             required: true,
                             admin: {
-                                placeholder: "Datos de Direccion aqui",
+                                placeholder: "Datos aqui",
                             }
                         },
                     ]
@@ -80,7 +80,7 @@ const Company: CollectionConfig = {
                             label: "Lema de la Empresa",
                             required: false,
                             admin: {
-                                placeholder: "Correo Electronico aqui",
+                                placeholder: "Correo aqui",
                             }
                         },
                         {
@@ -89,7 +89,7 @@ const Company: CollectionConfig = {
                             label: "Acerca la Empresa",
                             required: false,
                             admin: {
-                                placeholder: "Descripcion de la Empresa aqui",
+                                placeholder: "Descripcion aqui",
                             }
                         },
                         {
@@ -98,7 +98,7 @@ const Company: CollectionConfig = {
                             label: "Facebook de la Empresa",
                             required: false,
                             admin: {
-                                placeholder: "Link de Red Social aqui",
+                                placeholder: "Link aqui",
                             }
                         },
 
