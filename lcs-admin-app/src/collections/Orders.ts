@@ -38,7 +38,7 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
                 return servicePrice;
             })
             .catch(error => {
-             //   console.error('Error del Servicio:', error);
+                //   console.error('Error del Servicio:', error);
                 return 'No se puede obtener el Costo del Servicio.';
                 //return '';
             });
@@ -68,7 +68,7 @@ const getTotalPrice: FieldHook = async ({ data }) => {
                 return 'No se puede obtener el Costo del Producto.';
             });
         const { PrecioPS = productResponse, CantidadProducto } = data.DetallesPago;
-      //  console.log('PRECIO: ', PrecioPS)
+        //  console.log('PRECIO: ', PrecioPS)
         const calculatedPrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS
         const validatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedPrice * (1 - (data.DescuentoPedido / 100)) : calculatedPrice
         const totalProdPrice = Math.round(validatedDiscount);
@@ -116,12 +116,39 @@ interface Ubicacion {
     updatedAt: string;
     UbicacionDatos: string;
 }
-type LocationData = string; // Ajusta el tipo según tus necesidades
+
+type LocationData = string;
+
+let globalString: string | undefined;
+
+function ClientLocationGlobal(valor: string): string {
+    // Inicializa globalString si aún no ha sido definida
+    globalString = globalString || '';
+
+    let LocationResult: string = '';
+
+    if (!globalString.includes(valor)) {
+        LocationResult = globalString += valor;
+    }
+
+   return LocationResult;
+}
+
+
+function CheckClientLocation(clientLocation: string): string {
+
+    const lowercaseClientLocation = clientLocation.toLowerCase();
+
+    if (globalString && globalString.toLowerCase().includes(lowercaseClientLocation)) {
+        return `Coincidencia: ${clientLocation}`;
+    } else {
+        return 'La Ubicación del Cliente y la del Pedido No Coincide..';
+    }
+}
 
 const getProductServiceLocation: FieldHook = async ({ data }) => {
-
-
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
+       
         try {
             const fieldID = data.ProductoServicio.value;
             const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`);
@@ -135,23 +162,31 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                 const { Pais, Departamento, Municipio } = ubicacion;
                 return `${Pais} - ${Departamento} - ${Municipio}`
             };
+
             let locationData: LocationData[] = [];
+
             productLocation.forEach((ubicacion: Ubicacion) => {
                 const getLocationString = formatLocationData(ubicacion);
-                console.log('Ubicacion: ', getLocationString)
                 locationData.push(getLocationString + '\n')
-                //  return datosString
             });
-          //  console.log('Location Data fuera del bucle: ', locationData);
-            return locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Producto.';
+
+            //  console.log('Location Data fuera del bucle: ', locationData);
+            const resultLocationProduct = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Producto.';
+
+            console.log('Location Data fuera del bucle: ', resultLocationProduct);
+
+            ClientLocationGlobal(resultLocationProduct)
+
+            return resultLocationProduct;
 
         } catch (error) {
-           // console.error('Error del Producto:', error);
+            // console.error('Error del Producto:', error);
             return 'No se puede obtener la Ubicacion del Producto.';
         }
     }
 
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
+       
         try {
             const fieldID = data.ProductoServicio.value;
             const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`);
@@ -169,27 +204,30 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             let locationData: LocationData[] = [];
             serviceLocation.forEach((ubicacion: Ubicacion) => {
                 const getLocationString = formatLocationData(ubicacion);
-              //  console.log('Ubicacion: ', getLocationString)
+                //  console.log('Ubicacion: ', getLocationString)
                 locationData.push(getLocationString + '\n')
                 //  return datosString
             });
-           // console.log('Location Data fuera del bucle: ', locationData);
-            return locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Servicio.';
+            //  console.log('Location Data fuera del bucle: ', locationData);
+            const resultServiceLocation = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Servicio.';
+
+            ClientLocationGlobal(resultServiceLocation)
+
+            return resultServiceLocation;
         } catch (error) {
-           // console.error('Error del Servicio:', error);
+            // console.error('Error del Servicio:', error);
             return 'No se puede obtener la Ubicacion del Servicio.';
         }
     }
+
+
     return null;
 }
 
 
-
-
 const getClientLocation: FieldHook = async ({ data }) => {
-    console.log('CLIENTE')
-    if (data && data.Cliente !== undefined ) {
 
+    if (data && data.Cliente !== undefined) {
         try {
             const fieldID = data.Cliente;
             console.error('fieldID del Cliente:', fieldID);
@@ -200,26 +238,26 @@ const getClientLocation: FieldHook = async ({ data }) => {
             const clientData = await clientResponse.json();
             const clientLocation = clientData.UbicacionCliente;
 
-            console.log('Ubicacion Data: ', clientLocation)
-
-           
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { Pais, Departamento, Municipio } = ubicacion;
                 return `${Pais} - ${Departamento} - ${Municipio}`;
-              };
-              
-              let locationData: LocationData = '';
-              
-              // Verifica si clientLocation no es nulo o indefinido antes de procesarlo
-              if (clientLocation) {
+            };
+
+            let locationData: LocationData = '';
+            if (clientLocation) {
                 const getLocationString = formatLocationData(clientLocation);
-                console.log('Ubicacion String: ', getLocationString);
                 locationData = getLocationString;
-              } else {
+            } else {
                 console.error('Error: clientLocation es nulo o indefinido.');
-              }
-           
-            return locationData ? locationData : 'No se puede obtener la Ubicacion del Cliente.';
+            }
+
+
+            console.log('GLOBAL STRING', globalString)
+
+            const ValidatedLocation = CheckClientLocation(locationData)
+
+            return ValidatedLocation;
+
 
         } catch (error) {
             console.error('Error del Cliente:', error);
@@ -320,9 +358,6 @@ const Orders: CollectionConfig = {
             }
         },
 
-
-
-
         {
             type: 'row',
             fields: [
@@ -335,7 +370,7 @@ const Orders: CollectionConfig = {
                         width: '50%'
                     },
                     access: {
-                        update: () => false
+                        update: () => false,
                     },
                     hooks: {
                         beforeChange: [({ siblingData }) => {
@@ -349,7 +384,7 @@ const Orders: CollectionConfig = {
                     type: "text", // required
                     label: "Ubicacion del Cliente",
                     required: false,
-                    admin:{
+                    admin: {
                         width: '50%',
                         readOnly: true,
                     },

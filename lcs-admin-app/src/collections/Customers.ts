@@ -202,14 +202,6 @@ const Customers: CollectionConfig = {
             ]
         },
         {
-          name: "UbicacionCliente", // required
-          label: "Ubicacion",
-          type: 'relationship', // required
-          relationTo:'ubicaciones', //required eg:users
-          hasMany: false,
-          required: true
-        },
-        {
             name: 'DireccionCliente',
             label: 'Direccion del Cliente',
             type: 'textarea',
@@ -228,6 +220,18 @@ const Customers: CollectionConfig = {
                 description: 'Marque esta casilla si el cliente acepta los Terminos y Condiciones'
             }
         },
+        {
+            name: "UbicacionCliente", // required
+            label: "Ubicacion",
+            type: 'relationship', // required
+            relationTo:'ubicaciones', //required eg:users
+            hasMany: false,
+            required: true,
+            admin: {
+                position: 'sidebar'
+            }
+          },
+          
         {
             name: "Estado", 
             type: "select", 
