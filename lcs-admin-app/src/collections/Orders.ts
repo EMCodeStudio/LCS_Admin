@@ -3,7 +3,7 @@ import { CollectionConfig, FieldHook } from "payload/types";
 import ErrorMessages from "../components/Messages/ErrorMessages";
 
 
-const handleProductServicePrice: FieldHook = async ({ data }) => {
+const getProductServicePrice: FieldHook = async ({ data }) => {
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
         const fieldID = data.ProductoServicio.value;
         const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
@@ -14,8 +14,8 @@ const handleProductServicePrice: FieldHook = async ({ data }) => {
                 return productResponse.json();
             })
             .then(productData => {
-                const productName = productData.Precio;
-                return productName;
+                const productPrice = productData.Precio;
+                return productPrice;
             })
             .catch(error => {
                 console.error('Error del Producto:', error);
@@ -46,7 +46,9 @@ const handleProductServicePrice: FieldHook = async ({ data }) => {
     }
     return null;
 }
-const getTotal: FieldHook = async ({ data }) => {
+
+
+const getTotalPrice: FieldHook = async ({ data }) => {
 
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
         const fieldID = data.ProductoServicio.value;
@@ -67,9 +69,9 @@ const getTotal: FieldHook = async ({ data }) => {
             });
         const { PrecioPS = productResponse, CantidadProducto } = data.DetallesPago;
         console.log('PRECIO: ', PrecioPS)
-        const validatePrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS
-        const validateDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? validatePrice * (1 - (data.DescuentoPedido / 100)) : validatePrice
-        const totalProdPrice = Math.round(validateDiscount);
+        const calculatedPrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS
+        const validatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedPrice * (1 - (data.DescuentoPedido / 100)) : calculatedPrice
+        const totalProdPrice = Math.round(validatedDiscount);
         console.log('TOTAL PROD: ', totalProdPrice)
         return totalProdPrice;
     }
@@ -84,8 +86,8 @@ const getTotal: FieldHook = async ({ data }) => {
                 return serviceResponse.json();
             })
             .then(serviceData => {
-                const productPrice = serviceData.Precio;
-                return productPrice;
+                const servicePrice = serviceData.Precio;
+                return servicePrice;
             })
             .catch(error => {
                 console.error('Error del Servicio:', error);
@@ -94,8 +96,8 @@ const getTotal: FieldHook = async ({ data }) => {
             });
         const PrecioPS = serviceResponse
         console.log('PRECIO: ', PrecioPS)
-        const validateDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioPS * (1 - (data.DescuentoPedido / 100)) : PrecioPS
-        const totalServPrice = Math.round(validateDiscount);
+        const calculatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioPS * (1 - (data.DescuentoPedido / 100)) : PrecioPS
+        const totalServPrice = Math.round(calculatedDiscount);
         console.log('TOTAL SERV: ', totalServPrice)
         return totalServPrice;
     }
@@ -103,6 +105,82 @@ const getTotal: FieldHook = async ({ data }) => {
     return null;
 
 }
+
+const getProductServiceLocation: FieldHook = async ({ data }) => {
+
+    interface Ubicacion {
+        id: string;
+        Pais: string;
+        Departamento: string;
+        Municipio: string;
+        EstadoUbicacion: string;
+        createdAt: string;
+        updatedAt: string;
+        UbicacionDatos: string;
+    }
+
+    type LocationData = string; // Ajusta el tipo según tus necesidades
+
+
+    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
+        try {
+
+            const fieldID = data.ProductoServicio.value;
+            const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`);
+            if (!productResponse.ok) {
+                throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`);
+            }
+            const productData = await productResponse.json();
+            const productLocation = productData.UbicacionProducto;
+
+
+            /*  productLocation.forEach((ubicacion: Ubicacion) => {
+                  const { Pais, Departamento, Municipio } = ubicacion;
+                  console.log('Ubicacion: ', ubicacion) 
+                  console.log('Pais:', Pais, ' Departamento:', Departamento, ' Municipio:', Municipio);
+              });*/
+
+            const obtenerDatosUbicacion = (ubicacion: Ubicacion): string => {
+                const { Pais, Departamento, Municipio } = ubicacion;
+                return `${Pais} - ${Departamento} - ${Municipio}`
+            };
+
+            let locationData: LocationData = '';
+
+            productLocation.forEach((ubicacion: Ubicacion) => {
+                const datosString = obtenerDatosUbicacion(ubicacion);
+                console.log('Ubicacion: ', datosString)
+                locationData = datosString
+                //  return datosString
+            });
+
+            console.log('Location Data fuera del bucle: ', locationData);
+            return locationData ? locationData : 'No se puede obtener la Ubicacion del Producto.';
+
+        } catch (error) {
+            console.error('Error del Producto:', error);
+            return 'No se puede obtener la Ubicacion del Producto.';
+        }
+
+
+    }
+
+    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
+        try {
+            const fieldID = data.ProductoServicio.value;
+            const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`);
+            if (!serviceResponse.ok) {
+                throw new Error(`Error al obtener la Ubicacion del Servicio. Código de estado: ${serviceResponse.status}`);
+            }
+            const serviceData = await serviceResponse.json();
+            const serviceLocation = serviceData.UbicacionServicio;
+            return serviceLocation ? serviceLocation : 'No se puede obtener la Ubicacion del Producto.';
+        } catch (error) {
+        }
+        return null;
+    }
+}
+
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -188,8 +266,8 @@ const Orders: CollectionConfig = {
                     }
                 }
             },
-            admin:{
-                description:'Seleccione un Producto o Servicio de la Lista'
+            admin: {
+                description: 'Seleccione un Producto o Servicio de la Lista'
             }
         },
         {
@@ -255,7 +333,28 @@ const Orders: CollectionConfig = {
 
                 }
             },
-
+        },
+        {
+            type: 'row',
+            fields: [
+                {
+                    name: 'UbicacionPS',
+                    label: 'Ubicaciones Disponibles',
+                    type: 'textarea',
+                    admin: {
+                        readOnly: true
+                    },
+                    access: {
+                        update: () => false
+                    },
+                    hooks: {
+                        beforeChange: [({ siblingData }) => {
+                            return siblingData.UbicacionPS = undefined
+                        }],
+                        afterRead: [getProductServiceLocation]
+                    }
+                },
+            ]
         },
         {
             name: "DetallesPago",
@@ -283,7 +382,7 @@ const Orders: CollectionConfig = {
                                 beforeChange: [({ siblingData }) => {
                                     return siblingData.PrecioPS = undefined
                                 }],
-                                afterRead: [handleProductServicePrice]
+                                afterRead: [getProductServicePrice]
                             },
                         },
                         {
@@ -322,7 +421,7 @@ const Orders: CollectionConfig = {
                                 beforeChange: [({ siblingData }) => {
                                     siblingData.TotalPrice = undefined
                                 }],
-                                afterRead: [getTotal]
+                                afterRead: [getTotalPrice]
                             },
                             admin: {
                                 width: '100%',
