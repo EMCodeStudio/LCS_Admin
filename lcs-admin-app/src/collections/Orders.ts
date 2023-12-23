@@ -140,17 +140,17 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                   console.log('Pais:', Pais, ' Departamento:', Departamento, ' Municipio:', Municipio);
               });*/
 
-            const obtenerDatosUbicacion = (ubicacion: Ubicacion): string => {
+            const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { Pais, Departamento, Municipio } = ubicacion;
                 return `${Pais} - ${Departamento} - ${Municipio}`
             };
 
-            let locationData: LocationData = '';
+            let locationData: LocationData[] =[];
 
             productLocation.forEach((ubicacion: Ubicacion) => {
-                const datosString = obtenerDatosUbicacion(ubicacion);
-                console.log('Ubicacion: ', datosString)
-                locationData = datosString
+                const getLocationString = formatLocationData(ubicacion);
+                console.log('Ubicacion: ', getLocationString)
+                locationData.push(' '+getLocationString)
                 //  return datosString
             });
 
