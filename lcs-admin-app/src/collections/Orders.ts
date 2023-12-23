@@ -132,14 +132,7 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             }
             const productData = await productResponse.json();
             const productLocation = productData.UbicacionProducto;
-
-
-            /*  productLocation.forEach((ubicacion: Ubicacion) => {
-                  const { Pais, Departamento, Municipio } = ubicacion;
-                  console.log('Ubicacion: ', ubicacion) 
-                  console.log('Pais:', Pais, ' Departamento:', Departamento, ' Municipio:', Municipio);
-              });*/
-
+            
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { Pais, Departamento, Municipio } = ubicacion;
                 return `${Pais} - ${Departamento} - ${Municipio}`
@@ -150,12 +143,12 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             productLocation.forEach((ubicacion: Ubicacion) => {
                 const getLocationString = formatLocationData(ubicacion);
                 console.log('Ubicacion: ', getLocationString)
-                locationData.push(' '+getLocationString)
+                locationData.push(getLocationString+'\n')
                 //  return datosString
             });
 
             console.log('Location Data fuera del bucle: ', locationData);
-            return locationData ? locationData : 'No se puede obtener la Ubicacion del Producto.';
+            return locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Producto.';
 
         } catch (error) {
             console.error('Error del Producto:', error);
@@ -174,7 +167,21 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             }
             const serviceData = await serviceResponse.json();
             const serviceLocation = serviceData.UbicacionServicio;
-            return serviceLocation ? serviceLocation : 'No se puede obtener la Ubicacion del Producto.';
+
+            const formatLocationData = (ubicacion: Ubicacion): string => {
+                const { Pais, Departamento, Municipio } = ubicacion;
+                return `${Pais} - ${Departamento} - ${Municipio}`
+            };
+
+            let locationData: LocationData[] =[];
+            serviceLocation.forEach((ubicacion: Ubicacion) => {
+                const getLocationString = formatLocationData(ubicacion);
+                console.log('Ubicacion: ', getLocationString)
+                locationData.push(getLocationString+'\n')
+                //  return datosString
+            });
+            console.log('Location Data fuera del bucle: ', locationData);
+            return locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Servicio.';
         } catch (error) {
         }
         return null;
