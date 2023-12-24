@@ -1,20 +1,23 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 
 const formatCedulaNombre: FieldHook = async ({ data }) => (
-    `${data.Nombre} ${data.Apellidos} - ${data.Cedula}`
+   `${data.NombreCliente} ${data.ApellidosCliente} - ${data.CedulaCliente}`
 )
 const Customers: CollectionConfig = {
+
     slug: 'clientes',
     access: {
         read: () => true,
         update: () => true
     },
+
     auth: true,
     admin: {
         useAsTitle: 'CedulaNombre',
-        defaultColumns: ['Cedula', 'Nombre', 'Apellidos'],
+        defaultColumns: ['CedulaCliente', 'NombreCliente', 'ApellidosCliente'],
         group: 'VENTAS'
     },
+
     labels: {
         singular: 'Cliente',
         plural: 'Clientes',
@@ -23,9 +26,9 @@ const Customers: CollectionConfig = {
     fields: [
         //example text field
         {
-            name: "CedulaNombre", 
-            type: "text", 
-            label: 'Nombre y Apellidos - Cedula',
+            name: "CedulaNombre",
+            type: "text",
+            label: 'Cedula - Nombre y Apellidos',
             required: false,
             hooks: {
                 beforeChange: [({ siblingData }) => {
@@ -41,15 +44,19 @@ const Customers: CollectionConfig = {
                 hidden: true,
             }
         },
+
+
+
+
         {
             type: 'row',
             fields: [
                 {
-                    name: "TipoID", 
+                    name: "TipoID",
                     label: "Tipo de Identificacion",
-                    type: 'select', 
+                    type: 'select',
                     required: true,
-                    options: [ 
+                    options: [
                         {
                             label: 'Cedula de Ciudadania',
                             value: 'zitizen',
@@ -65,7 +72,7 @@ const Customers: CollectionConfig = {
                     }
                 },
                 {
-                    name: 'Cedula',
+                    name: 'CedulaCliente',
                     label: 'Cedula del Cliente',
                     type: 'text',
                     required: true,
@@ -77,11 +84,13 @@ const Customers: CollectionConfig = {
                 },
             ]
         },
+
+
         {
             type: 'row',
             fields: [
                 {
-                    name: 'Nombre',
+                    name: 'NombreCliente',
                     label: 'Nombre del Cliente',
                     type: 'text',
                     required: true,
@@ -90,7 +99,7 @@ const Customers: CollectionConfig = {
                     }
                 },
                 {
-                    name: 'Apellidos',
+                    name: 'ApellidosCliente',
                     label: 'Apellidos del Cliente',
                     type: 'text',
                     required: true,
@@ -100,12 +109,16 @@ const Customers: CollectionConfig = {
                 },
             ]
         },
+
+
+
+
         {
-            name: "TipoPersona", 
+            name: "TipoPersona",
             label: "Tipo de Persona",
-            type: 'radio', 
+            type: 'radio',
             required: false,
-            options: [ 
+            options: [
                 {
                     label: 'Natural',
                     value: 'nature',
@@ -121,6 +134,11 @@ const Customers: CollectionConfig = {
                 description: 'Si la Persona es Juridica apareceran nuevos campos.'
             }
         },
+
+
+
+
+
         {
             type: 'collapsible',
             label: 'Datos de la Empresa',
@@ -153,6 +171,10 @@ const Customers: CollectionConfig = {
                         },
                     ]
                 },
+
+
+
+
                 {
                     name: 'CorreoEmpresa',
                     label: 'Correo de la Empresa',
@@ -163,6 +185,9 @@ const Customers: CollectionConfig = {
                         placeholder: 'Correo  aqui'
                     }
                 },
+
+
+
                 {
                     name: 'DireccionEmpresa',
                     label: 'Direccion de la Empresa',
@@ -172,27 +197,39 @@ const Customers: CollectionConfig = {
                         placeholder: 'Direccion aqui'
                     }
                 },
+
+
             ]
         },
-        
+
+
+
+
+
+
+
+
+
+
+
         {
             type: 'collapsible',
             label: 'Informacion Contacto del Cliente',
             fields: [
                 {
-                    name: "CorreoCliente", 
-                    type: "email", 
-                    label: "Correo del Cliente",
-                    required: true,
-                    unique: true,
+                    name: "CorreoCliente",
+                    type: "email",
+                    label: "Correo Electronico",
+                    //required: true,
+                    //unique: true,
                     admin: {
                         placeholder: 'Correo aqui'
                     }
                 },
                 {
-                    name: "NumeroCelular", 
+                    name: "NumeroCelular",
                     label: "Numero Telefonico",
-                    type: "number", 
+                    type: "number",
                     required: true,
                     admin: {
                         step: 1,
@@ -201,6 +238,10 @@ const Customers: CollectionConfig = {
                 },
             ]
         },
+
+
+
+
         {
             name: 'DireccionCliente',
             label: 'Direccion del Cliente',
@@ -211,32 +252,39 @@ const Customers: CollectionConfig = {
             }
         },
 
+
+
         {
-            name: "Terminos", 
-            type: "checkbox", 
+            name: "Terminos",
+            type: "checkbox",
             label: "Acepta Terminos y Condiciones?",
             defaultValue: false,
             admin: {
                 description: 'Marque esta casilla si el cliente acepta los Terminos y Condiciones'
             }
         },
+
+
+
         {
             name: "UbicacionCliente", // required
             label: "Ubicacion",
             type: 'relationship', // required
-            relationTo:'ubicaciones', //required eg:users
+            relationTo: 'ubicaciones', //required eg:users
             hasMany: false,
             required: true,
             admin: {
                 position: 'sidebar'
             }
-          },
-          
+        },
+
+
+
         {
-            name: "Estado", 
-            type: "select", 
+            name: "Estado",
+            type: "select",
             label: "Estado del Cliente",
-            hasMany: false, 
+            hasMany: false,
             options: [
                 {
                     label: "Habilitado",
@@ -253,14 +301,18 @@ const Customers: CollectionConfig = {
                 position: 'sidebar'
             }
         },
+
+
+
+        
         {
-            name: "FechaRegistro", 
-            type: "date", 
+            name: "FechaRegistro",
+            type: "date",
             label: "Fecha de Registro",
             required: true,
             admin: {
                 position: "sidebar",
-                date:{
+                date: {
                     pickerAppearance: 'dayOnly',
                     displayFormat: 'dd-MM-yyyy'
                 }

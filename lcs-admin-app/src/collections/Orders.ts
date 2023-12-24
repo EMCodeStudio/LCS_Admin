@@ -47,7 +47,6 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
     return null;
 }
 
-
 const getTotalPrice: FieldHook = async ({ data }) => {
 
     if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
@@ -133,7 +132,6 @@ function ClientLocationGlobal(valor: string): string {
 
    return LocationResult;
 }
-
 
 function CheckClientLocation(clientLocation: string): string {
 
@@ -224,7 +222,6 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
     return null;
 }
 
-
 const getClientLocation: FieldHook = async ({ data }) => {
 
     if (data && data.Cliente !== undefined) {
@@ -276,7 +273,7 @@ const Orders: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'producto',
-        defaultColumns: ['Cliente', 'TipoVenta', 'ProductoServicio', 'EstadoPago', 'EstadoPedido'],
+        defaultColumns: ['ClientePedido', 'TipoVenta', 'ProductoServicio', 'EstadoPago', 'EstadoPedido'],
         group: 'VENTAS'
     },
     labels: {
@@ -285,7 +282,7 @@ const Orders: CollectionConfig = {
     },
     fields: [
         {
-            name: 'Cliente',
+            name: 'ClientePedido',
             /*  label: {es: 'Nombre y Cedula' , en: 'Name and Document'}, */
             label: 'Datos del Cliente',
             type: 'relationship',

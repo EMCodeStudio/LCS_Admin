@@ -58,7 +58,7 @@
 ### URLS
 
 Login           POST: <http://localhost:3000/api/usuarios/login> *
-Logout          POST: <http://localhost:3000/api/usuarios/logout> *
+Logout          POST: <http://localhost:3000/api/usuarios/logout>*
 Unlock          POST: <http://localhost:3000/api/usuarios/unlock>
 Refresh         POST: <http://localhost:3000/api/usuarios/refresh-token> *
 Verify user     POST: <http://localhost:3000/api/usuarios/verify/{token}>

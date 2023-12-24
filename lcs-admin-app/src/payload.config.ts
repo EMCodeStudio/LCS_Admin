@@ -18,9 +18,9 @@ import Colors from './collections/Colors'
 import Trademarks from './collections/Trademarks'
 import Logo from './components/Logo/Logo'
 import Icon from './components/Logo/Icon'
-import Customers from './collections/Customers'
 import Orders from './collections/Orders'
 import Locations from './collections/Locations'
+import Customers from './collections/Customers'
 
 
 export default buildConfig({
@@ -41,8 +41,8 @@ export default buildConfig({
   },
   editor: slateEditor({}),
   collections: [
-    Orders,
     Customers,
+    Orders,
     Publications,
     Tags,
     Portraits,
