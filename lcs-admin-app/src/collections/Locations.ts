@@ -5,8 +5,6 @@ const formatLocation: FieldHook = async ({ data }) => (
     `${data.Pais} - ${data.Municipio} (${data.Departamento})`
 )
 
-
-
 const Locations: CollectionConfig = {
     slug: 'ubicaciones',
     access: {
@@ -27,9 +25,9 @@ const Locations: CollectionConfig = {
         //example text field
 
         {
-            name: "UbicacionDatos", // required
-            type: "text", // required
-            label: "Datos de la Ubicacion",
+            name: "UbicacionDatos",
+            type: "text",
+            label: "Pais - Departamento - Municipio / Ciudad",
             required: false,
             admin: {
                 hidden: true
@@ -47,9 +45,9 @@ const Locations: CollectionConfig = {
         },
 
         {
-            name: "Pais", // required
-            type: "select", // required
-            hasMany: false, /// set to true if you want to select multiple
+            name: "Pais",
+            type: "select",
+            hasMany: false, 
             options: [
                 {
                     label: "Colombia",
@@ -61,26 +59,31 @@ const Locations: CollectionConfig = {
             required: false,
         },
         {
-            name: "Departamento", // required
-            type: 'text',
+            name: "Departamento",
+            type: 'relationship',
+            relationTo: "departamentos",
+            hasMany: false, 
             required: false,
             admin:{
-                placeholder: 'Nombre aqui'
+                description: 'Seleccione un Departameto '
             }
         },
         {
-            name: "Municipio", // required
-            type: 'text',
+            name: "Municipio",
+            type: 'relationship',
+            label: 'Municipio | Ciudad',
+            hasMany: false, 
+            relationTo: 'municipios',
             required: false,
             admin:{
-                placeholder: 'Nombre aqui'
+                description: 'Selecciones un Municipio o Ciudad'
             }
         },
         {
-            name: "EstadoUbicacion", // required
-            type: "select", // required
+            name: "EstadoUbicacion",
+            type: "select",
             label: 'Estado de la Ubicacion',
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false, 
             options: [
                 {
                     label: "Disponible",
