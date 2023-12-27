@@ -6,7 +6,7 @@ const Images: CollectionConfig = {
     slug: 'imagenes',
     admin: {
         useAsTitle: 'Imagen',
-        defaultColumns: ['Imagen', 'Estado'],
+        defaultColumns: ['NombreImagen', 'EstadoImagen'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -51,12 +51,10 @@ const Images: CollectionConfig = {
          focalPoint: false
      }, */
 
-
-
     fields: [
-        //example text field
+
         {
-            name: 'Imagen',
+            name: 'NombreImagen',
             label: 'Nombre de la Imagen',
             type: 'text',
             required: true,
@@ -77,10 +75,10 @@ const Images: CollectionConfig = {
             }
         }, */
         {
-            name: "Estado", // required
-            type: "select", // required
+            name: "EstadoImagen",
+            type: "select",
             label: 'Estado de la Imagen',
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false,
             options: [
                 {
                     label: "Disponible",

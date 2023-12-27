@@ -7,7 +7,7 @@ const Portraits: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'Portada',
-        defaultColumns: ['Portada', 'Imagen', 'Estado'],
+        defaultColumns: ['NombrePortada', 'ImagenPortada', 'EstadoPortada'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -15,19 +15,18 @@ const Portraits: CollectionConfig = {
         plural: 'Portadas',
     },
     fields: [
-        //example text field
         {
-            name: "Portada", // required
-            type: "text", // required
+            name: "NombrePortada",
+            type: "text",
             label: "Nombre de la Portada",
             required: true,
-            unique:true,
+            unique: true,
             admin: {
                 placeholder: 'Nombre aqui'
             }
         },
         {
-            name: 'Imagen',
+            name: 'ImagenPortada',
             label: 'Imagen de la Portada',
             type: 'upload',
             relationTo: 'imagenes',
@@ -44,10 +43,10 @@ const Portraits: CollectionConfig = {
             }
         },
         {
-            name: "Estado", // required
-            type: "select", // required
+            name: "EstadoPortada ",
+            type: "select",
             label: "Estado de la Portada",
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false,
             options: [
                 {
                     label: "Publico",

@@ -1,21 +1,14 @@
-import payload from "payload";
+
 import { CollectionConfig, FieldHook } from "payload/types";
-
-
 
 const Products: CollectionConfig = {
     slug: 'productos',
     access: {
         read: () => true,
     },
-
     admin: {
         useAsTitle: 'NombreProducto',
-
-        /*  defaultColumns: ['Producto', 'Modelo', 'Subcategoria', 'Codigo', 'Tamano', 'esMarca', 'Marca', 'esMedidasPeso', 'UnidadMedidas', 'Alto', 'Ancho', 'UnidadPeso', 'Peso', 'Color', 'Cantidad', 'Precio', 'Imagenes', 'Estado', 'FechaIngreso', 'HoraIngreso'],
-        */
-        defaultColumns: ['NombreProducto', 'Color', 'Cantidad', 'Precio'],
-
+        defaultColumns: ['NombreProducto', 'ColorProducto', 'CantidadProducto', 'PrecioProducto'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -27,7 +20,6 @@ const Products: CollectionConfig = {
             type: 'row',
             fields: [
 
-               
                 {
                     name: 'NombreProducto',
                     label: 'Nombre del Producto',
@@ -41,7 +33,7 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: 'Modelo',
+                    name: 'ModeloProducto',
                     label: 'Modelo del Producto',
                     type: 'text',
                     required: false,
@@ -57,7 +49,7 @@ const Products: CollectionConfig = {
             fields: [
                 {
 
-                    name: "Subcategoria", // required
+                    name: "SubcategoriaProducto", // required
                     label: "Subcategoria del Producto",
                     type: 'relationship', // required
                     relationTo: 'subcategorias', //required eg:users
@@ -68,7 +60,7 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: 'Codigo',
+                    name: 'CodigoProducto',
                     label: 'Codigo del Producto',
                     type: 'text',
                     required: false,
@@ -80,7 +72,7 @@ const Products: CollectionConfig = {
                 },
 
                 {
-                    name: "Tamano", // required
+                    name: "TamanoProducto", // required
                     type: "select", // required
                     hasMany: false, /// set to true if you want to select multiple
                     label: 'Tamaño del Producto',
@@ -107,41 +99,41 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "esMarca", // required
+            name: "esMarcaProducto", // required
             type: "checkbox", // required
-            label: "Marca del Producto",
+            label: "Tiene una Marca?",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si desea agregar una Marca.'
+                description: 'Marque esta casilla si Desea agregar una Marca.'
             }
         },
         {
-            name: "Marca", // required
+            name: "MarcaProducto", // required
             type: "relationship", // required
             relationTo: 'marcas',
             label: "Marca del Producto",
             required: false,
             admin: {
-                condition: ({ esMarca }) => esMarca === true,
+                condition: ({ esMarcaProducto }) => esMarcaProducto === true,
             }
         },
         {
-            name: "esMedidasPeso", // required
+            name: "esMedidaPesoProducto", // required
             type: "checkbox", // required
-            label: "Medidas y Peso del Producto",
+            label: "Tiene Medidas y Peso?",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si desea agregar Medidas y Peso.'
+                description: 'Marque esta casilla si Desea agregar Medidas y Peso.'
             }
         },
         {
             type: 'row',
             admin: {
-                condition: ({ esMedidasPeso }) => esMedidasPeso === true
+                condition: ({ esMedidaPesoProducto }) => esMedidaPesoProducto === true
             },
             fields: [
                 {
-                    name: "UnidadMedidas", // required
+                    name: "UnidadMedidaProducto", // required
                     type: "select", // required
                     label: 'Unidad de Medida',
                     hasMany: false, /// set to true if you want to select multiple
@@ -170,8 +162,8 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "Alto", // required
-                    label: "Alto del Producto",
+                    name: "AltoProducto", // required
+                    label: "Altura del Producto",
                     type: "number", // required
                     required: false,
                     admin: {
@@ -181,7 +173,7 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "Ancho", // required
+                    name: "AnchoProducto", // required
                     label: "Ancho del Producto",
                     type: "number", // required
                     required: false,
@@ -198,11 +190,11 @@ const Products: CollectionConfig = {
         {
             type: 'row',
             admin: {
-                condition: ({ esMedidasPeso }) => esMedidasPeso === true
+                condition: ({ esMedidasPesoProducto }) => esMedidasPesoProducto === true
             },
             fields: [
                 {
-                    name: "UnidadPeso", // required
+                    name: "UnidadPesoProducto", // required
                     type: "select", // required
                     label: 'Unidad de Peso',
                     hasMany: false, /// set to true if you want to select multiple
@@ -231,7 +223,7 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "Peso", // required
+                    name: "PesoProducto", // required
                     label: "Peso del Producto",
                     type: "number", // required
                     required: false,
@@ -248,7 +240,7 @@ const Products: CollectionConfig = {
             type: 'row',
             fields: [
                 {
-                    name: "Color", // required
+                    name: "ColorProducto", // required
                     label: "Color del Producto",
                     type: "relationship", // required
                     relationTo: 'colores',
@@ -258,7 +250,7 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "Cantidad", // required
+                    name: "CantidadProducto", // required
                     label: "Cantidad Disponible",
                     type: "number", // required
                     required: true,
@@ -269,7 +261,7 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "Precio", // required
+                    name: "PrecioProducto", // required
                     label: "Precio del Producto",
                     type: "number", // required
                     required: true,
@@ -281,8 +273,6 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-        
-
         //example text field
         /*   {
               name: 'Colores',
@@ -328,7 +318,6 @@ const Products: CollectionConfig = {
                           },
                       ],
                   },
-  
                   {
                       type: 'row',
                       fields: [
@@ -362,8 +351,6 @@ const Products: CollectionConfig = {
                                           ]
                                       }
                                   }
-  
-  
                               ]
                           },
                       ]
@@ -373,13 +360,13 @@ const Products: CollectionConfig = {
           } */
         {
             type: 'array',
-            name: 'ImagenProducto',
+            name: 'ImagenesProducto',
             required: true,
             maxRows: 10,
             minRows: 1,
             fields: [
                 {
-                    name: "Imagen", // required
+                    name: "ImagenProducto", // required
                     label: "Imagen del Producto",
                     type: 'upload', // required
                     relationTo: 'imagenes', //required eg:users
@@ -398,7 +385,7 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "Estado", // required
+            name: "EstadoProducto", // required
             type: "select", // required
             label: "Estado del Producto",
             hasMany: false, /// set to true if you want to select multiple
@@ -419,9 +406,9 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "FechaIngreso", // required
+            name: "FechaIngresoProducto", // required
             type: "date", // required
-            label: "Fecha de Ingreso",
+            label: "Fecha Ingreso del Producto",
             admin: {
                 position: "sidebar",
                 date: {
@@ -434,11 +421,11 @@ const Products: CollectionConfig = {
                 },
             }
         },
-        
+
         {
-            name: "HoraIngreso", // required
+            name: "HoraIngresoProducto", // required
             type: "date", // required
-            label: "Hora de Ingreso",
+            label: "Hora Ingreso del Producto",
             admin: {
                 position: "sidebar",
                 date: {
@@ -455,7 +442,8 @@ const Products: CollectionConfig = {
             hasMany: true,
             required: false,
             admin: {
-                position: 'sidebar'
+                position: 'sidebar',
+                description: 'Seleccione una Ubicaciones de Distrubucion'
             }
         },
     ],

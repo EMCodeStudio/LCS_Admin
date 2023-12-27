@@ -2,7 +2,7 @@ import { CollectionConfig, FieldHook } from "payload/types";
 
 
 const formatLocation: FieldHook = async ({ data }) => (
-    `${data.Pais} - ${data.Municipio} (${data.Departamento})`
+    `${data.PaisUbicacion} - ${data.MunicipioUbicacion} (${data.DepartamentoUbicacion})`
 )
 
 const Locations: CollectionConfig = {
@@ -22,7 +22,6 @@ const Locations: CollectionConfig = {
         plural: 'Ubicaciones',
     },
     fields: [
-        //example text field
 
         {
             name: "UbicacionDatos",
@@ -47,7 +46,7 @@ const Locations: CollectionConfig = {
         {
             name: "Pais",
             type: "select",
-            hasMany: false, 
+            hasMany: false,
             options: [
                 {
                     label: "Colombia",
@@ -59,23 +58,23 @@ const Locations: CollectionConfig = {
             required: false,
         },
         {
-            name: "Departamento",
+            name: "DepartamentoUbicacion",
             type: 'relationship',
             relationTo: "departamentos",
-            hasMany: false, 
+            hasMany: false,
             required: false,
-            admin:{
+            admin: {
                 description: 'Seleccione un Departameto '
             }
         },
         {
-            name: "Municipio",
+            name: "MunicipioUbicacion",
             type: 'relationship',
             label: 'Municipio | Ciudad',
-            hasMany: false, 
+            hasMany: false,
             relationTo: 'municipios',
             required: false,
-            admin:{
+            admin: {
                 description: 'Selecciones un Municipio o Ciudad'
             }
         },
@@ -83,7 +82,7 @@ const Locations: CollectionConfig = {
             name: "EstadoUbicacion",
             type: "select",
             label: 'Estado de la Ubicacion',
-            hasMany: false, 
+            hasMany: false,
             options: [
                 {
                     label: "Disponible",

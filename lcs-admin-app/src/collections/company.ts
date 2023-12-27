@@ -4,18 +4,18 @@ const Company: CollectionConfig = {
     slug: 'empresa',
     access: {
         read: () => true,
-        create: () => false,
+        create: () => true,
         update: () => true,
         delete: () => false,
     },
     admin: {
         useAsTitle: 'Empresa',
-        defaultColumns: ['Empresa', 'Numero', 'Correo'],
+        defaultColumns: ['NombreEmpresa', 'NumeroEmpresa', 'CorreoEmpresa'],
         group: 'SISTEMA'
     },
     labels: {
         singular: 'Empresa',
-        plural: 'Empresas',
+        plural: 'Empresa',
     },
     fields: [
         {
@@ -26,8 +26,8 @@ const Company: CollectionConfig = {
                     description: 'Rellene los siguientes Campos',
                     fields: [
                         {
-                            name: "Empresa", // required
-                            type: "text", // required
+                            name: "NombreEmpresa",
+                            type: "text",
                             label: "Nombre de la Empresa",
                             required: true,
                             admin: {
@@ -38,8 +38,8 @@ const Company: CollectionConfig = {
                             type: 'row',
                             fields: [
                                 {
-                                    name: "Numero", // required
-                                    type: "number", // required
+                                    name: "NumeroEmpresa",
+                                    type: "number",
                                     label: "Numero Celular de la Empresa",
                                     required: true,
                                     admin: {
@@ -48,8 +48,8 @@ const Company: CollectionConfig = {
                                     }
                                 },
                                 {
-                                    name: "Correo", // required
-                                    type: "email", // required
+                                    name: "CorreoEmpresa",
+                                    type: "email",
                                     label: "Correo Electronico de la Empresa",
                                     required: true,
                                     admin: {
@@ -60,12 +60,12 @@ const Company: CollectionConfig = {
                             ]
                         },
                         {
-                            name: "Direccion", // required
-                            type: "textarea", // required
+                            name: "DireccionEmpresa",
+                            type: "textarea",
                             label: "Direccion de la Empresa",
                             required: true,
                             admin: {
-                                placeholder: "Datos aqui",
+                                placeholder: "Datos de Direccion aqui",
                             }
                         },
                     ]
@@ -75,17 +75,17 @@ const Company: CollectionConfig = {
                     description: 'Rellene los siguientes Campos',
                     fields: [
                         {
-                            name: "Slogan", // required
-                            type: "text", // required
+                            name: "SloganEmpresa",
+                            type: "textarea",
                             label: "Lema de la Empresa",
                             required: false,
                             admin: {
-                                placeholder: "Correo aqui",
+                                placeholder: "Lema aqui",
                             }
                         },
                         {
-                            name: "Nosotros", // required
-                            type: "textarea", // required
+                            name: "Nosotros",
+                            type: "textarea",
                             label: "Acerca la Empresa",
                             required: false,
                             admin: {
@@ -93,12 +93,12 @@ const Company: CollectionConfig = {
                             }
                         },
                         {
-                            name: "Facebook", // required
-                            type: "text", // required
+                            name: "FacebookEmpresa",
+                            type: "text",
                             label: "Facebook de la Empresa",
                             required: false,
                             admin: {
-                                placeholder: "Link aqui",
+                                placeholder: "Link de Facebook aqui",
                             }
                         },
 
@@ -107,17 +107,27 @@ const Company: CollectionConfig = {
             ]
         },
         {
-            name: "Ubicacion", // required
-            type: "point", // required
-            label: "Ubicacion Mapa",
+            name: "UbicacionEmpresa",
+            type: "relationship",
+            relationTo: 'ubicaciones',
+            label: "Ubicacion del Mapa",
             required: false,
             admin: {
                 position: 'sidebar'
             }
         },
         {
-            name: "FechaInicios", // required
-            type: "date", // required
+            name: "MapaEmpresa",
+            type: "point",
+            label: "Ubicacion en el Mapa",
+            required: true,
+            admin: {
+                position: 'sidebar'
+            }
+        },
+        {
+            name: "FechaInicioEmpresa",
+            type: "date",
             label: "Fecha de Inicios",
             admin: {
                 date: {

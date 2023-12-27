@@ -7,8 +7,8 @@ const Subcategories: CollectionConfig =  {
         read: () => true
     },
     admin: {
-        useAsTitle: 'Subcategoria',
-        defaultColumns: ['Subcategoria','Categoria','Estado'],
+        useAsTitle: 'NombreSubcategoria',
+        defaultColumns: ['NombreSubcategoria','CategoriaSubcategoria','EstadoSubcategoria'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -18,7 +18,7 @@ const Subcategories: CollectionConfig =  {
     fields: [
         //example text field
         {
-            name: 'Subcategoria',
+            name: 'NombreSubcategoria',
             label: 'Nombre de la Subcategoria',
             type: 'text',
             required: true,
@@ -28,7 +28,7 @@ const Subcategories: CollectionConfig =  {
             }
         },
         {
-          name: "Categoria", // required
+          name: "CategoriaSubcategoria", // required
           label: "Nombre de la Categoria",
           type: 'relationship', // required
           relationTo:'categorias', //required eg:users
@@ -36,14 +36,7 @@ const Subcategories: CollectionConfig =  {
           required: true
         },
         {
-            name: "Portada", // required
-            type: "relationship", // required
-            relationTo: 'portadas',  //required eg:media
-            label: "Portada de la Subcategoria",
-            required: false,
-        },
-        {
-            name: "Estado", // required
+            name: "EstadoSubcategoria", // required
             type: "select", // required
             label:"Estado de la Subcategoria",
             hasMany: false, /// set to true if you want to select multiple

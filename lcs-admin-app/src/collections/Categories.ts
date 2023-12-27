@@ -3,10 +3,8 @@ import { CollectionConfig } from "payload/types";
 const Categories: CollectionConfig = {
   slug: 'categorias',
   access: {
-
     read: () => true
-
-    /*  read: ({ req: { user } }) => user.roles.includes("admin"),
+    /*read: ({ req: { user } }) => user.roles.includes("admin"),
  
      create: ({ req: { user } }) => user.roles.includes("admin"),
  
@@ -15,7 +13,7 @@ const Categories: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'Categoria',
-    defaultColumns: ['Categoria', 'Estado'],
+    defaultColumns: ['NombreCategoria', 'EstadoCategoria'],
     group: 'INVENTARIO',
     /* hidden: ({ user }) => {
       if (!user.roles.toString().includes('admin')) {
@@ -30,14 +28,13 @@ const Categories: CollectionConfig = {
   fields: [
     {
 
-      name: "Categoria", // required
-      type: "text", // required
+      name: "NombreCategoria",
+      type: "text",
       label: "Nombre de la Categoria",
       required: true,
       unique: true,
-      index: true,
-      saveToJWT: true,
-
+      //  index: true,
+      //saveToJWT: true,
       admin: {
         placeholder: "Nombre aqui",
 
@@ -45,10 +42,10 @@ const Categories: CollectionConfig = {
 
     },
     {
-      name: "Estado", // required
+      name: "EstadoCategoria",
       label: "Estado de la Categoria",
-      type: "select", // required
-      hasMany: false, /// set to true if you want to select multiple
+      type: "select",
+      hasMany: false,
       options: [
         {
           label: "Publica",

@@ -1,25 +1,30 @@
-const Municipalities = {
+import { CollectionConfig } from "payload/types";
+
+const Municipalities: CollectionConfig = {
     slug: 'municipios',
-   labels: {
-      singular: 'Municipio',
-      plural: 'Municipios',
+    access: {
+        read: () => true
+    },
+    admin: {
+        useAsTitle: 'NombreMunicipio',
+        group: 'SISTEMA'
+    },
+    labels: {
+        singular: 'Municipio',
+        plural: 'Municipios',
     },
     fields: [
-        //example text field
         {
             name: 'NombreMunicipio',
             label: 'Nombre Municipio / Ciudad',
             type: 'text',
             unique: true,
             required: true,
-            admin:{
-                placeholder:  'Nombre aqui'
+            admin: {
+                placeholder: 'Nombre aqui'
             }
         },
     ],
-    admin: {
-        useAsTitle: 'fieldName',
-    },
     timestamps: true,
 };
 

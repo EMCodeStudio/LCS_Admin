@@ -13,7 +13,7 @@ const ErrorMessages: React.FC<Props> = (props) => {
   const { message, showError } = props
 
   const [isVisible, setIsVisible] = useState(true);
-  
+
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
@@ -34,7 +34,8 @@ const ErrorMessages: React.FC<Props> = (props) => {
       isVisible && (
         <div className={`${baseClass}`}>
           <p>{message}</p>
-          <button className={`${baseClass}__close-button`} type='button' onClick={handleClose}>X</button>
+          <button className={`${baseClass}__close-button`} type='button' onClick={handleClose}>&#x58;</button>
+          {/*    &#x88 */}
         </div>
       )
     )

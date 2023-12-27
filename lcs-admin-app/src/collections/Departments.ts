@@ -14,7 +14,6 @@ const Departments: CollectionConfig = {
       plural: 'Departmentos',
     },
     fields: [
-        //example text field
         {
             name: 'NombreDepartamento',
             label: 'Nombre del Departamento',

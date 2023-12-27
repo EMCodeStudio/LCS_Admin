@@ -2,10 +2,9 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 import ErrorMessages from "../components/Messages/ErrorMessages";
 
-
 const getProductServicePrice: FieldHook = async ({ data }) => {
-    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
-        const fieldID = data.ProductoServicio.value;
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
+        const fieldID = data.ProductoServicioPedido.value;
         const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
             .then(productResponse => {
                 if (!productResponse.ok) {
@@ -24,8 +23,8 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
             });
         return productResponse ? productResponse : null;
     }
-    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
-        const fieldID = data.ProductoServicio.value;
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'service') {
+        const fieldID = data.ProductoServicioPedido.value;
         const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
             .then(serviceResponse => {
                 if (!serviceResponse.ok) {
@@ -46,11 +45,10 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
     }
     return null;
 }
-
 const getTotalPrice: FieldHook = async ({ data }) => {
 
-    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
-        const fieldID = data.ProductoServicio.value;
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
+        const fieldID = data.ProductoServicioPedido.value;
         const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
             .then(productResponse => {
                 if (!productResponse.ok) {
@@ -66,17 +64,17 @@ const getTotalPrice: FieldHook = async ({ data }) => {
                 console.error('Error del Producto:', error);
                 return 'No se puede obtener el Costo del Producto.';
             });
-        const { PrecioPS = productResponse, CantidadProducto } = data.DetallesPago;
-        //  console.log('PRECIO: ', PrecioPS)
-        const calculatedPrice = CantidadProducto > 0 ? CantidadProducto * PrecioPS : CantidadProducto + PrecioPS
+        const { PrecioProductoServicio = productResponse, CantidadProductoPedido } = data.DetallesPagoPedido;
+        //  console.log('PRECIO: ', PrecioProductoServicio)
+        const calculatedPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : CantidadProductoPedido + PrecioProductoServicio
         const validatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedPrice * (1 - (data.DescuentoPedido / 100)) : calculatedPrice
         const totalProdPrice = Math.round(validatedDiscount);
         //console.log('TOTAL PROD: ', totalProdPrice)
         return totalProdPrice;
     }
 
-    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
-        const fieldID = data.ProductoServicio.value;
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'service') {
+        const fieldID = data.ProductoServicioPedido.value;
         const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
             .then(serviceResponse => {
                 if (!serviceResponse.ok) {
@@ -93,9 +91,9 @@ const getTotalPrice: FieldHook = async ({ data }) => {
                 return 'No se puede obtener el Costo del Servicio.';
                 // return '';
             });
-        const PrecioPS = serviceResponse
-        console.log('PRECIO: ', PrecioPS)
-        const calculatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioPS * (1 - (data.DescuentoPedido / 100)) : PrecioPS
+        const PrecioProductoServicio = serviceResponse
+        console.log('PRECIO: ', PrecioProductoServicio)
+        const calculatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
         const totalServPrice = Math.round(calculatedDiscount);
         console.log('TOTAL SERV: ', totalServPrice)
         return totalServPrice;
@@ -104,7 +102,6 @@ const getTotalPrice: FieldHook = async ({ data }) => {
     return null;
 
 }
-
 interface Ubicacion {
     id: string;
     Pais: string;
@@ -115,9 +112,7 @@ interface Ubicacion {
     updatedAt: string;
     UbicacionDatos: string;
 }
-
 type LocationData = string;
-
 let globalString: string | undefined;
 
 function ClientLocationGlobal(valor: string): string {
@@ -130,9 +125,8 @@ function ClientLocationGlobal(valor: string): string {
         LocationResult = globalString += valor;
     }
 
-   return LocationResult;
+    return LocationResult;
 }
-
 function CheckClientLocation(clientLocation: string): string {
 
     const lowercaseClientLocation = clientLocation.toLowerCase();
@@ -143,12 +137,11 @@ function CheckClientLocation(clientLocation: string): string {
         return 'La Ubicación del Cliente y la del Pedido No Coincide..';
     }
 }
-
 const getProductServiceLocation: FieldHook = async ({ data }) => {
-    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'product') {
-       
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
+
         try {
-            const fieldID = data.ProductoServicio.value;
+            const fieldID = data.ProductoServicioPedido.value;
             const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`);
             if (!productResponse.ok) {
                 throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`);
@@ -183,10 +176,10 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
         }
     }
 
-    if (data && data.ProductoServicio.value !== undefined && data.TipoVenta === 'service') {
-       
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'service') {
+
         try {
-            const fieldID = data.ProductoServicio.value;
+            const fieldID = data.ProductoServicioPedido.value;
             const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`);
             if (!serviceResponse.ok) {
                 throw new Error(`Error al obtener la Ubicacion del Servicio. Código de estado: ${serviceResponse.status}`);
@@ -221,7 +214,6 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
 
     return null;
 }
-
 const getClientLocation: FieldHook = async ({ data }) => {
 
     if (data && data.Cliente !== undefined) {
@@ -233,7 +225,7 @@ const getClientLocation: FieldHook = async ({ data }) => {
                 throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`);
             }
             const clientData = await clientResponse.json();
-            const clientLocation = clientData.UbicacionCliente;
+            const clientLocation = clientData.UbicacionClientePedido;
 
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { Pais, Departamento, Municipio } = ubicacion;
@@ -273,7 +265,7 @@ const Orders: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'producto',
-        defaultColumns: ['ClientePedido', 'TipoVenta', 'ProductoServicio', 'EstadoPago', 'EstadoPedido'],
+        defaultColumns: ['ClientePedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS'
     },
     labels: {
@@ -290,7 +282,7 @@ const Orders: CollectionConfig = {
             required: true
         },
         {
-            name: "TipoVenta",
+            name: "TipoVentaPedido",
             label: "Tipo de Venta",
             type: 'radio',
             required: false,
@@ -310,7 +302,7 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "ProductoServicio",
+            name: "ProductoServicioPedido",
             label: "Productos - Servicios",
             type: 'relationship',
             /*  hooks: {
@@ -328,8 +320,8 @@ const Orders: CollectionConfig = {
             filterOptions: ({ data, relationTo, siblingData, }) => {
 
                 if (relationTo === 'productos') {
-                    if (data.TipoVenta === 'product') {
-                        console.log('TIPO VENTA:', data.TipoVenta)
+                    if (data.TipoVentaPedido === 'product') {
+                        console.log('TIPO VENTA:', data.TipoVentaPedido)
                         return {
                             Cantidad: { greater_than_equal: 1 },
                         }
@@ -339,8 +331,8 @@ const Orders: CollectionConfig = {
                     }
                 }
                 if (relationTo === 'servicios') {
-                    if (data.TipoVenta === 'service') {
-                        console.log('TIPO VENTA:', data.TipoVenta)
+                    if (data.TipoVentaPedido === 'service') {
+                        console.log('TIPO VENTA:', data.TipoVentaPedido)
                         return {
                             EstadoServicio: { equals: 'published' }
                         }
@@ -359,7 +351,7 @@ const Orders: CollectionConfig = {
             type: 'row',
             fields: [
                 {
-                    name: 'UbicacionPS',
+                    name: 'UbicacionProductoServicio',
                     label: 'Ubicaciones Disponibles',
                     type: 'textarea',
                     admin: {
@@ -371,14 +363,14 @@ const Orders: CollectionConfig = {
                     },
                     hooks: {
                         beforeChange: [({ siblingData }) => {
-                            return siblingData.UbicacionPS = undefined
+                            return siblingData.UbicacionProductoServicio = undefined
                         }],
                         afterRead: [getProductServiceLocation]
                     }
                 },
                 {
-                    name: "UbicacionCliente", // required
-                    type: "text", // required
+                    name: "UbicacionClientePedido",
+                    type: "text",
                     label: "Ubicacion del Cliente",
                     required: false,
                     admin: {
@@ -390,7 +382,7 @@ const Orders: CollectionConfig = {
                     },
                     hooks: {
                         beforeChange: [({ siblingData }) => {
-                            return siblingData.UbicacionPS = undefined
+                            return siblingData.UbicacionProductoServicio = undefined
                         }],
                         afterRead: [getClientLocation]
                     }
@@ -402,11 +394,11 @@ const Orders: CollectionConfig = {
             type: 'row',
             fields: [
                 {
-                    name: "OfertaPedido", // required
+                    name: "OfertaPedido",
                     label: "Aplicar Descuento?",
-                    type: 'radio', // required
+                    type: 'radio',
                     required: false,
-                    options: [ // required
+                    options: [
                         {
                             label: 'Si',
                             value: 'apply',
@@ -423,8 +415,8 @@ const Orders: CollectionConfig = {
                     }
                 },
                 {
-                    name: "DescuentoPedido", // required
-                    type: "number", // required
+                    name: "DescuentoPedido",
+                    type: "number",
                     label: "% Descuento",
                     required: false,
                     admin: {
@@ -458,11 +450,13 @@ const Orders: CollectionConfig = {
                 width: '100%',
                 components: {
                     Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 1 a 99.', showError: true }),
+
                 }
             },
+
         },
         {
-            name: "DetallesPago",
+            name: "DetallesPagoPedido",
             type: "group",
             label: "Detalles de Pago",
             fields: [
@@ -470,7 +464,7 @@ const Orders: CollectionConfig = {
                     type: 'row',
                     fields: [
                         {
-                            name: "PrecioPS",
+                            name: "PrecioProductoServicio",
                             type: "number",
                             label: "Costo de Venta",
                             required: false,
@@ -485,13 +479,13 @@ const Orders: CollectionConfig = {
                             },
                             hooks: {
                                 beforeChange: [({ siblingData }) => {
-                                    return siblingData.PrecioPS = undefined
+                                    return siblingData.PrecioProductoServicio = undefined
                                 }],
                                 afterRead: [getProductServicePrice]
                             },
                         },
                         {
-                            name: "CantidadProducto",
+                            name: "CantidadProductoPedido",
                             label: "Cantidad del Producto",
                             type: "number",
                             required: false,
@@ -499,7 +493,7 @@ const Orders: CollectionConfig = {
                             admin: {
                                 width: '50%',
                                 condition: (data, siblingData, { user }) => {
-                                    if (data.TipoVenta === 'product') {
+                                    if (data.TipoVentaPedido === 'product') {
                                         return true
                                     } else {
                                         return false
@@ -514,7 +508,7 @@ const Orders: CollectionConfig = {
                     type: 'row',
                     fields: [
                         {
-                            name: "TotalPrice",
+                            name: "TotalPricioPedido",
                             label: "$ Total a Pagar",
                             type: "number",
                             required: false,
@@ -541,10 +535,10 @@ const Orders: CollectionConfig = {
             ],
         },
         {
-            name: "EstadoPago",
+            name: "EstadoPagoPedido",
             type: "select",
             label: 'Estado del Pago',
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false,
             admin: {
                 position: 'sidebar',
             },
@@ -615,7 +609,7 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "FechaEntrega",
+            name: "FechaEntregaPedido",
             type: "date",
             label: "Fecha de Entrega",
             localized: true,

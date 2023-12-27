@@ -21,7 +21,8 @@ import Icon from './components/Logo/Icon'
 import Orders from './collections/Orders'
 import Locations from './collections/Locations'
 import Customers from './collections/Customers'
-
+import Departments from './collections/Departments'
+import Municipalities from './collections/Municipalities'
 
 export default buildConfig({
   admin: {
@@ -53,6 +54,8 @@ export default buildConfig({
     Subcategories,
     Products,
     Services,
+    Municipalities,
+    Departments,
     Locations,
     Company,
     Users,

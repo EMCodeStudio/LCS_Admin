@@ -3,13 +3,12 @@ import ErrorMessages from "../components/Messages/ErrorMessages";
 
 const Publications: CollectionConfig = {
     slug: 'publicaciones',
-
     access: {
         read: () => true
     },
     admin: {
         useAsTitle: 'Titulo',
-        defaultColumns: ['Titulo', 'TipoVenta', 'ProductoServicio', 'Estado'],
+        defaultColumns: ['TituloPublicacion', 'TipoVentaPublicacion', 'ProductoServicioPublicacion', 'EstadoPublicacion'],
         group: 'VENTAS',
     },
     labels: {
@@ -17,9 +16,8 @@ const Publications: CollectionConfig = {
         plural: 'Publicaciones',
     },
     fields: [
-        //example text field
         {
-            name: 'Titulo',
+            name: 'TituloPublicacion',
             label: 'Titulo de la Publicacion',
             type: 'text',
             required: true,
@@ -28,62 +26,8 @@ const Publications: CollectionConfig = {
                 placeholder: 'Titulo aqui'
             }
         },
-        /*  {
-             name: "TipoVenta", // required
-             label: "Tipo de Venta",
-             type: 'radio', // required
-             required: true,
-             options: [ // required
-                 {
-                     label: 'Producto',
-                     value: 'product',
-                 },
-                 {
-                     label: 'Servicio',
-                     value: 'service',
-                 },
-             ],
-             defaultValue: 'product',
-             admin: {
-                 layout: 'horizontal',
-             }
-         },
-         {
-             name: "Producto", // required
-             label: "Nombre del Producto ",
-             type: 'relationship', // required
-             relationTo: 'productos', //required eg:users
-             hasMany: false,
-             admin: {
-                 condition: (data, siblingData, { user }) => {
-                     if (data.TipoVenta === 'product') {
-                         return true
-                     } else {
-                         return false
-                     }
-                 },
- 
-             },
-         },
-         {
-             name: "Servicio", // required
-             label: "Nombre del Servicio",
-             type: 'relationship', // required
-             relationTo: 'servicios', //required eg:users
-             hasMany: false,
-             admin: {
-                 condition: (data, siblingData, { user }) => {
-                     if (data.TipoVenta === 'service') {
-                         return true
-                     } else {
-                         return false
-                     }
-                 },
- 
-             }
-         }, */
         {
-            name: "TipoVenta",
+            name: "TipoVentaPublicacion",
             label: "Tipo de Venta",
             type: 'radio',
             required: false,
@@ -103,7 +47,7 @@ const Publications: CollectionConfig = {
             }
         },
         {
-            name: "ProductoServicio",
+            name: "ProductoServicioPublicacion",
             label: "Productos - Servicios",
             type: 'relationship',
             relationTo: ['productos', 'servicios'],
@@ -113,10 +57,10 @@ const Publications: CollectionConfig = {
             filterOptions: ({ data, relationTo, siblingData, }) => {
 
                 if (relationTo === 'productos') {
-                    if (data.TipoVenta === 'product') {
+                    if (data.TipoVentaPublicacion === 'product') {
 
                         return {
-                            Cantidad: { greater_than_equal: 1 },
+                            CantidadProducto: { greater_than_equal: 1 },
                         }
                     }
                     return {
@@ -134,42 +78,41 @@ const Publications: CollectionConfig = {
                     }
                 }
             },
-            admin:{
+            admin: {
                 description: 'Seleccione un Producto o Servicio de la Lista.'
             }
         },
         {
-            name: "esOferta", // required
-            type: "checkbox", // required
-            label: "Oferta de la Publicacion",
+            name: "esOfertaPublicacion",
+            type: "checkbox",
+            label: "Publicacion en Oferta?",
             defaultValue: false,
             admin: {
-                description: 'Marque esta casilla si la publicacion estara en oferta y rellene el campo de Descuento.'
+                description: 'Marque esta casilla si la publicacion esta oferta, rellenar campo de Descuento.'
             }
         },
         {
-            name: "Descuento", // required
-            label: "Descuento de la Publicacion", // required
-            type: "number", // required
+            name: "DescuentoPublicacion",
+            label: "Descuento de la Publicacion",
+            type: "number",
             required: false,
             admin: {
                 step: 1,
                 placeholder: '% 00',
-                condition: ({ esOferta }) => esOferta === true,
+                condition: ({ esOfertaPublicacion }) => esOfertaPublicacion === true,
                 width: '50%',
+                description: '%'
             },
             hooks: {
                 beforeChange: [
                     ({ data }) => {
                         if (data && data.length) {
                             const twoDigits = /^\d{2}$/;
-                            const discount = data.Descuento;
+                            const discount = data.DescuentoPublicacion;
                             if (twoDigits.test(discount)) {
                                 return discount
                             }
-                            else {
-                                return 0
-                            }
+                            return 0
                         }
                     }
                 ]
@@ -179,24 +122,24 @@ const Publications: CollectionConfig = {
             name: 'ErrorMessage',
             type: 'ui',
             admin: {
-                condition: ({ Descuento }) => Descuento >= 100,
+                condition: ({ DescuentoPublicacion }) => DescuentoPublicacion >= 100,
                 components: {
-                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 0 a 99.', showError: true }),
+                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros entre 1 - 99.', showError: true }),
 
                 }
             },
 
         },
         {
-            name: "Descripcion", // required
-            type: "richText", // required
+            name: "DescripcionPublicacion",
+            type: "richText",
             label: "Descripcion de la Publicacion",
-            required: true,
+            required: false,
         },
         {
-            name: "Etiquetas", // required
+            name: "EtiquetasPublicacion",
             label: "Nombres de Etiquetas",
-            type: 'relationship', // required
+            type: 'relationship',
             relationTo: 'etiquetas', //required eg:users
             hasMany: true,
             required: false,
@@ -205,10 +148,10 @@ const Publications: CollectionConfig = {
             }
         },
         {
-            name: "Estado", // required
+            name: "EstadoPublicacion",
             label: 'Estado de la Publicacion',
-            type: "select", // required
-            hasMany: false, /// set to true if you want to select multiple
+            type: "select",
+            hasMany: false,
             options: [
                 {
                     label: "Disponible",

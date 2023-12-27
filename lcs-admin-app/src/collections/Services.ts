@@ -7,7 +7,7 @@ const Services: CollectionConfig = {
     },
     admin: {
         useAsTitle: 'NombreServicio',
-        defaultColumns: ['NombreServicio', 'Precio', 'Subcategoria', 'EstadoServicio'],
+        defaultColumns: ['NombreServicio', 'PrecioServicio', 'SubcategoriaServicio', 'EstadoServicio'],
         group: 'INVENTARIO'
     },
     labels: {
@@ -15,7 +15,7 @@ const Services: CollectionConfig = {
         plural: 'Servicios',
     },
     fields: [
-        //example text field
+        
         {
             name: 'NombreServicio',
             label: 'Nombre del Servicio',
@@ -33,10 +33,10 @@ const Services: CollectionConfig = {
             fields: [
                 {
 
-                    name: "Subcategoria", // required
+                    name: "SubcategoriaServicio", 
                     label: "Subcategoria del Servicio",
-                    type: 'relationship', // required
-                    relationTo: 'subcategorias', //required eg:users
+                    type: 'relationship', 
+                    relationTo: 'subcategorias', 
                     hasMany: false,
                     required: true,
                     admin: {
@@ -44,9 +44,9 @@ const Services: CollectionConfig = {
                     }
                 },
                 {
-                    name: "Precio", // required
+                    name: "PrecioServicio", 
                     label: "Costo del Servicio",
-                    type: "number", // required
+                    type: "number", 
                     required: false,
                     admin: {
                         step: 1,
@@ -61,16 +61,16 @@ const Services: CollectionConfig = {
 
         {
             type: 'array',
-            name:'ImagenServicio',
+            name:'ImagenesServicio',
             required: true,
             maxRows: 10,
             minRows: 1,
             fields: [
                 {
-                    name: "Imagen", // required
+                    name: "ImagenServicio", 
                     label: "Imagen del Servicio",
-                    type: 'upload', // required
-                    relationTo: 'imagenes', //required eg:users
+                    type: 'upload', 
+                    relationTo: 'imagenes', 
                     required: false,
                     hooks: {
                         beforeValidate: [
@@ -86,10 +86,10 @@ const Services: CollectionConfig = {
             ]
         },
         {
-            name: "EstadoServicio", // required
+            name: "EstadoServicio", 
             label: 'Estado del Servicio',
-            type: "select", // required
-            hasMany: false, /// set to true if you want to select multiple
+            type: "select", 
+            hasMany: false, 
             options: [
                 {
                     label: "Disponible",
@@ -107,10 +107,10 @@ const Services: CollectionConfig = {
             }
         },
         {
-            name: "UbicacionServicio", // required
+            name: "UbicacionServicio", 
             label: "Ubicaciones Disponibles",
-            type: 'relationship', // required
-            relationTo: 'ubicaciones', //required eg:users
+            type: 'relationship', 
+            relationTo: 'ubicaciones', 
             hasMany: true,
             required: false,
             admin: {

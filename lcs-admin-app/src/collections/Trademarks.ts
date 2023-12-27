@@ -4,7 +4,7 @@ const Trademarks: CollectionConfig = {
     slug: 'marcas',
     admin: {
         useAsTitle: 'Marca',
-        defaultColumns: ['Marca', 'Estado'],
+        defaultColumns: ['NombreMarca', 'EstadoMarca'],
         group: 'CONTENIDO'
     },
     labels: {
@@ -19,14 +19,14 @@ const Trademarks: CollectionConfig = {
             type: 'text',
         },
         {
-            name: "Imagen", // required
+            name: "ImagenMarca", // required
             type: "upload", // required
             relationTo: 'imagenes',  //required eg:media
             label: "Imagen de la Marca",
             required: false,
         },
         {
-            name: "Estado", // required
+            name: "EstadoMarca", // required
             type: "select", // required
             label: "Estado de la Marca",
             hasMany: false, /// set to true if you want to select multiple

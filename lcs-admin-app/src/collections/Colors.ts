@@ -2,54 +2,53 @@ import { CollectionConfig } from "payload/types";
 import colorField from "../components/Products/SelectColor";
 
 const Colors: CollectionConfig = {
-    slug: 'colores',
-    admin: {
-        useAsTitle: 'Nombre',
-        defaultColumns: ['Nombre','Color','Estado'],
-        group: 'CONTENIDO'
+  slug: 'colores',
+  admin: {
+    useAsTitle: 'Nombre',
+    defaultColumns: ['Nombre', 'Color', 'EstadoColor'],
+    group: 'CONTENIDO'
+  },
+  labels: {
+    singular: 'Color',
+    plural: 'Colores',
+  },
+  fields: [
+    {
+      name: 'Nombre',
+      label: 'Nombre del Color',
+      type: 'text',
+      required: true,
+      unique: true,
+      admin: {
+        placeholder: 'Color aqui',
+        width: '50%'
+      }
     },
-     labels: {
-        singular: 'Color',
-        plural: 'Colores',
-    }, 
-    fields: [
-        //example text field
+    colorField,
+    {
+      name: "EstadoColor",
+      type: "select",
+      label: 'Estado del Color',
+      hasMany: false,
+      admin: {
+        position: 'sidebar'
+      },
+      options: [
         {
-            name: 'Nombre',
-            label: 'Nombre del Color',
-            type: 'text',
-            required: true,
-            unique: true,
-            admin: {
-                placeholder: 'Color aqui',
-                width:'50%'
-            }
+          label: "Disponible",
+          value: "published",
         },
-        colorField,
         {
-          name: "Estado", // required
-          type: "select", // required
-          label:'Estado del Color',
-          hasMany: false, /// set to true if you want to select multiple,
-          admin:{
-            position: 'sidebar'
-          },
-          options: [
-            {
-              label: "Disponible",
-              value: "published",
-            },
-            {
-              label: "No Didponible",
-              value: "draft",
-            },
-          ],
-          defaultValue:'published',
-          required: false,
+          label: "No Didponible",
+          value: "draft",
         },
-    ],
+      ],
+      defaultValue: 'published',
+      required: false,
+    },
+  ],
 
-    timestamps: true,
+  timestamps: true,
 };
 
 export default Colors;

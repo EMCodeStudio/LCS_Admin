@@ -23,12 +23,11 @@ const Customers: CollectionConfig = {
         plural: 'Clientes',
     },
 
-    fields: [
-        //example text field
+    fields: [ 
         {
             name: "CedulaNombre",
             type: "text",
-            label: 'Cedula - Nombre y Apellidos',
+            label: 'Cedula - Nombre & Apellidos',
             required: false,
             hooks: {
                 beforeChange: [({ siblingData }) => {
@@ -44,10 +43,6 @@ const Customers: CollectionConfig = {
                 hidden: true,
             }
         },
-
-
-
-
         {
             type: 'row',
             fields: [
