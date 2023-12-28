@@ -18,13 +18,10 @@ const formatLocation: FieldHook = async ({ data }) => {
             const fieldID2 = data.MunicipioUbicacion
             const municipalityResponse = await fetch(`http://localhost:3001/api/municipios/${fieldID2}`)
 
-            if (!deparmentResponse.ok) {
-                throw new Error(`Error al obtener el Departamento. Código de estado: ${deparmentResponse.status}`)
+            if (!deparmentResponse.ok && !municipalityResponse.ok) {
+                throw new Error(`Error al obtener el Departamento y Municipio. Código de estado: ${deparmentResponse.status}`)
             }
-            if (!municipalityResponse.ok) {
-                throw new Error(`Error al obtener el Municipio. Código de estado: ${municipalityResponse.status}`)
-            }
-
+            
             const departmentData = await deparmentResponse.json()
             const departmentName = departmentData.NombreDepartamento;
 

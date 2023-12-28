@@ -11,8 +11,8 @@ const Departments: CollectionConfig = {
         group: 'SISTEMA'
     },
    labels: {
-      singular: 'Departmento',
-      plural: 'Departmentos',
+      singular: 'Departamento',
+      plural: 'Departamentos',
     },
     fields: [
         {
