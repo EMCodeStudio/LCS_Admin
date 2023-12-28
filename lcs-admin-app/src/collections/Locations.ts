@@ -34,7 +34,7 @@ const formatLocation: FieldHook = async ({ data }) => {
             return `${data.PaisUbicacion} - ${municipalityName} (${departmentName})`;
 
         } catch (error) {
-            console.error('Error de Consulta de Ubicacion:', error);
+            console.error('Error de Consulta de la Ubicacion:', error);
             return 'No se puede obtener la Ubicacion.';
         }
     }
@@ -52,7 +52,7 @@ const Locations: CollectionConfig = {
     admin: {
         useAsTitle: 'UbicacionDatos',
         defaultColumns: ['UbicacionDatos', 'EstadoUbicacion'],
-        group: 'SISTEMA'
+        group: 'INVENTARIO'
     },
 
     labels: {
@@ -63,7 +63,7 @@ const Locations: CollectionConfig = {
         {
             name: "UbicacionDatos",
             type: "text",
-            label: "Pais - Departamento - Municipio / Ciudad",
+            label: "Pais - Municipio / Ciudad (Departamento)",
             required: false,
             access: {
                 create: () => false,

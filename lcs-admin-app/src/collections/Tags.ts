@@ -6,7 +6,7 @@ const Tags: CollectionConfig =  {
          read: () => true
     },
     admin: {
-        useAsTitle: 'Etiqueta',
+        useAsTitle: 'NombreEtiqueta',
         defaultColumns:['NombreEtiqueta','EstadoEtiqutea'],
         group: 'VENTAS'
     },

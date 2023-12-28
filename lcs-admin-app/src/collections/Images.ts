@@ -5,7 +5,7 @@ import path from 'path'
 const Images: CollectionConfig = {
     slug: 'imagenes',
     admin: {
-        useAsTitle: 'Imagen',
+        useAsTitle: 'NombreImagen',
         defaultColumns: ['NombreImagen', 'EstadoImagen'],
         group: 'CONTENIDO'
     },

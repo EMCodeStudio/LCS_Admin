@@ -9,7 +9,7 @@ const Company: CollectionConfig = {
         delete: () => false,
     },
     admin: {
-        useAsTitle: 'Empresa',
+        useAsTitle: 'NombreEmpresa',
         defaultColumns: ['NombreEmpresa', 'NumeroEmpresa', 'CorreoEmpresa'],
         group: 'SISTEMA'
     },

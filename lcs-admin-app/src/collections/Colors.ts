@@ -4,8 +4,8 @@ import colorField from "../components/Products/SelectColor";
 const Colors: CollectionConfig = {
   slug: 'colores',
   admin: {
-    useAsTitle: 'Nombre',
-    defaultColumns: ['Nombre', 'Color', 'EstadoColor'],
+    useAsTitle: 'NombreColor',
+    defaultColumns: ['NombreClor','SeleccionColor', 'EstadoColor'],
     group: 'CONTENIDO'
   },
   labels: {
@@ -14,7 +14,7 @@ const Colors: CollectionConfig = {
   },
   fields: [
     {
-      name: 'Nombre',
+      name: 'NombreColor',
       label: 'Nombre del Color',
       type: 'text',
       required: true,

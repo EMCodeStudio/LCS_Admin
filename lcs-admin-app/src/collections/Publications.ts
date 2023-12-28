@@ -7,8 +7,8 @@ const Publications: CollectionConfig = {
         read: () => true
     },
     admin: {
-        useAsTitle: 'Titulo',
-        defaultColumns: ['TituloPublicacion', 'TipoVentaPublicacion', 'ProductoServicioPublicacion', 'EstadoPublicacion'],
+        useAsTitle: 'TituloPublicacion',
+        defaultColumns: ['TituloPublicacion', 'TipoVentaPublicacion', 'ProductoServicioPublicacion', 'DescuentoPublicacion', 'EstadoPublicacion'],
         group: 'VENTAS',
     },
     labels: {
@@ -58,7 +58,6 @@ const Publications: CollectionConfig = {
 
                 if (relationTo === 'productos') {
                     if (data.TipoVentaPublicacion === 'product') {
-
                         return {
                             CantidadProducto: { greater_than_equal: 1 },
                         }
@@ -68,7 +67,7 @@ const Publications: CollectionConfig = {
                     }
                 }
                 if (relationTo === 'servicios') {
-                    if (data.TipoVenta === 'service') {
+                    if (data.TipoVentaPublicacion === 'service') {
                         return {
                             EstadoServicio: { equals: 'published' }
                         }
@@ -93,7 +92,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "DescuentoPublicacion",
-            label: "Descuento de la Publicacion",
+            label: "% Descuento de la Publicacion %",
             type: "number",
             required: false,
             admin: {
@@ -101,7 +100,7 @@ const Publications: CollectionConfig = {
                 placeholder: '% 00',
                 condition: ({ esOfertaPublicacion }) => esOfertaPublicacion === true,
                 width: '50%',
-                description: '%'
+                //description: '%'
             },
             hooks: {
                 beforeChange: [
@@ -138,7 +137,7 @@ const Publications: CollectionConfig = {
         },
         {
             name: "EtiquetasPublicacion",
-            label: "Nombres de Etiquetas",
+            label: "Nombre de las Etiquetas",
             type: 'relationship',
             relationTo: 'etiquetas', //required eg:users
             hasMany: true,

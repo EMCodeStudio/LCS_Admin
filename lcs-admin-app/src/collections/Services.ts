@@ -114,7 +114,8 @@ const Services: CollectionConfig = {
             hasMany: true,
             required: false,
             admin: {
-                position: 'sidebar'
+                position: 'sidebar',
+                description: 'Seleccione Ubicaciones de Mano de Obra'
             }
         },
 
