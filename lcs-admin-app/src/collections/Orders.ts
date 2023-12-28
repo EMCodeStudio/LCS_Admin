@@ -115,7 +115,7 @@ interface Ubicacion {
 type LocationData = string;
 let globalString: string | undefined;
 
-function ClientLocationGlobal(valor: string): string {
+function setClientLocationGlobal(valor: string): string {
     // Inicializa globalString si aún no ha sido definida
     globalString = globalString || '';
 
@@ -127,7 +127,7 @@ function ClientLocationGlobal(valor: string): string {
 
     return LocationResult;
 }
-function CheckClientLocation(clientLocation: string): string {
+function setCheckClientLocation(clientLocation: string): string {
 
     const lowercaseClientLocation = clientLocation.toLowerCase();
 
@@ -166,7 +166,7 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
 
             console.log('Location Data fuera del bucle: ', resultLocationProduct);
 
-            ClientLocationGlobal(resultLocationProduct)
+            setClientLocationGlobal(resultLocationProduct)
 
             return resultLocationProduct;
 
@@ -202,7 +202,7 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             //  console.log('Location Data fuera del bucle: ', locationData);
             const resultServiceLocation = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Servicio.';
 
-            ClientLocationGlobal(resultServiceLocation)
+            setClientLocationGlobal(resultServiceLocation)
 
             return resultServiceLocation;
         } catch (error) {
@@ -214,46 +214,43 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
 
     return null;
 }
-const getClientLocation: FieldHook = async ({ data }) => {
 
+const getClientLocation: FieldHook = async ({ data }) => {
     if (data && data.Cliente !== undefined) {
         try {
-            const fieldID = data.Cliente;
-            console.error('fieldID del Cliente:', fieldID);
-            const clientResponse = await fetch(`http://localhost:3000/api/clientes/${fieldID}`);
+            const fieldID = data.ClientePedido
+
+            const clientResponse = await fetch(`http://localhost:3000/api/clientes/${fieldID}`)
             if (!clientResponse.ok) {
-                throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`);
+                throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`)
             }
-            const clientData = await clientResponse.json();
+
+            const clientData = await clientResponse.json()
             const clientLocation = clientData.UbicacionClientePedido;
 
             const formatLocationData = (ubicacion: Ubicacion): string => {
-                const { Pais, Departamento, Municipio } = ubicacion;
+                const { Pais, Departamento, Municipio } = ubicacion
                 return `${Pais} - ${Departamento} - ${Municipio}`;
-            };
-
-            let locationData: LocationData = '';
-            if (clientLocation) {
-                const getLocationString = formatLocationData(clientLocation);
-                locationData = getLocationString;
-            } else {
-                console.error('Error: clientLocation es nulo o indefinido.');
             }
 
+            let locationData: LocationData = '';
 
-            console.log('GLOBAL STRING', globalString)
+            if (clientLocation) {
+                const getLocationString = formatLocationData(clientLocation)
+                locationData = getLocationString;
+            } else {
+                console.error('Error: clientLocation es nulo o indefinido.')
+            }
 
-            const ValidatedLocation = CheckClientLocation(locationData)
+            const ValidatedLocation = setCheckClientLocation(locationData)
 
             return ValidatedLocation;
-
 
         } catch (error) {
             console.error('Error del Cliente:', error);
             return 'No se puede obtener la Ubicacion del Cliente.';
         }
     }
-
     return null;
 }
 

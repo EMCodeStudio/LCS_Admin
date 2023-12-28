@@ -4,7 +4,7 @@ const Company: CollectionConfig = {
     slug: 'empresa',
     access: {
         read: () => true,
-        create: () => true,
+        create: () => false,
         update: () => true,
         delete: () => false,
     },
@@ -119,8 +119,8 @@ const Company: CollectionConfig = {
         {
             name: "MapaEmpresa",
             type: "point",
-            label: "Ubicacion en el Mapa",
-            required: true,
+            label: "Coordenada Mapa",
+            required: false,
             admin: {
                 position: 'sidebar'
             }

@@ -43,7 +43,7 @@ const Portraits: CollectionConfig = {
             }
         },
         {
-            name: "EstadoPortada ",
+            name: "EstadoPortada",
             type: "select",
             label: "Estado de la Portada",
             hasMany: false,

@@ -12,7 +12,7 @@ const Categories: CollectionConfig = {
       */
   },
   admin: {
-    useAsTitle: 'Categoria',
+    useAsTitle: 'NombreCategoria',
     defaultColumns: ['NombreCategoria', 'EstadoCategoria'],
     group: 'INVENTARIO',
     /* hidden: ({ user }) => {

@@ -1,10 +1,10 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 
 const formatCedulaNombre: FieldHook = async ({ data }) => (
-   `${data.NombreCliente} ${data.ApellidosCliente} - ${data.CedulaCliente}`
+    `${data.NombreCliente} ${data.ApellidosCliente} - ${data.CedulaCliente}`
 )
-const Customers: CollectionConfig = {
 
+const Customers: CollectionConfig = {
     slug: 'clientes',
     access: {
         read: () => true,
@@ -23,7 +23,7 @@ const Customers: CollectionConfig = {
         plural: 'Clientes',
     },
 
-    fields: [ 
+    fields: [
         {
             name: "CedulaNombre",
             type: "text",
@@ -79,7 +79,6 @@ const Customers: CollectionConfig = {
                 },
             ]
         },
-
 
         {
             type: 'row',
@@ -299,7 +298,7 @@ const Customers: CollectionConfig = {
 
 
 
-        
+
         {
             name: "FechaRegistro",
             type: "date",

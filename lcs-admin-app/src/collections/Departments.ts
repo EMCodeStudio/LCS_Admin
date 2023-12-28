@@ -3,7 +3,8 @@ import { CollectionConfig } from "payload/types";
 const Departments: CollectionConfig = {
     slug: 'departamentos',
     access:{
-        read: ()=> true
+        read: () => true,
+        update: () => true
     },
     admin: {
         useAsTitle: 'NombreDepartamento',

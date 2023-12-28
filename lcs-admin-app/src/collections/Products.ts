@@ -443,7 +443,7 @@ const Products: CollectionConfig = {
             required: false,
             admin: {
                 position: 'sidebar',
-                description: 'Seleccione una Ubicaciones de Distrubucion'
+                description: 'Seleccione Ubicaciones de Distrubucion'
             }
         },
     ],
