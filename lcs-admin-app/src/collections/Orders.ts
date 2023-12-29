@@ -118,13 +118,11 @@ interface Ubicacion {
     updatedAt: string;
     UbicacionDatos: string;
 }
-
 interface Imagen {
     ImagenesProducto: {
         ImagenProducto: string;
     }[];
 }
-
 type LocationData = string;
 let globalLocationString: string | undefined;
 
@@ -136,7 +134,6 @@ function setClientLocationGlobal(productServiceLocation: string): string {
     }
     return LocationResult;
 }
-
 function setCheckedClientLocation(clientLocation: string): string {
     const lowerCaseClientLocation = clientLocation.toLowerCase();
     const lowerCasePSLocation = globalLocationString ?
@@ -147,6 +144,7 @@ function setCheckedClientLocation(clientLocation: string): string {
         return 'La Ubicación del Cliente y la del Pedido No Coincide.';
     }
 }
+
 const getProductServiceLocation: FieldHook = async ({ data }) => {
     if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
         try {
@@ -232,7 +230,6 @@ const getClientLocation: FieldHook = async ({ data }) => {
     }
     return null;
 }
-
 const getProductServiceImage: FieldHook = async ({ data }) => {
     try {
         const fieldID = data ? data.ProductoServicioPedido.value : null;
@@ -242,15 +239,10 @@ const getProductServiceImage: FieldHook = async ({ data }) => {
         }
         const productData = await productResponse.json();
         const productImage = productData.ImagenesProducto;
-        // console.log('DATOS DEL ID DEL PRODUCTO: ', productImage);
         const getImageString = productImage?.[0]?.ImagenProducto || 'Sin ID disponible';
-        // console.log('ID DE LA PRIMERA IMAGEN DEL PRODUCTO: ', getImageString);
         return getImageString;
-
-
-
     } catch (error) {
-        //console.error('Error al obtener la URL del Producto:', error);
+        console.error('Error al obtener la URL del Producto:', error);
         return 'Sin ID disponible';
     }
 }
@@ -325,7 +317,6 @@ const Orders: CollectionConfig = {
                 layout: 'horizontal',
             }
         },
-
         {
             name: "ImagenServicioProductoId", // required
             type: "text", // required
@@ -447,7 +438,6 @@ const Orders: CollectionConfig = {
                   },*/
             ]
         },
-
         {
             type: 'row',
             fields: [
