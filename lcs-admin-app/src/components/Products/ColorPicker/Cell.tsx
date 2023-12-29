@@ -6,7 +6,6 @@ const Cell: React.FC<Props> = (props) => {
   const { cellData } = props;
 
   if (!cellData) return null;
-
   return (
     <div
       className="chip"

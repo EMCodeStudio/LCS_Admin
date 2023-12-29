@@ -1,8 +1,9 @@
 
 import { CollectionConfig, FieldHook } from "payload/types";
 import ErrorMessages from "../components/Messages/ErrorMessages";
-import payload from "payload";
+import payload, { Payload } from "payload";
 import { ImageProduct } from "../components/Orders/ImageProduct";
+import PreviewImage from "../components/Orders/PreviewImage/PreviewImage";
 
 const getProductServicePrice: FieldHook = async ({ data }) => {
     if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
@@ -232,7 +233,6 @@ const getClientLocation: FieldHook = async ({ data }) => {
     return null;
 }
 
-
 const getProductServiceImage: FieldHook = async ({ data }) => {
     try {
         const fieldID = data ? data.ProductoServicioPedido.value : null;
@@ -242,18 +242,43 @@ const getProductServiceImage: FieldHook = async ({ data }) => {
         }
         const productData = await productResponse.json();
         const productImage = productData.ImagenesProducto;
-        console.log('DATOS DEL ID DEL PRODUCTO: ', productImage);
+        // console.log('DATOS DEL ID DEL PRODUCTO: ', productImage);
         const getImageString = productImage?.[0]?.ImagenProducto || 'Sin ID disponible';
-        console.log('ID DE LA PRIMERA IMAGEN DEL PRODUCTO: ', getImageString);
+        // console.log('ID DE LA PRIMERA IMAGEN DEL PRODUCTO: ', getImageString);
         return getImageString;
 
+
+
     } catch (error) {
-        console.error('Error al obtener la URL del Producto:', error);
+        //console.error('Error al obtener la URL del Producto:', error);
         return 'Sin ID disponible';
     }
-};
+}
+const setProductServiceImage: FieldHook = async ({ data }) => {
+    try {
+        if (data && data.ImagenServicioProductoId) {
+            const media = await payload.find({
+                collection: 'imagenes',
+                where: {
+                    id: {
+                        equals: data.ImagenServicioProductoId
+                    }
+                }
+            });
+            if (media.docs && media.docs.length > 0) {
+                // return media.docs[0].filename;
+                console.log('RESULTADO DEL RETUR SET IAMGE DATA: ', media.docs[0].id)
+                return media.docs[0].id;
+            }
+        }
+        return null;
 
+    } catch (error) {
+        console.error("Error en setProductServiceImage:", error);
+        return null;
+    }
 
+}
 
 
 const Orders: CollectionConfig = {
@@ -307,19 +332,30 @@ const Orders: CollectionConfig = {
             label: "ID de Producto - Servicio",
             required: false,
             admin: {
-                readOnly: true
+                readOnly: true,
+                hidden: true
             },
             access: {
                 // read:() => false,
                 // update: ()=> false,
             },
             hooks: {
-                beforeChange: [({ siblingData }) => {
+                /*beforeChange: [({ siblingData }) => {
                     return siblingData.ImagenServicioProductoId = undefined
-                }],
+                }],*/
+                beforeChange: [getProductServiceImage],
                 afterRead: [getProductServiceImage]
             }
         },
+
+        /*  { */
+        /*      name: "MediaProductServiceOrder", // required */
+        /*      type: "text", // required */
+        /*      label: "Imagen de Venta", */
+        /*      hooks: { */
+        /*          afterRead: [setProductServiceImage] */
+        /*      } */
+        /*  }, */
 
         {
             type: 'row',
@@ -343,7 +379,6 @@ const Orders: CollectionConfig = {
                     filterOptions: ({ data, relationTo, siblingData, }) => {
                         if (relationTo === 'productos') {
                             if (data.TipoVentaPedido === 'product') {
-                                console.log('TIPO VENTA:', data.TipoVentaPedido)
                                 return {
                                     CantidadProducto: { greater_than_equal: 1 },
                                 }
@@ -354,7 +389,6 @@ const Orders: CollectionConfig = {
                         }
                         if (relationTo === 'servicios') {
                             if (data.TipoVentaPedido === 'service') {
-                                console.log('TIPO VENTA:', data.TipoVentaPedido)
                                 return {
                                     EstadoServicio: { equals: 'published' }
                                 }
@@ -370,25 +404,49 @@ const Orders: CollectionConfig = {
                     }
                 },
 
-
                 {
-                    name: 'ProductImageOrder',
-                    type: 'ui',
+                    name: "VentaImagenOrder", // required
+                    type: "upload", // required
+                    relationTo: 'imagenes',  //required eg:media
+                    label: "Imagen de Venta",
+                    required: false,
                     admin: {
-                        condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'product',
                         width: '50%',
-                        components: {
-                            Field: ({ data }) => ImageProduct({ ...data, urlImage: 'http://localhost:3001/imagenes/porton_euro_1.jpg' }),
-                        }
+                        readOnly: true
                     },
+                    access: {
+                        update: () => false,
+                    },
+                    hooks: {
+                        beforeChange: [({ siblingData }) => {
+
+                            siblingData.VentaImagenOrder = undefined
+                        }],
+                        afterRead: [setProductServiceImage]
+                    }
                 },
+
+
+                /*  {
+                      name: 'ProductImageOrder',
+                      type: 'ui',
+                      admin: {
+                          condition: ({ TipoVentaPedido }) => {
+                              console.log("Valor de TipoVentaPedido:", TipoVentaPedido);
+                              return TipoVentaPedido === 'product';
+                          },
+                          width: '50%',
+                          components: {
+                              //Field:  ({ data }) => {
+                              //    const urlImage =  setProductServiceImage; 
+                              //  return ImageProduct({ ...data, urlImage });
+                              //}
+                              Field: PreviewImage
+                          }
+                      },
+                  },*/
             ]
         },
-
-
-
-
-
 
         {
             type: 'row',
