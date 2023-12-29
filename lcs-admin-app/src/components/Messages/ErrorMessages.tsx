@@ -1,33 +1,28 @@
 import React from 'react'
 import './Messages.scss'
 import { useState, useEffect } from 'react'
+
 type Props = {
   message: string
   showError?: boolean
 }
 
 const baseClass = 'error-message';
-
 const ErrorMessages: React.FC<Props> = (props) => {
 
   const { message, showError } = props
-
-  const [isVisible, setIsVisible] = useState(true);
+  const [isVisible, setIsVisible] = useState(true)
 
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      // onClose();
-    }, 60000); // 1 minuto en milisegundos
-
-    return () => clearTimeout(timer);
-    /*   }, [onClose]); */
-  }, []);
-
+    }, 60000)
+    return () => clearTimeout(timer)
+  }, [])
+  
   const handleClose = () => {
-    setIsVisible(false);
-    // onClose();
-  };
+    setIsVisible(false)
+  }
 
   if (showError) {
     return (
@@ -39,8 +34,7 @@ const ErrorMessages: React.FC<Props> = (props) => {
         </div>
       )
     )
-  }
-  else {
+  } else {
     return null;
   }
 }

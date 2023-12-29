@@ -1,6 +1,8 @@
 
 import { CollectionConfig, FieldHook } from "payload/types";
 import ErrorMessages from "../components/Messages/ErrorMessages";
+import payload from "payload";
+import { ImageProduct } from "../components/Orders/ImageProduct";
 
 const getProductServicePrice: FieldHook = async ({ data }) => {
     if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
@@ -100,6 +102,7 @@ const getTotalPrice: FieldHook = async ({ data }) => {
     return null;
 
 }
+
 interface Ubicacion {
     id: string;
     PaisUbicacion: string;
@@ -114,17 +117,25 @@ interface Ubicacion {
     updatedAt: string;
     UbicacionDatos: string;
 }
+
+interface Imagen {
+    ImagenesProducto: {
+        ImagenProducto: string;
+    }[];
+}
+
 type LocationData = string;
 let globalLocationString: string | undefined;
 
-function setClientLocationGlobal(valor: string): string {
+function setClientLocationGlobal(productServiceLocation: string): string {
     globalLocationString = globalLocationString || '';
     let LocationResult: string = '';
-    if (!globalLocationString.includes(valor)) {
-        LocationResult = globalLocationString += valor;
+    if (!globalLocationString.includes(productServiceLocation)) {
+        LocationResult = globalLocationString += productServiceLocation;
     }
     return LocationResult;
 }
+
 function setCheckedClientLocation(clientLocation: string): string {
     const lowerCaseClientLocation = clientLocation.toLowerCase();
     const lowerCasePSLocation = globalLocationString ?
@@ -145,21 +156,15 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             }
             const productData = await productResponse.json()
             const productLocation = productData.UbicacionProducto;
-
-            console.log('DATOS DE UBICACION DEL PRODUCTO: ', productLocation)
-
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
                 return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
             }
-
             let locationData: LocationData[] = [];
-            
             productLocation.forEach((ubicacion: Ubicacion) => {
                 const getLocationString = formatLocationData(ubicacion);
                 locationData.push(getLocationString + '\n')
             })
-
             const resultLocationProduct = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Producto.';
             setClientLocationGlobal(resultLocationProduct)
             return resultLocationProduct;
@@ -177,9 +182,6 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             }
             const serviceData = await serviceResponse.json();
             const serviceLocation = serviceData.UbicacionServicio;
-
-            console.log('DATOS DE UBICACION DEL SERVICIO: ', serviceLocation)
-
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
                 return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
@@ -196,11 +198,8 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
             return 'No se puede obtener la Ubicacion del Servicio.';
         }
     }
-
-
     return null;
 }
-
 const getClientLocation: FieldHook = async ({ data }) => {
     if (data && data.ClientePedido !== undefined) {
         try {
@@ -211,8 +210,6 @@ const getClientLocation: FieldHook = async ({ data }) => {
             }
             const clientData = await clientResponse.json()
             const clientLocation = clientData.UbicacionCliente;
-
-            console.log('DATOS DE UBICACION DEL CLIENTE: ', clientLocation)
 
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
@@ -234,6 +231,30 @@ const getClientLocation: FieldHook = async ({ data }) => {
     }
     return null;
 }
+
+
+const getProductServiceImage: FieldHook = async ({ data }) => {
+    try {
+        const fieldID = data ? data.ProductoServicioPedido.value : null;
+        const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`);
+        if (!productResponse.ok) {
+            throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`);
+        }
+        const productData = await productResponse.json();
+        const productImage = productData.ImagenesProducto;
+        console.log('DATOS DEL ID DEL PRODUCTO: ', productImage);
+        const getImageString = productImage?.[0]?.ImagenProducto || 'Sin ID disponible';
+        console.log('ID DE LA PRIMERA IMAGEN DEL PRODUCTO: ', getImageString);
+        return getImageString;
+
+    } catch (error) {
+        console.error('Error al obtener la URL del Producto:', error);
+        return 'Sin ID disponible';
+    }
+};
+
+
+
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -279,51 +300,95 @@ const Orders: CollectionConfig = {
                 layout: 'horizontal',
             }
         },
-        {
-            name: "ProductoServicioPedido",
-            label: "Productos - Servicios",
-            type: 'relationship',
-            /*  hooks: {
-                 beforeChange: [
-                   ({ data, value, operation }) => {
-                     data.PrecioProducto = typeof value === 'string' ? value.split(' ')[0] : '';
-                     return value;
-                   },
-                 ],
-               }, */
-            relationTo: ['productos', 'servicios'],
-            hasMany: false,
-            required: true,
-            maxDepth: 0,
-            filterOptions: ({ data, relationTo, siblingData, }) => {
 
-                if (relationTo === 'productos') {
-                    if (data.TipoVentaPedido === 'product') {
-                        console.log('TIPO VENTA:', data.TipoVentaPedido)
-                        return {
-                            CantidadProducto: { greater_than_equal: 1 },
-                        }
-                    }
-                    return {
-                        NombreProducto: { exists: false },
-                    }
-                }
-                if (relationTo === 'servicios') {
-                    if (data.TipoVentaPedido === 'service') {
-                        console.log('TIPO VENTA:', data.TipoVentaPedido)
-                        return {
-                            EstadoServicio: { equals: 'published' }
-                        }
-                    }
-                    return {
-                        NombreServicio: { exists: false },
-                    }
-                }
-            },
+        {
+            name: "ImagenServicioProductoId", // required
+            type: "text", // required
+            label: "ID de Producto - Servicio",
+            required: false,
             admin: {
-                description: 'Seleccione un Producto o Servicio de la Lista'
+                readOnly: true
+            },
+            access: {
+                // read:() => false,
+                // update: ()=> false,
+            },
+            hooks: {
+                beforeChange: [({ siblingData }) => {
+                    return siblingData.ImagenServicioProductoId = undefined
+                }],
+                afterRead: [getProductServiceImage]
             }
         },
+
+        {
+            type: 'row',
+            fields: [
+                {
+                    name: "ProductoServicioPedido",
+                    label: "Productos - Servicios",
+                    type: 'relationship',
+                    /*  hooks: {
+                         beforeChange: [
+                           ({ data, value, operation }) => {
+                             data.PrecioProducto = typeof value === 'string' ? value.split(' ')[0] : '';
+                             return value;
+                           },
+                         ],
+                       }, */
+                    relationTo: ['productos', 'servicios'],
+                    hasMany: false,
+                    required: true,
+                    maxDepth: 0,
+                    filterOptions: ({ data, relationTo, siblingData, }) => {
+                        if (relationTo === 'productos') {
+                            if (data.TipoVentaPedido === 'product') {
+                                console.log('TIPO VENTA:', data.TipoVentaPedido)
+                                return {
+                                    CantidadProducto: { greater_than_equal: 1 },
+                                }
+                            }
+                            return {
+                                NombreProducto: { exists: false },
+                            }
+                        }
+                        if (relationTo === 'servicios') {
+                            if (data.TipoVentaPedido === 'service') {
+                                console.log('TIPO VENTA:', data.TipoVentaPedido)
+                                return {
+                                    EstadoServicio: { equals: 'published' }
+                                }
+                            }
+                            return {
+                                NombreServicio: { exists: false },
+                            }
+                        }
+                    },
+                    admin: {
+                        description: 'Seleccione un Producto o Servicio de la Lista',
+                        width: '50%',
+                    }
+                },
+
+
+                {
+                    name: 'ProductImageOrder',
+                    type: 'ui',
+                    admin: {
+                        condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'product',
+                        width: '50%',
+                        components: {
+                            Field: ({ data }) => ImageProduct({ ...data, urlImage: 'http://localhost:3001/imagenes/porton_euro_1.jpg' }),
+                        }
+                    },
+                },
+            ]
+        },
+
+
+
+
+
 
         {
             type: 'row',
@@ -348,7 +413,7 @@ const Orders: CollectionConfig = {
                 },
                 {
                     name: "UbicacionClientePedido",
-                    type: "text",
+                    type: "textarea",
                     label: "Ubicacion del Cliente",
                     required: false,
                     admin: {
@@ -395,7 +460,7 @@ const Orders: CollectionConfig = {
                 {
                     name: "DescuentoPedido",
                     type: "number",
-                    label: "% Descuento",
+                    label: "% Descuento %",
                     required: false,
                     admin: {
                         condition: ({ OfertaPedido }) => OfertaPedido === 'apply',
@@ -411,10 +476,11 @@ const Orders: CollectionConfig = {
                                         return discount;
                                     }
                                     else {
-                                        return 0
+                                        return data.DescuentoPedido = 0
                                     }
                                 }
                             }
+
                         ]
                     }
                 },
@@ -428,10 +494,8 @@ const Orders: CollectionConfig = {
                 width: '100%',
                 components: {
                     Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 1 a 99.', showError: true }),
-
                 }
             },
-
         },
         {
             name: "DetallesPagoPedido",
@@ -482,6 +546,7 @@ const Orders: CollectionConfig = {
                         },
                     ],
                 },
+
                 {
                     type: 'row',
                     fields: [
