@@ -23,6 +23,7 @@ import Locations from './collections/Locations'
 import Customers from './collections/Customers'
 import Departments from './collections/Departments'
 import Municipalities from './collections/Municipalities'
+import PQR from './collections/PQR'
 
 export default buildConfig({
   admin: {
@@ -59,6 +60,7 @@ export default buildConfig({
     Users,
     Departments,
     Municipalities,
+    PQR
   ],
 
   i18n: {

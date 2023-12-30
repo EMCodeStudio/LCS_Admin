@@ -112,7 +112,7 @@ const Services: CollectionConfig = {
             type: 'relationship', 
             relationTo: 'ubicaciones', 
             hasMany: true,
-            required: false,
+            required: true,
             admin: {
                 position: 'sidebar',
                 description: 'Seleccione Ubicaciones de Mano de Obra'

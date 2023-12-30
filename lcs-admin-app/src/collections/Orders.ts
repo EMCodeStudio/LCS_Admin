@@ -1,107 +1,91 @@
 
 import { CollectionConfig, FieldHook } from "payload/types";
 import ErrorMessages from "../components/Messages/ErrorMessages";
-import payload, { Payload } from "payload";
-import { ImageProduct } from "../components/Orders/ImageProduct";
-import PreviewImage from "../components/Orders/PreviewImage/PreviewImage";
+import payload from "payload";
+
 
 const getProductServicePrice: FieldHook = async ({ data }) => {
-    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
-        const fieldID = data.ProductoServicioPedido.value;
-        const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`)
-            .then(productResponse => {
-                if (!productResponse.ok) {
-                    throw new Error(`Error al obtener el Costo del Producto. Código de estado: ${productResponse.status}`);
-                }
-                return productResponse.json();
-            })
-            .then(productData => {
-                const productPrice = productData.PrecioProducto;
-                return productPrice;
-            })
-            .catch(error => {
-                console.error('Error del Producto:', error);
-                return 'No se puede obtener el Costo del Producto.';
-                // return '';
-            });
-        return productResponse ? productResponse : null;
-    }
-    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'service') {
-        const fieldID = data.ProductoServicioPedido.value;
-        const serviceResponse = await fetch(`http://localhost:3001/api/servicios/${fieldID}`)
-            .then(serviceResponse => {
-                if (!serviceResponse.ok) {
-                    throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
-                }
-                return serviceResponse.json();
-            })
-            .then(serviceData => {
-                const servicePrice = serviceData.PrecioServicio;
-                return servicePrice;
-            })
-            .catch(error => {
-                //   console.error('Error del Servicio:', error);
-                return 'No se puede obtener el Costo del Servicio.';
-                //return '';
-            });
-        return serviceResponse ? serviceResponse : null;
+    try {
+        if (data && data.ProductoServicioPedido.value !== undefined) {
+            const fieldID = data.ProductoServicioPedido.value;
+            if (data.TipoVentaPedido === 'product') {
+                const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`)
+                    .then(response => response.json())
+                const productPrice = productResponse.PrecioProducto;
+                const validatedProductPrice = productPrice !== data.PrecioProductoServicio ? productPrice : null
+                return validatedProductPrice;
+            }
+            if (data.TipoVentaPedido === 'service') {
+                const serviceResponse = await fetch(`http://localhost:3001/api/servicios/${fieldID}`)
+                    .then(response => response.json())
+                const servicePrice = serviceResponse.PrecioServicio;
+                const validatedServicePrice = servicePrice !== data.PrecioServiceoServicio ? servicePrice : null
+                return validatedServicePrice;
+            }
+        }
+    } catch (error) {
+        console.log('Error en la función getProductServicePrice:', error);
     }
     return null;
 }
+
 const getTotalPrice: FieldHook = async ({ data }) => {
-
-    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
-        const fieldID = data.ProductoServicioPedido.value;
-        const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`)
-            .then(productResponse => {
-                if (!productResponse.ok) {
-                    throw new Error(`Error al obtener el Costo del Producto. Código de estado: ${productResponse.status}`);
-                }
-                return productResponse.json();
-            })
-            .then(productData => {
-                const productPrice = productData.PrecioProducto;
-                return productPrice;
-            })
-            .catch(error => {
-                console.error('Error del Producto:', error);
-                return 'No se puede obtener el Costo del Producto.';
-            });
-        const { PrecioProductoServicio = productResponse, CantidadProductoPedido } = data.DetallesPagoPedido;
-        const calculatedPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : CantidadProductoPedido + PrecioProductoServicio
-        const validatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedPrice * (1 - (data.DescuentoPedido / 100)) : calculatedPrice
-        const totalProdPrice = Math.round(validatedDiscount)
-        return totalProdPrice;
+    try {
+        if (data && data.ProductoServicioPedido.value !== undefined) {
+            const fieldID = data.ProductoServicioPedido.value;
+            const fieldDataTotal = data.TotalPricioPedido;
+            let PrecioProductoServicio: number = 0;
+            if (data.TipoVentaPedido === 'product') {
+                const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`)
+                    .then(productResponse => {
+                        if (!productResponse.ok) {
+                            throw new Error(`Error al obtener el Costo del Producto. Código de estado: ${productResponse.status}`)
+                        }
+                        return productResponse.json()
+                    })
+                    .then(productData => {
+                        const productPrice = productData.PrecioProducto;
+                        return productPrice;
+                    })
+                    .catch(error => {
+                        console.error('Error del Producto:', error);
+                        return 'No se puede obtener el Costo del Producto.';
+                    });
+                const { CantidadProductoPedido } = data.DetallesPagoPedido;
+                PrecioProductoServicio = productResponse;
+                const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : CantidadProductoPedido + PrecioProductoServicio
+                const validatedProductDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : calculatedProductPrice
+                const totalProductPrice = Math.round(validatedProductDiscount)
+                const checkedTotalProductPrice = fieldDataTotal !== totalProductPrice ? totalProductPrice : null;
+                return checkedTotalProductPrice;
+            }
+            if (data.TipoVentaPedido === 'service') {
+                const serviceResponse = await fetch(`http://localhost:3001/api/servicios/${fieldID}`)
+                    .then(serviceResponse => {
+                        if (!serviceResponse.ok) {
+                            throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
+                        }
+                        return serviceResponse.json();
+                    })
+                    .then(serviceData => {
+                        const servicePrice = serviceData.PrecioServicio;
+                        return servicePrice;
+                    })
+                    .catch(error => {
+                        console.error('Error del Servicio:', error);
+                        return 'No se puede obtener el Costo del Servicio.';
+                    });
+                PrecioProductoServicio = serviceResponse
+                const calculatedServiceDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
+                const totalServicePrice = Math.round(calculatedServiceDiscount);
+                const checkedTotalServicePrice = fieldDataTotal !== totalServicePrice ? totalServicePrice : null;
+                return checkedTotalServicePrice;
+            }
+        }
+    } catch (error) {
+        console.log('Error en la función getTotalPrice:', error);
     }
-
-    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'service') {
-        const fieldID = data.ProductoServicioPedido.value;
-        const serviceResponse = await fetch(`http://localhost:3001/api/servicios/${fieldID}`)
-            .then(serviceResponse => {
-                if (!serviceResponse.ok) {
-                    throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
-                }
-                return serviceResponse.json();
-            })
-            .then(serviceData => {
-                const servicePrice = serviceData.PrecioServicio;
-                return servicePrice;
-            })
-            .catch(error => {
-                console.error('Error del Servicio:', error);
-                return 'No se puede obtener el Costo del Servicio.';
-                // return '';
-            });
-        const PrecioProductoServicio = serviceResponse
-        console.log('PRECIO: ', PrecioProductoServicio)
-        const calculatedDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
-        const totalServPrice = Math.round(calculatedDiscount);
-        console.log('TOTAL SERV: ', totalServPrice)
-        return totalServPrice;
-    }
-
     return null;
-
 }
 
 interface Ubicacion {
@@ -203,6 +187,7 @@ const getClientLocation: FieldHook = async ({ data }) => {
     if (data && data.ClientePedido !== undefined) {
         try {
             const fieldID = data.ClientePedido
+            const fieldData = data.UbicacionClientePedido
             const clientResponse = await fetch(`http://localhost:3001/api/clientes/${fieldID}`)
             if (!clientResponse.ok) {
                 throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`)
@@ -222,31 +207,39 @@ const getClientLocation: FieldHook = async ({ data }) => {
                 console.error('Error: clientLocation es nulo o indefinido.')
             }
             const ValidatedLocation = setCheckedClientLocation(locationData)
-            return ValidatedLocation;
+            if (fieldData !== ValidatedLocation) return ValidatedLocation;
         } catch (error) {
             console.error('Error de Ubicacion del Cliente:', error);
             return 'No se puede obtener la Ubicacion del Cliente.';
         }
     }
-    return null;
+    //return null;
 }
-const getProductServiceImage: FieldHook = async ({ data }) => {
-    try {
-        const fieldID = data ? data.ProductoServicioPedido.value : null;
-        const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`);
-        if (!productResponse.ok) {
-            throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`);
+const getProductServiceImageId: FieldHook = async ({ data }) => {
+    if (data && data.ProductoServicioPedido.value !== undefined && data.TipoVentaPedido === 'product') {
+        try {
+            const fieldID = data ? data.ProductoServicioPedido.value : null;
+            const fieldData = data.ImagenServicioProductoId
+            const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`);
+            if (!productResponse.ok) {
+                throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`);
+            }
+            const productData = await productResponse.json();
+            const productImage = productData.ImagenesProducto;
+            const getImageString = productImage?.[0]?.ImagenProducto || 'Sin ID disponible';
+
+
+            if (fieldData !== getImageString) return getImageString;
+
+
+        } catch (error) {
+            console.error('Error al obtener la URL del Producto:', error);
+            return 'Sin ID disponible';
         }
-        const productData = await productResponse.json();
-        const productImage = productData.ImagenesProducto;
-        const getImageString = productImage?.[0]?.ImagenProducto || 'Sin ID disponible';
-        return getImageString;
-    } catch (error) {
-        console.error('Error al obtener la URL del Producto:', error);
-        return 'Sin ID disponible';
     }
 }
-const setProductServiceImage: FieldHook = async ({ data }) => {
+
+const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     try {
         if (data && data.ImagenServicioProductoId) {
             const media = await payload.find({
@@ -266,7 +259,7 @@ const setProductServiceImage: FieldHook = async ({ data }) => {
         return null;
 
     } catch (error) {
-        console.error("Error en setProductServiceImage:", error);
+        console.error("Error en setProductServiceImageChecked:", error);
         return null;
     }
 
@@ -334,8 +327,8 @@ const Orders: CollectionConfig = {
                 /*beforeChange: [({ siblingData }) => {
                     return siblingData.ImagenServicioProductoId = undefined
                 }],*/
-                beforeChange: [getProductServiceImage],
-                afterRead: [getProductServiceImage]
+                beforeChange: [getProductServiceImageId],
+                afterRead: [getProductServiceImageId]
             }
         },
 
@@ -344,7 +337,7 @@ const Orders: CollectionConfig = {
         /*      type: "text", // required */
         /*      label: "Imagen de Venta", */
         /*      hooks: { */
-        /*          afterRead: [setProductServiceImage] */
+        /*          afterRead: [setProductServiceImageChecked] */
         /*      } */
         /*  }, */
 
@@ -394,16 +387,17 @@ const Orders: CollectionConfig = {
                         width: '50%',
                     }
                 },
-
                 {
                     name: "VentaImagenOrder", // required
                     type: "upload", // required
                     relationTo: 'imagenes',  //required eg:media
                     label: "Imagen de Venta",
                     required: false,
+
                     admin: {
                         width: '50%',
-                        readOnly: true
+                        readOnly: true,
+                        condition: ({ UbicacionProductoServicio }) => UbicacionProductoServicio !== undefined
                     },
                     access: {
                         update: () => false,
@@ -413,7 +407,7 @@ const Orders: CollectionConfig = {
 
                             siblingData.VentaImagenOrder = undefined
                         }],
-                        afterRead: [setProductServiceImage]
+                        afterRead: [setProductServiceImageChecked]
                     }
                 },
 
@@ -429,7 +423,7 @@ const Orders: CollectionConfig = {
                           width: '50%',
                           components: {
                               //Field:  ({ data }) => {
-                              //    const urlImage =  setProductServiceImage; 
+                              //    const urlImage =  setProductServiceImageChecked; 
                               //  return ImageProduct({ ...data, urlImage });
                               //}
                               Field: PreviewImage
