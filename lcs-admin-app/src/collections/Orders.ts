@@ -33,7 +33,6 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
     }
     return null;
 }
-
 const getTotalPrice: FieldHook = async ({ data }) => {
     try {
         if (data && data.ProductoServicioPedido.value !== undefined) {
@@ -62,7 +61,7 @@ const getTotalPrice: FieldHook = async ({ data }) => {
                 const validatedProductDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : calculatedProductPrice
                 const totalProductPrice = Math.round(validatedProductDiscount)
                 const comparedProductTotalPrice = fieldProductServiceTotalPrice !== totalProductPrice;
-                const checkedTotalProductPrice =  comparedProductTotalPrice? totalProductPrice : null;
+                const checkedTotalProductPrice = comparedProductTotalPrice ? totalProductPrice : null;
                 return checkedTotalProductPrice;
             }
             if (data.TipoVentaPedido === 'service') {
@@ -94,7 +93,6 @@ const getTotalPrice: FieldHook = async ({ data }) => {
     }
     return null;
 }
-
 interface Ubicacion {
     id: string;
     PaisUbicacion: string;
@@ -109,11 +107,11 @@ interface Ubicacion {
     updatedAt: string;
     UbicacionDatos: string;
 }
-interface Imagen {
+/*interface Imagen {
     ImagenesProducto: {
         ImagenProducto: string;
     }[];
-}
+}*/
 type LocationData = string;
 let globalLocationString: string | undefined;
 
@@ -135,7 +133,6 @@ function setCheckedClientLocation(clientLocation: string): string {
         return 'La Ubicación del Cliente y la del Pedido No Coincide.';
     }
 }
-
 const getProductServiceLocation: FieldHook = async ({ data }) => {
     try {
         if (data && data.ProductoServicioPedido.value !== undefined) {
@@ -192,17 +189,16 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
     return null;
 }
 const getClientLocation: FieldHook = async ({ data }) => {
-    if (data && data.ClientePedido !== undefined) {
-        try {
+    try {
+        if (data && data.ClientePedido !== undefined) {
             const fieldID = data.ClientePedido
-            const fieldData = data.UbicacionClientePedido
+            const fieldClientLocation = data.UbicacionClientePedido
             const clientResponse = await fetch(`http://localhost:3001/api/clientes/${fieldID}`)
             if (!clientResponse.ok) {
                 throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`)
             }
             const clientData = await clientResponse.json()
             const clientLocation = clientData.UbicacionCliente;
-
             const formatLocationData = (ubicacion: Ubicacion): string => {
                 const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
                 return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
@@ -212,42 +208,51 @@ const getClientLocation: FieldHook = async ({ data }) => {
                 const getLocationString = formatLocationData(clientLocation)
                 locationData = getLocationString;
             } else {
-                console.error('Error: clientLocation es nulo o indefinido.')
+                console.log('Error: clientLocation es nulo o indefinido.')
             }
             const ValidatedLocation = setCheckedClientLocation(locationData)
-            if (fieldData !== ValidatedLocation) return ValidatedLocation;
-        } catch (error) {
-            console.error('Error de Ubicacion del Cliente:', error);
-            return 'No se puede obtener la Ubicacion del Cliente.';
+            const compareClientLocation = fieldClientLocation !== ValidatedLocation;
+            if (compareClientLocation) return ValidatedLocation; else null
         }
+    } catch (error) {
+        console.log('Error de Ubicacion del Cliente:', error);
     }
-    //return null;
+    return null;
 }
 const getProductServiceImageId: FieldHook = async ({ data }) => {
     try {
-        if (data && data.ProductoServicioPedido.value !== undefined){
-            
+        if (data && data.ProductoServicioPedido.value !== undefined) {
             const fieldID = data ? data.ProductoServicioPedido.value : null;
-            const fieldImagenProductServiceId = data.ImagenServicioProductoId
-
-            if(data.TipoVentaPedido === 'product') {
-            const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`)
-            if (!productResponse.ok) {
-                throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`)
+            const fieldImageProductServiceId = data.ImagenServicioProductoId
+            if (data.TipoVentaPedido === 'product') {
+                const productResponse = await fetch(`http://localhost:3001/api/productos/${fieldID}`)
+                if (!productResponse.ok) {
+                    throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`)
+                }
+                const productData = await productResponse.json();
+                const productImage = productData.ImagenesProducto;
+                const getImageProductString = productImage?.[0]?.ImagenProducto || 'Imagen ID No Encontrada';
+                const comparedImagenProductId = fieldImageProductServiceId !== getImageProductString
+                if (comparedImagenProductId) return getImageProductString; else null
             }
-            const productData = await productResponse.json();
-            const productImage = productData.ImagenesProducto;
-            const getImageProductString = productImage?.[0]?.ImagenProducto || 'Imagen ID No Encontrada';
-            const comparedImagenProductId = fieldImagenProductServiceId !== getImageProductString
-            if (comparedImagenProductId) return getImageProductString ; else  null
+            if (data.TipoVentaPedido === 'service') {
+                const serviceResponse = await fetch(`http://localhost:3001/api/servicios/${fieldID}`)
+                if (!serviceResponse.ok) {
+                    throw new Error(`Error al obtener la URL del Serviceo. Código de estado: ${serviceResponse.status}`)
+                }
+                const serviceData = await serviceResponse.json();
+                const serviceImage = serviceData.ImagenesServicio;
+                const getImageServiceString = serviceImage?.[0]?.Imagenserviceo || 'Imagen ID No Encontrada';
+                const comparedImageServiceId = fieldImageProductServiceId !== getImageServiceString
+                if (comparedImageServiceId) return getImageServiceString; else null
+            }
         }
-    }
+
     } catch (error) {
         console.log('Error en la funcion getProductServiceImageId: ', error)
     }
     return null
 }
-
 const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     try {
         if (data && data.ImagenServicioProductoId) {
@@ -255,25 +260,25 @@ const setProductServiceImageChecked: FieldHook = async ({ data }) => {
                 collection: 'imagenes',
                 where: {
                     id: {
-                        equals: data.ImagenServicioProductoId
+                        equals: data.ImagenServicioProductoId,
                     }
                 }
-            });
+            })
             if (media.docs && media.docs.length > 0) {
-                // return media.docs[0].filename;
-                console.log('RESULTADO DEL RETUR SET IAMGE DATA: ', media.docs[0].id)
-                return media.docs[0].id;
+                const fieldImageProductService = data.ImagenServicioProductoId;
+                const imageProductService = media.docs[0].id  // return media.docs[0].filename;
+                console.log('RESULTADO DE SET IMAGE DATA: ', fieldImageProductService)
+                console.log('RESULTADO DE FIELD IMAGE DATA: ', imageProductService)
+                const compareImageProductService = fieldImageProductService !== imageProductService;
+                const validatedImageProductService = compareImageProductService ? imageProductService : null;
+                return validatedImageProductService;
             }
         }
-        return null;
-
     } catch (error) {
-        console.error("Error en setProductServiceImageChecked:", error);
-        return null;
+        console.log("Error en la funcion setProductServiceImageChecked: ", error)
     }
-
+    return null;
 }
-
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
