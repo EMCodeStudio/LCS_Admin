@@ -74,7 +74,7 @@ const Products: CollectionConfig = {
                 {
                     name: "TamanoProducto", 
                     type: "select", 
-                    hasMany: false, /// set to true if you want to select multiple
+                    hasMany: false, 
                     label: 'Tamaño del Producto',
                     admin: {
                         width: '30%',
@@ -136,7 +136,7 @@ const Products: CollectionConfig = {
                     name: "UnidadMedidaProducto", 
                     type: "select", 
                     label: 'Unidad de Medida',
-                    hasMany: false, /// set to true if you want to select multiple
+                    hasMany: false, 
                     options: [
                         {
                             label: "(m) Metros",
@@ -197,7 +197,7 @@ const Products: CollectionConfig = {
                     name: "UnidadPesoProducto", 
                     type: "select", 
                     label: 'Unidad de Peso',
-                    hasMany: false, /// set to true if you want to select multiple
+                    hasMany: false, 
                     options: [
                         {
                             label: "(kg) Kilogramo",
@@ -368,7 +368,7 @@ const Products: CollectionConfig = {
                 {
                     name: "ImagenProducto", 
                     label: "Imagen del Producto",
-                    type: 'upload', // required
+                    type: 'upload', 
                     relationTo: 'imagenes', 
                     required: true,
                     hooks: {
@@ -385,10 +385,10 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "EstadoProducto", // required
-            type: "select", // required
+            name: "EstadoProducto", 
+            type: "select", 
             label: "Estado del Producto",
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false, 
             options: [
                 {
                     label: "Nuevo",
@@ -406,9 +406,10 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "FechaIngresoProducto", // required
-            type: "date", // required
+            name: "FechaIngresoProducto", 
+            type: "date", 
             label: "Fecha Ingreso del Producto",
+            required: true,
             admin: {
                 position: "sidebar",
                 date: {
@@ -423,9 +424,10 @@ const Products: CollectionConfig = {
         },
 
         {
-            name: "HoraIngresoProducto", // required
-            type: "date", // required
+            name: "HoraIngresoProducto", 
+            type: "date", 
             label: "Hora Ingreso del Producto",
+            required: true,
             admin: {
                 position: "sidebar",
                 date: {

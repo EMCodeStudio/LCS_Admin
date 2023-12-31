@@ -98,7 +98,7 @@ Reset Password POST: <http://localhost:3000/api/usuarios/reset-password>
 - npm run dev
 - npm run build
 - npm run start
-- <http://localhost:3001/admin/login>
+- <http://localhost:3000/admin/login>
 
 # Creating User
 

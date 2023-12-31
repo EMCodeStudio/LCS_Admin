@@ -6,39 +6,29 @@ import { CollectionConfig, FieldHook } from "payload/types";
 */
 
 const formatLocation: FieldHook = async ({ data }) => {
-
-    // `${data.PaisUbicacion} - ${data.MunicipioUbicacion} (${data.DepartamentoUbicacion})`
-
-    if (data && data.DepartamentoUbicacion !== undefined || data && data.DepartamentoUbicacion !== undefined) {
-        try {
-
+    try {
+        if (data) {
             const fieldID1 = data.DepartamentoUbicacion
-            const deparmentResponse = await fetch(`http://localhost:3001/api/departamentos/${fieldID1}`)
-
             const fieldID2 = data.MunicipioUbicacion
+            const deparmentResponse = await fetch(`http://localhost:3001/api/departamentos/${fieldID1}`)
             const municipalityResponse = await fetch(`http://localhost:3001/api/municipios/${fieldID2}`)
-
-            if (!deparmentResponse.ok && !municipalityResponse.ok) {
+            if (!deparmentResponse.ok) {
                 throw new Error(`Error al obtener el Departamento y Municipio. Código de estado: ${deparmentResponse.status}`)
             }
-            
+            if (!municipalityResponse.ok) {
+                throw new Error(`Error al obtener el Municipio. Código de estado: ${deparmentResponse.status}`)
+            }
             const departmentData = await deparmentResponse.json()
-            const departmentName = departmentData.NombreDepartamento;
-
+            const departmentLocation = departmentData.NombreDepartamento;
             const municipalityData = await municipalityResponse.json()
             const municipalityName = municipalityData.NombreMunicipio;
-
-            return `${data.PaisUbicacion} - ${municipalityName} (${departmentName})`;
-
-        } catch (error) {
-            console.error('Error de Consulta de la Ubicacion:', error);
-            return 'No se puede obtener la Ubicacion.';
+            return `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
         }
+    } catch (error) {
+        console.log('Error de Consulta de la Ubicacion:', error);
     }
-
-    return null;
-
 }
+
 
 const Locations: CollectionConfig = {
     slug: 'ubicaciones',

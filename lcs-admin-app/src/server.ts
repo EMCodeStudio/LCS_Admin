@@ -22,7 +22,7 @@ const start = async () => {
   // Add your own express routes here
   app.use('/public', express.static(path.resolve(__dirname, './public')));
 
-  app.listen(3001)
+  app.listen(3000)
 }
 
 start()

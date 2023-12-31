@@ -46,7 +46,7 @@ const Customers: CollectionConfig = {
                     name: "TipoIdCliente",
                     label: "Tipo de Identificacion",
                     type: 'select',
-                    required: true,
+                   // required: true,
                     options: [
                         {
                             label: 'Cedula de Ciudadania',
@@ -216,7 +216,7 @@ const Customers: CollectionConfig = {
         },
         {
             name: "UbicacionCliente", 
-            label: "Ubicacion",
+            label: "Ubicacion del Cliente",
             type: 'relationship', 
             relationTo: 'ubicaciones', 
             hasMany: false,

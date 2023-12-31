@@ -8,7 +8,7 @@ export const ImageProduct: React.FC<ImageProps> = (imageValue) => {
     console.log('NOMBRE DE LA IMAGEN PARAMETRO: ', urlImage)
     return (
         <div className='image-container'>
-            <img src={`http://localhost:3001/imagenes/${urlImage}`} alt="" />
+            <img src={`http://localhost:3000/imagenes/${urlImage}`} alt="" />
         </div>
     )
 }
