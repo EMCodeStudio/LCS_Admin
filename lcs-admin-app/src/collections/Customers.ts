@@ -221,7 +221,7 @@ const Customers: CollectionConfig = {
             relationTo: 'ubicaciones', 
             hasMany: false,
             unique: true,
-            required: true,
+            required: false,
             admin: {
                 position: 'sidebar'
             }

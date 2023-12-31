@@ -4,8 +4,7 @@ import { CollectionConfig, FieldHook } from "payload/types";
  `${data.PaisUbicacion} - ${data.MunicipioUbicacion} (${data.DepartamentoUbicacion})`
 )
 */
-
-const formatLocation: FieldHook = async ({ data }) => {
+/*const formatLocation: FieldHook = async ({ data }) => {
     try {
         if (data) {
             const fieldID1 = data.DepartamentoUbicacion
@@ -27,8 +26,43 @@ const formatLocation: FieldHook = async ({ data }) => {
     } catch (error) {
         console.log('Error de Consulta de la Ubicacion:', error);
     }
-}
+}*/
 
+const formatLocation: FieldHook = async ({ data }) => {
+    try {
+        if (data) {
+
+            const fieldDeparmentLocationId = data.DepartamentoUbicacion;
+            const fieldMunicipalityLocationId = data.MunicipioUbicacion;
+            const fieldLocation = data.UbicacionDatos;
+
+            const deparmentResponse = await fetch(`http://localhost:3000/api/departamentos/${fieldDeparmentLocationId}`)
+            const municipalityResponse = await fetch(`http://localhost:3000/api/municipios/${fieldMunicipalityLocationId}`)
+
+            if (!deparmentResponse.ok) {
+                throw new Error(`Error al obtener el Departamento y Municipio. Código de estado: ${deparmentResponse.status}`)
+            }
+            if (!municipalityResponse.ok) {
+                throw new Error(`Error al obtener el Municipio. Código de estado: ${deparmentResponse.status}`)
+            }
+            const departmentData = await deparmentResponse.json()
+            const departmentLocation = departmentData.NombreDepartamento;
+
+            const municipalityData = await municipalityResponse.json()
+            const municipalityName = municipalityData.NombreMunicipio;
+
+            const formatedLocation = `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
+
+            const comparedLocarion = fieldLocation !== formatedLocation
+
+            const validatedLocation = comparedLocarion ? formatedLocation : console.log('Ubicacion Ya Existe!')
+
+            return validatedLocation;
+        }
+    } catch (error) {
+        console.log('Error de Consulta de la Ubicacion:', error);
+    }
+}
 
 const Locations: CollectionConfig = {
     slug: 'ubicaciones',
@@ -66,7 +100,6 @@ const Locations: CollectionConfig = {
                 hidden: true
             },
         },
-
         {
             name: "PaisUbicacion",
             type: "select",
@@ -87,7 +120,7 @@ const Locations: CollectionConfig = {
             type: 'relationship',
             relationTo: "departamentos",
             hasMany: false,
-            required: false,
+            required: true,
             admin: {
                 description: 'Seleccione un Departamento.'
             }
@@ -98,7 +131,8 @@ const Locations: CollectionConfig = {
             label: 'Nombre de Municipio | Ciudad',
             hasMany: false,
             relationTo: 'municipios',
-            required: false,
+            unique: true,
+            required: true,
             admin: {
                 description: 'Selecciones un Municipio o Ciudad.'
             }
