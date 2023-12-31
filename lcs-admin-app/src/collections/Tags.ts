@@ -27,10 +27,10 @@ const Tags: CollectionConfig =  {
             }
         },
         {
-            name: "EstadoEtiqutea", // required
-            type: "select", // required
+            name: "EstadoEtiqutea", 
+            type: "select", 
             label:'Estado de la Etiqueta',
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false, 
             options: [
                 {
                     label: "Disponible",

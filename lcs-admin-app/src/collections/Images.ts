@@ -1,7 +1,6 @@
 import { CollectionConfig } from "payload/types";
 //import { LinkFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import path from 'path'
-
 const Images: CollectionConfig = {
     slug: 'imagenes',
     admin: {
@@ -13,11 +12,9 @@ const Images: CollectionConfig = {
         singular: 'Imagen',
         plural: 'Imagenes',
     },
-
     upload: {
         staticDir: path.resolve(__dirname, '../media'),
     },
-
     /*  upload: {
          staticURL: '/media',
          staticDir: 'media',
@@ -50,9 +47,7 @@ const Images: CollectionConfig = {
          crop: false,
          focalPoint: false
      }, */
-
     fields: [
-
         {
             name: 'NombreImagen',
             label: 'Nombre de la Imagen',
@@ -96,7 +91,6 @@ const Images: CollectionConfig = {
             }
         },
     ],
-
     timestamps: true,
 };
 

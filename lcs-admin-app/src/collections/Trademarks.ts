@@ -12,24 +12,24 @@ const Trademarks: CollectionConfig = {
         plural: 'Marcas',
     },
     fields: [
-        //example text field
+       
         {
             name: 'Marca',
             label: 'Nombre de la Marca',
             type: 'text',
         },
         {
-            name: "ImagenMarca", // required
-            type: "upload", // required
-            relationTo: 'imagenes',  //required eg:media
+            name: "ImagenMarca", 
+            type: "upload", 
+            relationTo: 'imagenes', 
             label: "Imagen de la Marca",
             required: false,
         },
         {
-            name: "EstadoMarca", // required
-            type: "select", // required
+            name: "EstadoMarca", 
+            type: "select", 
             label: "Estado de la Marca",
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false, 
             options: [
                 {
                     label: "Publica",

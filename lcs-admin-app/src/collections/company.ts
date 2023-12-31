@@ -134,13 +134,12 @@ const Company: CollectionConfig = {
                     pickerAppearance: 'dayOnly',
                     displayFormat: 'dd-MM-yyyy'
                     //Options: dayAndTime, timeOnly, dayOnly
-
                 },
                 position: 'sidebar'
             }
         }
     ],
     timestamps: true,
-};
+}
 
 export default Company;

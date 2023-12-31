@@ -344,8 +344,8 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "ImagenServicioProductoId", // required
-            type: "text", // required
+            name: "ImagenServicioProductoId", 
+            type: "text", 
             label: "ID de Producto - Servicio",
             required: false,
             admin: {
@@ -366,8 +366,8 @@ const Orders: CollectionConfig = {
         },
 
         /*  { */
-        /*      name: "MediaProductServiceOrder", // required */
-        /*      type: "text", // required */
+        /*      name: "MediaProductServiceOrder",  */
+        /*      type: "text",  */
         /*      label: "Imagen de Venta", */
         /*      hooks: { */
         /*          afterRead: [setProductServiceImageChecked] */
@@ -420,9 +420,9 @@ const Orders: CollectionConfig = {
                     }
                 },
                 {
-                    name: "VentaImagenOrder", // required
-                    type: "upload", // required
-                    relationTo: 'imagenes',  //required eg:media
+                    name: "VentaImagenOrder", 
+                    type: "upload", 
+                    relationTo: 'imagenes',  
                     label: "Imagen de Venta",
                     required: false,
                     admin: {
@@ -440,8 +440,6 @@ const Orders: CollectionConfig = {
                         afterRead: [setProductServiceImageChecked]
                     }
                 },
-
-
                 /*  {
                       name: 'ProductImageOrder',
                       type: 'ui',

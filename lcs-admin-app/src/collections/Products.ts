@@ -1,6 +1,4 @@
-
 import { CollectionConfig, FieldHook } from "payload/types";
-
 const Products: CollectionConfig = {
     slug: 'productos',
     access: {
@@ -19,7 +17,6 @@ const Products: CollectionConfig = {
         {
             type: 'row',
             fields: [
-
                 {
                     name: 'NombreProducto',
                     label: 'Nombre del Producto',
@@ -235,7 +232,6 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-
         {
             type: 'row',
             fields: [
@@ -273,7 +269,7 @@ const Products: CollectionConfig = {
                 },
             ]
         },
-        //example text field
+        //example text field colors with prices
         /*   {
               name: 'Colores',
               type: 'array',
@@ -422,7 +418,6 @@ const Products: CollectionConfig = {
                 },
             }
         },
-
         {
             name: "HoraIngresoProducto", 
             type: "date", 
@@ -450,6 +445,6 @@ const Products: CollectionConfig = {
         },
     ],
     timestamps: true,
-};
+}
 
 export default Products;

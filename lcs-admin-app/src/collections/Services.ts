@@ -1,5 +1,4 @@
 import { CollectionConfig } from "payload/types";
-
 const Services: CollectionConfig = {
     slug: 'servicios',
     access: {
@@ -15,7 +14,6 @@ const Services: CollectionConfig = {
         plural: 'Servicios',
     },
     fields: [
-        
         {
             name: 'NombreServicio',
             label: 'Nombre del Servicio',
@@ -27,7 +25,6 @@ const Services: CollectionConfig = {
                 placeholder: 'Nombre aqui'
             }
         },
-
         {
             type: 'row',
             fields: [
@@ -58,7 +55,6 @@ const Services: CollectionConfig = {
                 },
             ]
         },
-
         {
             type: 'array',
             name:'ImagenesServicio',
@@ -121,6 +117,6 @@ const Services: CollectionConfig = {
 
     ],
     timestamps: true,
-};
+}
 
 export default Services;

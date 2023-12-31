@@ -26,6 +26,6 @@ const Municipalities: CollectionConfig = {
         },
     ],
     timestamps: true,
-};
+}
 
 export default Municipalities;

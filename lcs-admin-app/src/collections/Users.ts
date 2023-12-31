@@ -1,5 +1,4 @@
 import { CollectionConfig } from 'payload/types'
-
 const Users: CollectionConfig = {
   slug: 'usuarios',
   auth: true,
@@ -19,11 +18,9 @@ const Users: CollectionConfig = {
     singular: 'Usuario'
   },
   fields: [
-    // Email added by default
-    // Add more fields as needed
     {
-      name: "Usuario", // required
-      type: "text", // required
+      name: "Usuario",
+      type: "text", 
       label: "Nombre de Usuario",
       required: false,
       unique: true,

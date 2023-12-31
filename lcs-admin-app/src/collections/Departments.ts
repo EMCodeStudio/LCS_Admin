@@ -1,5 +1,4 @@
 import { CollectionConfig } from "payload/types";
-
 const Departments: CollectionConfig = {
     slug: 'departamentos',
     access:{
@@ -28,6 +27,6 @@ const Departments: CollectionConfig = {
     ],
    
     timestamps: true,
-};
+}
 
 export default Departments;

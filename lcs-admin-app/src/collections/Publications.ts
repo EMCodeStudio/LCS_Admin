@@ -100,7 +100,6 @@ const Publications: CollectionConfig = {
                 placeholder: '% 00',
                 condition: ({ esOfertaPublicacion }) => esOfertaPublicacion === true,
                 width: '50%',
-                //description: '%'
             },
             hooks: {
                 beforeChange: [
@@ -139,7 +138,7 @@ const Publications: CollectionConfig = {
             name: "EtiquetasPublicacion",
             label: "Nombre de las Etiquetas",
             type: 'relationship',
-            relationTo: 'etiquetas', //required eg:users
+            relationTo: 'etiquetas', 
             hasMany: true,
             required: false,
             admin: {

@@ -1,13 +1,10 @@
 import { CollectionConfig } from "payload/types";
-
 const Categories: CollectionConfig = {
   slug: 'categorias',
   access: {
     read: () => true
     /*read: ({ req: { user } }) => user.roles.includes("admin"),
- 
      create: ({ req: { user } }) => user.roles.includes("admin"),
- 
      update: ({ req: { user } }) => user.roles.includes("admin"),
       */
   },
@@ -27,7 +24,6 @@ const Categories: CollectionConfig = {
   },
   fields: [
     {
-
       name: "NombreCategoria",
       type: "text",
       label: "Nombre de la Categoria",
@@ -37,9 +33,7 @@ const Categories: CollectionConfig = {
       //saveToJWT: true,
       admin: {
         placeholder: "Nombre aqui",
-
       },
-
     },
     {
       name: "EstadoCategoria",
@@ -65,5 +59,4 @@ const Categories: CollectionConfig = {
   ],
   timestamps: true
 }
-
 export default Categories;

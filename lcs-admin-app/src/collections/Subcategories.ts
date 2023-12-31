@@ -28,18 +28,18 @@ const Subcategories: CollectionConfig =  {
             }
         },
         {
-          name: "CategoriaSubcategoria", // required
+          name: "CategoriaSubcategoria", 
           label: "Nombre de la Categoria",
-          type: 'relationship', // required
-          relationTo:'categorias', //required eg:users
+          type: 'relationship', 
+          relationTo:'categorias', 
           hasMany: true,
           required: true
         },
         {
-            name: "EstadoSubcategoria", // required
-            type: "select", // required
+            name: "EstadoSubcategoria", 
+            type: "select", 
             label:"Estado de la Subcategoria",
-            hasMany: false, /// set to true if you want to select multiple
+            hasMany: false, 
             options: [
                 {
                     label: "Publica",
@@ -58,6 +58,6 @@ const Subcategories: CollectionConfig =  {
         },
     ],
     timestamps: true,
-};
+}
 
 export default Subcategories;
