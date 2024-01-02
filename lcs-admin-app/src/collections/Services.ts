@@ -26,21 +26,21 @@ const Services: CollectionConfig = {
             }
         },
         {
-            type: 'row', 
+            type: 'row',
             fields: [
-              /*  {
-                    name: "SubcategoriaServicio", 
+                {
+                    name: "SubcategoriaServicio",
                     label: "Subcategoria del Servicio",
-                    type: 'relationship', 
-                    relationTo: 'subcategorias', 
-                    maxDepth:0,
+                    type: 'relationship',
+                    relationTo: 'subcategorias',
+                    maxDepth: 0,
                     filterOptions: ({ relationTo }) => {
                         if (relationTo === 'subcategorias') {
-                            const isContentStateProductCategory = 'asdasd'
-                                return {
-                                    TipoCategoriaSubcategoria: { equals: isContentStateProductCategory },
-                                }
-                        }else{
+                            const isContainService = 'Service';
+                            return {
+                                TipoCategoriaSubcategoria: { contains: isContainService }
+                            }
+                        } else {
                             return {}
                         }
                     },
@@ -49,11 +49,11 @@ const Services: CollectionConfig = {
                     admin: {
                         width: '50%',
                     }
-                },*/
+                },
                 {
-                    name: "PrecioServicio", 
+                    name: "PrecioServicio",
                     label: "Costo del Servicio",
-                    type: "number", 
+                    type: "number",
                     required: false,
                     admin: {
                         step: 1,
@@ -67,16 +67,16 @@ const Services: CollectionConfig = {
         },
         {
             type: 'array',
-            name:'ImagenesServicio',
+            name: 'ImagenesServicio',
             required: true,
             maxRows: 10,
             minRows: 1,
             fields: [
                 {
-                    name: "ImagenServicio", 
+                    name: "ImagenServicio",
                     label: "Imagen del Servicio",
-                    type: 'upload', 
-                    relationTo: 'imagenes', 
+                    type: 'upload',
+                    relationTo: 'imagenes',
                     required: false,
                     hooks: {
                         beforeValidate: [
@@ -92,10 +92,10 @@ const Services: CollectionConfig = {
             ]
         },
         {
-            name: "EstadoServicio", 
+            name: "EstadoServicio",
             label: 'Estado del Servicio',
-            type: "select", 
-            hasMany: false, 
+            type: "select",
+            hasMany: false,
             options: [
                 {
                     label: "Disponible",
@@ -113,10 +113,10 @@ const Services: CollectionConfig = {
             }
         },
         {
-            name: "UbicacionServicio", 
+            name: "UbicacionServicio",
             label: "Ubicaciones Disponibles",
-            type: 'relationship', 
-            relationTo: 'ubicaciones', 
+            type: 'relationship',
+            relationTo: 'ubicaciones',
             hasMany: true,
             required: true,
             admin: {

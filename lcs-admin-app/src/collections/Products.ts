@@ -44,7 +44,7 @@ const Products: CollectionConfig = {
         {
             type: 'row',
             fields: [
-              /*  {
+                {
 
                     name: "SubcategoriaProducto",
                     label: "Subcategoria del Producto",
@@ -54,9 +54,9 @@ const Products: CollectionConfig = {
                     required: true,
                     filterOptions: ({ relationTo }) => {
                         if (relationTo === 'subcategorias') {
-                            const isContentStateProductCategory = 'asdasd';
+                            const isContainProduct = 'Product';
                             return {
-                                TipoCategoriaSubcategoria: {equals: isContentStateProductCategory}
+                                TipoCategoriaSubcategoria: {contains: isContainProduct }
                             }
                         } else {
                             return {}
@@ -65,7 +65,7 @@ const Products: CollectionConfig = {
                     admin: {
                         width: '40%',
                     }
-                },*/
+                },
                 {
                     name: 'CodigoProducto',
                     label: 'Codigo del Producto',
