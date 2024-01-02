@@ -91,6 +91,15 @@ const Services: CollectionConfig = {
                 },
             ]
         },
+
+
+
+        {
+            name: "DetalleServicio",
+            type: "richText",
+            label: "Detalles del Servicio",
+        },
+
         {
             name: "EstadoServicio",
             label: 'Estado del Servicio',

@@ -458,49 +458,15 @@ const Orders: CollectionConfig = {
                   },*/
             ]
         },
-        {
-            type: 'row',
-            fields: [
-                {
-                    name: 'UbicacionProductoServicio',
-                    label: 'Ubicaciones Disponibles',
-                    type: 'textarea',
-                    admin: {
-                        readOnly: true,
-                        width: '50%'
-                    },
-                    access: {
-                        update: () => false,
-                    },
-                    hooks: {
-                        beforeChange: [({ siblingData }) => {
-                            return siblingData.UbicacionProductoServicio = undefined
-                        }],
-                        afterRead: [getProductServiceLocation]
-                    }
-                },
-                {
-                    name: "UbicacionClientePedido",
-                    type: "textarea",
-                    label: "Ubicacion del Cliente",
-                    required: false,
-                    admin: {
-                        width: '50%',
-                        readOnly: true,
-                    },
-                    access: {
-                        update: () => false
-                    },
-                    hooks: {
-                        beforeChange: [({ siblingData }) => {
-                            return siblingData.UbicacionProductoServicio = undefined
-                        }],
-                        afterRead: [getClientLocation]
-                    }
-                },
+       
+       
+       
+       
+       
+       
 
-            ]
-        },
+       
+       
         {
             type: 'row',
             fields: [
@@ -555,6 +521,48 @@ const Orders: CollectionConfig = {
             ]
         },
         {
+            type: 'row',
+            fields: [
+                {
+                    name: 'UbicacionProductoServicio',
+                    label: 'Ubicaciones Disponibles',
+                    type: 'textarea',
+                    admin: {
+                        readOnly: true,
+                        width: '50%'
+                    },
+                    access: {
+                        update: () => false,
+                    },
+                    hooks: {
+                        beforeChange: [({ siblingData }) => {
+                            return siblingData.UbicacionProductoServicio = undefined
+                        }],
+                        afterRead: [getProductServiceLocation]
+                    }
+                },
+                {
+                    name: "UbicacionClientePedido",
+                    type: "textarea",
+                    label: "Ubicacion del Cliente",
+                    required: false,
+                    admin: {
+                        width: '50%',
+                        readOnly: true,
+                    },
+                    access: {
+                        update: () => false
+                    },
+                    hooks: {
+                        beforeChange: [({ siblingData }) => {
+                            return siblingData.UbicacionProductoServicio = undefined
+                        }],
+                        afterRead: [getClientLocation]
+                    }
+                },
+            ]
+        },
+        {
             name: 'ErrorMessage',
             type: 'ui',
             admin: {
@@ -596,7 +604,7 @@ const Orders: CollectionConfig = {
                         },
                         {
                             name: "CantidadProductoPedido",
-                            label: "Cantidad Solucitada",
+                            label: "Cantidad Solicitada",
                             type: "number",
                             required: false,
                             defaultValue: 0,
