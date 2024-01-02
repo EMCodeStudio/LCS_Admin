@@ -238,8 +238,6 @@ const getClientLocation: FieldHook = async ({ data }) => {
 
 }
 
-
-
 const getProductServiceImageId: FieldHook = async ({ data }) => {
     try {
         if (data && data.ProductoServicioPedido.value !== undefined) {
@@ -274,6 +272,7 @@ const getProductServiceImageId: FieldHook = async ({ data }) => {
     }
     // return null
 }
+
 const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     try {
         if (data) {
@@ -296,7 +295,6 @@ const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     } catch (error) {
         console.log("Error en la funcion setProductServiceImageChecked: ", error)
     }
-    // return null;
 }
 
 const Orders: CollectionConfig = {
@@ -400,7 +398,7 @@ const Orders: CollectionConfig = {
                                 }
                             }
                             return {
-                                NombreProducto: { exists: false },
+                                NombreCategoria: { exists: false },
                             }
                         }
                         if (relationTo === 'servicios') {
@@ -546,7 +544,7 @@ const Orders: CollectionConfig = {
                                         return discount;
                                     }
                                     else {
-                                        return data.DescuentoPedido = 0
+                                        return data.DescuentoPedido == 0
                                     }
                                 }
                             }

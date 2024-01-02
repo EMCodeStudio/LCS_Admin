@@ -26,20 +26,30 @@ const Services: CollectionConfig = {
             }
         },
         {
-            type: 'row',
+            type: 'row', 
             fields: [
-                {
-
+              /*  {
                     name: "SubcategoriaServicio", 
                     label: "Subcategoria del Servicio",
                     type: 'relationship', 
                     relationTo: 'subcategorias', 
+                    maxDepth:0,
+                    filterOptions: ({ relationTo }) => {
+                        if (relationTo === 'subcategorias') {
+                            const isContentStateProductCategory = 'asdasd'
+                                return {
+                                    TipoCategoriaSubcategoria: { equals: isContentStateProductCategory },
+                                }
+                        }else{
+                            return {}
+                        }
+                    },
                     hasMany: false,
                     required: true,
                     admin: {
                         width: '50%',
                     }
-                },
+                },*/
                 {
                     name: "PrecioServicio", 
                     label: "Costo del Servicio",

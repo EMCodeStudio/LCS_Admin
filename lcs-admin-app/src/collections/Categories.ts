@@ -6,11 +6,11 @@ const Categories: CollectionConfig = {
     /*read: ({ req: { user } }) => user.roles.includes("admin"),
      create: ({ req: { user } }) => user.roles.includes("admin"),
      update: ({ req: { user } }) => user.roles.includes("admin"),
-      */
+    */
   },
   admin: {
     useAsTitle: 'NombreCategoria',
-    defaultColumns: ['NombreCategoria', 'EstadoCategoria'],
+    defaultColumns: ['NombreCategoria', 'TipoCategoria', 'EstadoCategoria'],
     group: 'INVENTARIO',
     /* hidden: ({ user }) => {
       if (!user.roles.toString().includes('admin')) {
@@ -35,6 +35,27 @@ const Categories: CollectionConfig = {
         placeholder: "Nombre aqui",
       },
     },
+    {
+      name: "TipoCategoria", 
+      label: "Que Incluira esta Categoria?",
+      type: 'radio', 
+      required: false,
+      options: [ 
+        {
+          label: 'Productos',
+          value: 'products',
+        },
+        {
+          label: 'Servicios',
+          value: 'services',
+        },
+      ],
+      defaultValue: 'products',
+      admin: {
+        layout: 'horizontal',
+      }
+    },
+
     {
       name: "EstadoCategoria",
       label: "Estado de la Categoria",

@@ -44,18 +44,28 @@ const Products: CollectionConfig = {
         {
             type: 'row',
             fields: [
-                {
+              /*  {
 
-                    name: "SubcategoriaProducto", 
+                    name: "SubcategoriaProducto",
                     label: "Subcategoria del Producto",
-                    type: 'relationship', 
-                    relationTo: 'subcategorias', 
+                    type: 'relationship',
+                    relationTo: 'subcategorias',
                     hasMany: false,
                     required: true,
+                    filterOptions: ({ relationTo }) => {
+                        if (relationTo === 'subcategorias') {
+                            const isContentStateProductCategory = 'asdasd';
+                            return {
+                                TipoCategoriaSubcategoria: {equals: isContentStateProductCategory}
+                            }
+                        } else {
+                            return {}
+                        }
+                    },
                     admin: {
                         width: '40%',
                     }
-                },
+                },*/
                 {
                     name: 'CodigoProducto',
                     label: 'Codigo del Producto',
@@ -69,9 +79,9 @@ const Products: CollectionConfig = {
                 },
 
                 {
-                    name: "TamanoProducto", 
-                    type: "select", 
-                    hasMany: false, 
+                    name: "TamanoProducto",
+                    type: "select",
+                    hasMany: false,
                     label: 'Tamaño del Producto',
                     admin: {
                         width: '30%',
@@ -96,8 +106,8 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "esMarcaProducto", 
-            type: "checkbox", 
+            name: "esMarcaProducto",
+            type: "checkbox",
             label: "Tiene una Marca?",
             defaultValue: false,
             admin: {
@@ -105,8 +115,8 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "MarcaProducto", 
-            type: "relationship", 
+            name: "MarcaProducto",
+            type: "relationship",
             relationTo: 'marcas',
             label: "Marca del Producto",
             required: false,
@@ -115,8 +125,8 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "esMedidaPesoProducto", 
-            type: "checkbox", 
+            name: "esMedidaPesoProducto",
+            type: "checkbox",
             label: "Tiene Medidas y Peso?",
             defaultValue: false,
             admin: {
@@ -130,10 +140,10 @@ const Products: CollectionConfig = {
             },
             fields: [
                 {
-                    name: "UnidadMedidaProducto", 
-                    type: "select", 
+                    name: "UnidadMedidaProducto",
+                    type: "select",
                     label: 'Unidad de Medida',
-                    hasMany: false, 
+                    hasMany: false,
                     options: [
                         {
                             label: "(m) Metros",
@@ -159,9 +169,9 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "AltoProducto", 
+                    name: "AltoProducto",
                     label: "Altura del Producto",
-                    type: "number", 
+                    type: "number",
                     required: false,
                     admin: {
                         step: 1,
@@ -170,9 +180,9 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "AnchoProducto", 
+                    name: "AnchoProducto",
                     label: "Ancho del Producto",
-                    type: "number", 
+                    type: "number",
                     required: false,
                     admin: {
                         step: 1,
@@ -191,10 +201,10 @@ const Products: CollectionConfig = {
             },
             fields: [
                 {
-                    name: "UnidadPesoProducto", 
-                    type: "select", 
+                    name: "UnidadPesoProducto",
+                    type: "select",
                     label: 'Unidad de Peso',
-                    hasMany: false, 
+                    hasMany: false,
                     options: [
                         {
                             label: "(kg) Kilogramo",
@@ -220,9 +230,9 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "PesoProducto", 
+                    name: "PesoProducto",
                     label: "Peso del Producto",
-                    type: "number", 
+                    type: "number",
                     required: false,
                     admin: {
                         step: 1,
@@ -236,9 +246,9 @@ const Products: CollectionConfig = {
             type: 'row',
             fields: [
                 {
-                    name: "ColorProducto", 
+                    name: "ColorProducto",
                     label: "Color del Producto",
-                    type: "relationship", 
+                    type: "relationship",
                     relationTo: 'colores',
                     required: false,
                     admin: {
@@ -246,9 +256,9 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "CantidadProducto", 
+                    name: "CantidadProducto",
                     label: "Cantidad Disponible",
-                    type: "number", 
+                    type: "number",
                     required: true,
                     admin: {
                         step: 1,
@@ -257,9 +267,9 @@ const Products: CollectionConfig = {
                     }
                 },
                 {
-                    name: "PrecioProducto", 
+                    name: "PrecioProducto",
                     label: "Precio del Producto",
-                    type: "number", 
+                    type: "number",
                     required: true,
                     admin: {
                         step: 1,
@@ -362,10 +372,10 @@ const Products: CollectionConfig = {
             minRows: 1,
             fields: [
                 {
-                    name: "ImagenProducto", 
+                    name: "ImagenProducto",
                     label: "Imagen del Producto",
-                    type: 'upload', 
-                    relationTo: 'imagenes', 
+                    type: 'upload',
+                    relationTo: 'imagenes',
                     required: true,
                     hooks: {
                         beforeValidate: [
@@ -381,10 +391,10 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "EstadoProducto", 
-            type: "select", 
+            name: "EstadoProducto",
+            type: "select",
             label: "Estado del Producto",
-            hasMany: false, 
+            hasMany: false,
             options: [
                 {
                     label: "Nuevo",
@@ -402,8 +412,8 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "FechaIngresoProducto", 
-            type: "date", 
+            name: "FechaIngresoProducto",
+            type: "date",
             label: "Fecha Ingreso del Producto",
             required: true,
             admin: {
@@ -419,8 +429,8 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "HoraIngresoProducto", 
-            type: "date", 
+            name: "HoraIngresoProducto",
+            type: "date",
             label: "Hora Ingreso del Producto",
             required: true,
             admin: {
@@ -432,10 +442,10 @@ const Products: CollectionConfig = {
             }
         },
         {
-            name: "UbicacionProducto", 
+            name: "UbicacionProducto",
             label: "Ubicaciones Disponibles",
-            type: 'relationship', 
-            relationTo: 'ubicaciones', 
+            type: 'relationship',
+            relationTo: 'ubicaciones',
             hasMany: true,
             required: true,
             admin: {
