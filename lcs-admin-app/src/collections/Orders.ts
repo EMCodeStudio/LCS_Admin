@@ -301,6 +301,7 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
         const { CantidadProductoPedido } = data.DetallesPagoPedido
         console.log('RESULTADO DE CANTIDAD FIELD: ', CantidadProductoPedido)
 
+        
         if (CantidadProductoPedido > 0) {
             const productFieldId = data.ProductoServicioPedido.value;
             const collectionName = 'productos';
