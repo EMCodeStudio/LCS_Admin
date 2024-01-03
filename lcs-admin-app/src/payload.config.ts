@@ -27,6 +27,7 @@ import PQR from './collections/PQR'
 
 export default buildConfig({
   admin: {
+
     user: Users.slug,
     bundler: webpackBundler(),
     meta: {
@@ -40,6 +41,19 @@ export default buildConfig({
         Icon
       }
     },
+
+    // ...
+   /* livePreview: {
+      url: 'http://localhost:3000', // The URL to your front-end, this can also be a function (see below)
+      collections: ['pages'], // The collections to enable Live Preview on (globals are also possible)
+    },*/
+
+  
+  
+  
+
+    
+    
   },
   editor: slateEditor({}),
   collections: [

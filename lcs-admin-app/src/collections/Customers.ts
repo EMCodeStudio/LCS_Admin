@@ -123,7 +123,7 @@ const Customers: CollectionConfig = {
             type: 'collapsible',
             label: 'Datos de la Empresa',
             admin: {
-                condition: ({ TipoPersona }) => TipoPersona === 'juristic',
+                condition: ({ TipoPersonaCliente }) => TipoPersonaCliente === 'juristic',
             },
             fields: [
                 {

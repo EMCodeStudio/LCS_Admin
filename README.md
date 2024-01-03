@@ -92,6 +92,12 @@ Reset Password POST: <http://localhost:3000/api/usuarios/reset-password>
     "Estado": "published",
   }
 
+### STOP PROGRAM USING PORT 3000
+
+- CMD: netstat -ano | find "3000"
+- LISTENING       6236
+- TASK PID AND CLOSE or taskkill /F /PID 6236
+
 # Commands
 
 - cd lcs-admin-app
