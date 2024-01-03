@@ -318,21 +318,20 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
                 console.log('RESULTADO DE CONSULTA DE ID DE PRODUCTO: ', resultProductId)
               
                 const responseStock = await payload.update({
-                    collection: 'posts',
+                    collection: 'productos',
                     id: resultProductId,
                     data: {
-                      CantidadProdcuto: CantidadProductoPedido
+                      CantidadProducto: CantidadProductoPedido
                     },
                   })
                   
                   console.log('RESULTADO DE PRODUCT UPDATED : ', responseStock)
 
-                    if (responseStock.length) {
+                    if (responseStock.ok) {
                         const resultData = responseStock.toString;
-                        console.log('RESULTADO DE RETURN DE STOCK PRODUCTO: ', resultData);
+                        console.log('RESULTADO DE RETURN DE STOCK PRODUCTO: ', resultData)
                     } else {
                        console.log('Error en la solicitud al servidor. Código de estado');
-                        // También puedes imprimir el cuerpo de la respuesta para depurar
                         const errorBody = responseStock;
                         console.log('Cuerpo de la respuesta: ', errorBody);
                     }
