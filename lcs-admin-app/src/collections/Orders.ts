@@ -299,10 +299,12 @@ const setProductServiceImageChecked: FieldHook = async ({ data }) => {
 const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
     try {
         const { CantidadProductoPedido } = data.DetallesPagoPedido
-        console.log('RESULTADO DE CANTIDAD FIELD: ', CantidadProductoPedido)
+        const stateOrderPayment = data.EstadoPagoPedido
 
-        
-        if (CantidadProductoPedido > 0) {
+        console.log('RESULTADO DE CANTIDAD FIELD: ', CantidadProductoPedido)
+        console.log('RESULTADO DE ESTADO PAGO FIELD: ', stateOrderPayment)
+
+        if (CantidadProductoPedido > 0 && stateOrderPayment ==='Realizado') {
             const productFieldId = data.ProductoServicioPedido.value;
             const collectionName = 'productos';
             console.log('RESULTADO DE PRODUCTO FIELD: ', collectionName, ' - ', productFieldId)
@@ -327,7 +329,6 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
                   })
                   
                   console.log('RESULTADO DE PRODUCT UPDATED : ', responseStock)
-
                     if (responseStock.ok) {
                         const resultData = responseStock.toString;
                         console.log('RESULTADO DE RETURN DE STOCK PRODUCTO: ', resultData)
@@ -338,7 +339,6 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
                     }
                 }
             }
-        
         } catch (error) {
             console.log('ERROR AL ACTULIZAR LA CANTIDAD DEL PRODUCTO: ', error)
         }
