@@ -132,16 +132,16 @@ function setClientLocationGlobal(productServiceLocation: string): string {
     return globalLocationString;
 }
 
+
 function setProductStockStateGlobal(productOrderState: string): string {
     globalProductString = globalProductString || '';
     let ProductResult: string = '';
     if (!globalProductString.includes(productOrderState)) {
-        ProductResult = globalProductString = productOrderState;
+        ProductResult = globalProductString += productOrderState;
     }
     globalProductString = ProductResult
     return globalProductString;
 }
-
 function setCheckedClientLocationAtProductService(clientLocationString: string): string {
     if (clientLocationString) {
         const lowerCaseClientLocation = clientLocationString.toLowerCase()
@@ -155,7 +155,6 @@ function setCheckedClientLocationAtProductService(clientLocationString: string):
         return 'Ubicacion del Cliente No Encontrada.';
     }
 }
-
 const getProductServiceLocation: FieldHook = async ({ data }) => {
     try {
         if (data && data.ProductoServicioPedido.value !== undefined) {
@@ -211,7 +210,6 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
     }
     //return null;
 }
-
 const getClientLocation: FieldHook = async ({ data }) => {
     try {
         if (data && data.ClientePedido !== undefined) {
@@ -280,7 +278,6 @@ const getProductServiceImageId: FieldHook = async ({ data }) => {
     }
     // return null
 }
-
 const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     try {
         if (data) {
@@ -304,8 +301,7 @@ const setProductServiceImageChecked: FieldHook = async ({ data }) => {
         console.log("Error en la funcion setProductServiceImageChecked: ", error)
     }
 }
-
-const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
+const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
     try {
         const { CantidadProductoPedido } = data.DetallesPagoPedido;
         const stateOrderPayment = data.EstadoPagoPedido;
@@ -324,29 +320,34 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
                 }
             })
             if (productResponse.docs && productResponse.docs.length > 0) {
-
                 const resultProductId = productResponse.docs[0].id;
                 const resultProductStock = productResponse.docs[0].CantidadProducto;
                 const countStockNumber = resultProductStock as number;
-
-                if (countStockNumber >= CantidadProductoPedido && stateOrderApproved && isOrderApproved === 'notApproved') {
-                    const newStock = countStockNumber - CantidadProductoPedido;
-                    setProductStockStateGlobal('Aprobado')
-                    await payload.update({
-                        collection: 'productos',
-                        id: resultProductId,
-                        data: {
-                            CantidadProducto: newStock
-                        },
-                    })
-                    console.log('Producto Stock Actualizado.');
+                setProductStockStateGlobal('')
+                if (stateOrderApproved && isOrderApproved === 'notApproved') {
+                    if (countStockNumber >= CantidadProductoPedido) {
+                        const newStock = countStockNumber - CantidadProductoPedido;
+                        setProductStockStateGlobal('Aprobado')
+                        await payload.update({
+                            collection: 'productos',
+                            id: resultProductId,
+                            data: {
+                                CantidadProducto: newStock
+                            },
+                        })
+                        console.log('Producto Stock Actualizado.')
+                    } else {
+                        console.log('CANTIDAD SOLICITADA SUPERA EL STOCK DISPONIBLE!.')
+                        setProductStockStateGlobal('No Aprobado')
+                    }
                 } else {
-                    console.log('CANTIDAD SOLICITADA SUPERA EL STOCK DISPONIBLE!.');
+                    console.log('DEBE MARCAR LA CASILLA DE APROBACION!.');
                     setProductStockStateGlobal('No Aprobado')
                 }
             }
             else {
-                // console.log('Producto no encontrado en la respuesta.');
+                console.log('Producto no encontrado en la funcion updateProductStock.')
+                setProductStockStateGlobal('No Aprobado')
             }
 
         } else {
@@ -357,19 +358,15 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
     } catch (error) {
         console.log('ERROR AL ACTULIZAR LA CANTIDAD DEL PRODUCTO: ', error)
     }
+
 }
-
-
 const getOrderApproved: FieldHook = async ({ data }) => {
-   // console.log('VARIABLE GLOBAL PRODUCT STATE STOCK', globalProductString)
-    const isOrderApproved = data ? data.AprobacionEstadoPedido : undefined;
-   // console.log('FIELD  ORDER APROBACION getOrderApproved: ', isOrderApproved)
-    if (globalProductString === 'Aprobado' && isOrderApproved === 'notApproved') {
+    console.log('VARIABLE GLOBAL PRODUCT STATE STOCK', globalProductString)
+    // console.log('FIELD  ORDER APROBACION getOrderApproved: ', isOrderApproved)
+    if (data && globalProductString === 'Aprobado' && data.AprobacionEstadoPedido === 'notApproved') {
         return 'approved'
     }
 }
-
-
 const getProductOrderStockState: FieldHook = async ({ data }) => {
     const isOrderApproved = data ? data.AprobacionEstadoPedido : undefined;
     //console.log('FIELD  ORDER APROBACION getProductOrderStockState: ', isOrderApproved)
@@ -377,14 +374,40 @@ const getProductOrderStockState: FieldHook = async ({ data }) => {
         return false;
     }
 }
-
 const validateProductRequest: FieldHook = async ({ data, originalDoc }) => {
     if (data && data.AprobacionEstadoPedido === 'approved') {
-        const {CantidadProductoPedido} = originalDoc.DetallesPagoPedido
+        const { CantidadProductoPedido } = originalDoc.DetallesPagoPedido
         console.log('ULTIMA CANTIDAD ORDER APROBACION validateProductRequest: ', CantidadProductoPedido)
         return CantidadProductoPedido
     }
 }
+
+const getProductStockOrder: FieldHook = async ({ data }) => {
+    try {
+        if (data && data.TipoVentaPedido === 'product' && data.ProductoServicioPedido !== undefined) {
+            const fieldProductId = data.ProductoServicioPedido.value;
+            console.log('ID DEL PRODUCTO getProductStockOrder: ', fieldProductId)
+            const responseProductoStock = await payload.find({
+                collection: 'productos',
+                where: {
+                    id: fieldProductId,
+                }
+            })
+            if (responseProductoStock.docs && responseProductoStock.docs.length > 0) {
+                const productStockData = responseProductoStock.docs[0].CantidadProducto;
+                return productStockData;
+            } else {
+                console.log('SIN STOCK DE PRODUCTOS!')
+            }
+        } else {
+            console.log('DEBE SELECCIONAR UN PRODUCTO DE LA LISTA!')
+        }
+    } catch (error) {
+        console.log('Error en la Funcion getProductStockOrder: ', error)
+    }
+}
+
+
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -396,7 +419,6 @@ const Orders: CollectionConfig = {
         useAsTitle: 'ClientePedido',
         defaultColumns: ['ClientePedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS',
-
     },
     labels: {
         singular: 'Pedido',
@@ -517,6 +539,7 @@ const Orders: CollectionConfig = {
                                 NombreServicio: { exists: false },
                             }
                         }
+
                     },
                     admin: {
                         description: 'Seleccione un Producto o Servicio de la Lista',
@@ -562,59 +585,6 @@ const Orders: CollectionConfig = {
                           }
                       },
                   },*/
-            ]
-        },
-        {
-            type: 'row',
-            fields: [
-                {
-                    name: "OfertaPedido",
-                    label: "Aplicar Descuento?",
-                    type: 'radio',
-                    required: false,
-                    options: [
-                        {
-                            label: 'Si',
-                            value: 'apply',
-                        },
-                        {
-                            label: 'No',
-                            value: 'noApply',
-                        },
-                    ],
-                    defaultValue: 'noApply',
-                    admin: {
-                        layout: 'horizontal',
-                        width: '30%'
-                    }
-                },
-                {
-                    name: "DescuentoPedido",
-                    type: "number",
-                    label: "% Descuento %",
-                    required: false,
-                    admin: {
-                        condition: ({ OfertaPedido }) => OfertaPedido === 'apply',
-                        width: '70%'
-                    },
-                    hooks: {
-                        beforeChange: [
-                            ({ data }) => {
-                                if (data && data.length) {
-                                    const twoDigits = /^\d{2}$/;
-                                    const discount = data.DescuentoPedido;
-                                    if (twoDigits.test(discount)) {
-                                        return discount;
-                                    }
-                                    else {
-                                        return data.DescuentoPedido == 0
-                                    }
-                                }
-                            }
-
-                        ]
-                    }
-                },
             ]
         },
         {
@@ -670,6 +640,99 @@ const Orders: CollectionConfig = {
                 }
             },
         },
+        {
+            type: 'row',
+            fields: [
+                {
+                    type: 'row',
+                    fields: [
+                        {
+                            name: "OfertaPedido",
+                            label: "Aplicar Descuento?",
+                            type: 'radio',
+                            required: false,
+                            options: [
+                                {
+                                    label: 'Si',
+                                    value: 'apply',
+                                },
+                                {
+                                    label: 'No',
+                                    value: 'noApply',
+                                },
+                            ],
+                            defaultValue: 'noApply',
+                            admin: {
+                                layout: 'horizontal',
+                                width: '50%'
+                            }
+                        },
+                        {
+                            name: "DescuentoPedido",
+                            type: "number",
+                            label: "% Descuento %",
+                            required: false,
+                            admin: {
+                                condition: ({ OfertaPedido }) => OfertaPedido === 'apply',
+                                width: '50%'
+                            },
+                            hooks: {
+                                beforeChange: [
+                                    ({ data }) => {
+                                        if (data && data.length) {
+                                            const twoDigits = /^\d{2}$/;
+                                            const discount = data.DescuentoPedido;
+                                            if (twoDigits.test(discount)) {
+                                                return discount;
+                                            }
+                                            else {
+                                                return data.DescuentoPedido == 0
+                                            }
+                                        }
+                                    }
+                                ]
+                            }
+                        },
+                    ]
+                },
+
+
+                {
+                    name: "StockProductoPedido",
+                    label: "Stock Disponible:",
+                    type: "number",
+                    required: false,
+                    admin: {
+                        width: '18%',
+                        readOnly: true,
+                        step: 1,
+                        //   condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'service'
+                    },
+                    hooks: {
+                        afterChange: [getProductStockOrder],
+                        afterRead: [getProductStockOrder]
+                    }
+                },
+            ],
+        },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
         {
             name: "DetallesPagoPedido",
             type: "group",
@@ -737,6 +800,10 @@ const Orders: CollectionConfig = {
                             hooks: {
                                 beforeChange: [getTotalPrice],
                                 afterRead: [getTotalPrice]
+                            },
+                            access: {
+                                update: () => true,
+                                read: () => true
                             },
                             admin: {
                                 readOnly: true,
@@ -858,11 +925,11 @@ const Orders: CollectionConfig = {
             }
         },
         {
-            name: "AprobacionEstadoPedido", // required
+            name: "AprobacionEstadoPedido",
             label: "Aprobacion de la Compra:",
-            type: 'radio', // required
+            type: 'radio',
             required: false,
-            options: [ // required
+            options: [
                 {
                     label: 'Aprobado',
                     value: 'approved',
