@@ -3,7 +3,6 @@ import { CollectionBeforeChangeHook, CollectionConfig, FieldHook } from "payload
 import ErrorMessages from "../components/Messages/ErrorMessages";
 import payload from "payload";
 
-
 const getProductServicePrice: FieldHook = async ({ data }) => {
     try {
         if (data && data.ProductoServicioPedido.value !== undefined) {
@@ -306,16 +305,13 @@ const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     }
 }
 
-
-
-
-
-
 const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, operation, originalDoc }) => {
     try {
         const { CantidadProductoPedido } = data.DetallesPagoPedido;
         const stateOrderPayment = data.EstadoPagoPedido;
-
+        const stateOrderApproved = data.EstadoCompraPedido;
+        const isOrderApproved = data.AprobacionEstadoPedido;
+        console.log('FIELD  ORDER APROBACION updateProductStock: ', isOrderApproved)
         if (CantidadProductoPedido > 0 && stateOrderPayment === 'paid') {
             const productFieldId = data.ProductoServicioPedido.value;
             const collectionName = 'productos';
@@ -328,14 +324,13 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
                 }
             })
             if (productResponse.docs && productResponse.docs.length > 0) {
-                const resultProductId = productResponse.docs[0].id
-                const resultProductStock = productResponse.docs[0].CantidadProducto
-                const countStockNumber = resultProductStock as number
 
-                if (countStockNumber >= CantidadProductoPedido) {
+                const resultProductId = productResponse.docs[0].id;
+                const resultProductStock = productResponse.docs[0].CantidadProducto;
+                const countStockNumber = resultProductStock as number;
+
+                if (countStockNumber >= CantidadProductoPedido && stateOrderApproved && isOrderApproved === 'notApproved') {
                     const newStock = countStockNumber - CantidadProductoPedido;
-
-                    data.EstadoCompraPedido == true
                     setProductStockStateGlobal('Aprobado')
                     await payload.update({
                         collection: 'productos',
@@ -344,23 +339,19 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
                             CantidadProducto: newStock
                         },
                     })
-
                     console.log('Producto Stock Actualizado.');
-
-                    return data
-
                 } else {
                     console.log('CANTIDAD SOLICITADA SUPERA EL STOCK DISPONIBLE!.');
-                    setProductStockStateGlobal('NoAprobado')
+                    setProductStockStateGlobal('No Aprobado')
                 }
-
             }
             else {
                 // console.log('Producto no encontrado en la respuesta.');
             }
 
         } else {
-            // console.log('DEBE AGREGAR UNA CANTIDAD Y CAMBIAR EL ESTADO DE PAGO A REALIZADO')
+            console.log('DEBE AGREGAR UNA CANTIDAD Y CAMBIAR EL ESTADO DE PAGO A REALIZADO')
+            setProductStockStateGlobal('No Aprobado')
         }
 
     } catch (error) {
@@ -369,34 +360,43 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data, req, opera
 }
 
 
-
-
-
-
-const getProductOrderStockState: FieldHook = async ({ data }) => {
-    if (data && data.EstadoPagoPedido === 'paid') {
-        console.log('VARIABLE GLLOBAL PRODCUT STATE STOCK', globalProductString)
-        if(globalProductString === 'Aprobado' ) {
-            return true
-        }
-       
+const getOrderApproved: FieldHook = async ({ data }) => {
+   // console.log('VARIABLE GLOBAL PRODUCT STATE STOCK', globalProductString)
+    const isOrderApproved = data ? data.AprobacionEstadoPedido : undefined;
+   // console.log('FIELD  ORDER APROBACION getOrderApproved: ', isOrderApproved)
+    if (globalProductString === 'Aprobado' && isOrderApproved === 'notApproved') {
+        return 'approved'
     }
 }
 
 
+const getProductOrderStockState: FieldHook = async ({ data }) => {
+    const isOrderApproved = data ? data.AprobacionEstadoPedido : undefined;
+    //console.log('FIELD  ORDER APROBACION getProductOrderStockState: ', isOrderApproved)
+    if (data && isOrderApproved === 'approved') {
+        return false;
+    }
+}
 
-
-
+const validateProductRequest: FieldHook = async ({ data, originalDoc }) => {
+    if (data && data.AprobacionEstadoPedido === 'approved') {
+        const {CantidadProductoPedido} = originalDoc.DetallesPagoPedido
+        console.log('ULTIMA CANTIDAD ORDER APROBACION validateProductRequest: ', CantidadProductoPedido)
+        return CantidadProductoPedido
+    }
+}
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
         read: () => true,
-        create: () => true
+        create: () => true,
+
     },
     admin: {
         useAsTitle: 'ClientePedido',
         defaultColumns: ['ClientePedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS',
+
     },
     labels: {
         singular: 'Pedido',
@@ -564,10 +564,6 @@ const Orders: CollectionConfig = {
                   },*/
             ]
         },
-
-
-
-
         {
             type: 'row',
             fields: [
@@ -707,9 +703,16 @@ const Orders: CollectionConfig = {
                             name: "CantidadProductoPedido",
                             label: "Cantidad Solicitada",
                             type: "number",
-                            required: false,
-                            defaultValue: 0,
+                            required: true,
+                            //defaultValue: 0,
+                            hooks: {
+                                beforeChange: [validateProductRequest],
+                                afterRead: [validateProductRequest]
+                            },
+
+
                             admin: {
+                                placeholder: '0',
                                 width: '50%',
                                 condition: (data) => {
                                     if (data.TipoVentaPedido === 'product') {
@@ -723,7 +726,6 @@ const Orders: CollectionConfig = {
                         },
                     ],
                 },
-
                 {
                     type: 'row',
                     fields: [
@@ -732,17 +734,12 @@ const Orders: CollectionConfig = {
                             label: "$ Total a Pagar",
                             type: "number",
                             required: false,
-                            access: {
-                                create: () => false,
-                                update: () => false
-                            },
                             hooks: {
-                                beforeChange: [({ siblingData }) => {
-                                    siblingData.TotalPrice = undefined
-                                }],
+                                beforeChange: [getTotalPrice],
                                 afterRead: [getTotalPrice]
                             },
                             admin: {
+                                readOnly: true,
                                 width: '100%',
                                 step: 1,
                                 placeholder: '0.00',
@@ -850,12 +847,44 @@ const Orders: CollectionConfig = {
         {
             name: "EstadoCompraPedido",
             type: "checkbox",
-            label: "Estado de Compra",
+            label: "Estado de Compra Aprobado?",
+            defaultValue: false,
             admin: {
                 position: 'sidebar'
             },
             hooks: {
-                beforeChange: [getProductOrderStockState]
+                beforeChange: [getProductOrderStockState],
+                afterRead: [getProductOrderStockState]
+            }
+        },
+        {
+            name: "AprobacionEstadoPedido", // required
+            label: "Aprobacion de la Compra:",
+            type: 'radio', // required
+            required: false,
+            options: [ // required
+                {
+                    label: 'Aprobado',
+                    value: 'approved',
+                },
+                {
+                    label: 'Sin Aprobar',
+                    value: 'notApproved',
+                },
+            ],
+            defaultValue: 'notApproved',
+            access: {
+                //update: () => false
+            },
+            admin: {
+                readOnly: true,
+                layout: 'horizontal',
+                position: 'sidebar',
+
+            },
+            hooks: {
+                beforeChange: [getOrderApproved],
+                afterRead: [getOrderApproved]
             }
         },
     ],
