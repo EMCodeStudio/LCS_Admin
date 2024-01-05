@@ -5,7 +5,7 @@ import payload from "payload";
 
 const getProductServicePrice: FieldHook = async ({ data }) => {
     try {
-        if (data && data.ProductoServicioPedido.value !== undefined) {
+        if (data && data.ProductoServicioPedido !== undefined) {
 
             const fieldID = data.ProductoServicioPedido.value;
             const fieldProductServicePrice = data.PrecioProductoServicio;
@@ -34,7 +34,7 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
 }
 const getTotalPrice: FieldHook = async ({ data }) => {
     try {
-        if (data && data.ProductoServicioPedido.value !== undefined) {
+        if (data && data.ProductoServicioPedido !== undefined) {
             const fieldID = data.ProductoServicioPedido.value;
             const fieldProductServiceTotalPrice = data.TotalPricioPedido;
             let PrecioProductoServicio: number = 0;
@@ -157,7 +157,7 @@ function setCheckedClientLocationAtProductService(clientLocationString: string):
 }
 const getProductServiceLocation: FieldHook = async ({ data }) => {
     try {
-        if (data && data.ProductoServicioPedido.value !== undefined) {
+        if (data && data.ProductoServicioPedido !== undefined) {
             const fieldID = data.ProductoServicioPedido.value;
             const fieldProductServiceLocation = data.UbicacionProductoServicio;
             if (data.TipoVentaPedido === 'product') {
@@ -246,7 +246,7 @@ const getClientLocation: FieldHook = async ({ data }) => {
 }
 const getProductServiceImageId: FieldHook = async ({ data }) => {
     try {
-        if (data && data.ProductoServicioPedido.value !== undefined) {
+        if (data && data.ProductoServicioPedido !== undefined) {
             const fieldID = data.ProductoServicioPedido.value
             const fieldImageProductServiceId = data.ImagenServicioProductoId
             if (data.TipoVentaPedido === 'product') {
@@ -513,7 +513,7 @@ const Orders: CollectionConfig = {
                     hasMany: false,
                     required: true,
                     maxDepth: 0,
-                    filterOptions: ({ data, relationTo, siblingData, }) => {
+                    filterOptions: ({ data, relationTo }) => {
                         if (relationTo === 'productos') {
                             if (data.TipoVentaPedido === 'product') {
                                 return {
@@ -534,7 +534,6 @@ const Orders: CollectionConfig = {
                                 NombreServicio: { exists: false },
                             }
                         }
-
                     },
                     admin: {
                         description: 'Seleccione un Producto o Servicio de la Lista',
@@ -654,16 +653,23 @@ const Orders: CollectionConfig = {
                                 layout: 'horizontal',
                                 width: '50%'
                             },
+                            hooks:{
+                                beforeChange: [ (args)  => {
+                                    if(args.data && args.data.AprobacionEstadoPedido !==  args.originalDoc.OfertaPedido ){
+                                        return args.data.OfertaPedido = args.originalDoc.OfertaPedido;
+                                    }
+                                }],
+                               
+                            }
 
-                            validate: (args) => {
-                                const approvedOrderState = args.data.AprobacionEstadoPedido.value;
+                           /* validate: ({data}) => {
+                                const approvedOrderState = data.AprobacionEstadoPedido;
                                 if (approvedOrderState === 'approved') {
                                     return 'No puede Agregar el Descuento! el Pedido ya ha sido Aprobado.'
                                 }
-                            },
+                            },*/
                         },
 
-                        
                         {
                             name: "DescuentoPedido",
                             type: "number",
