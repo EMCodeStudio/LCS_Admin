@@ -1,58 +1,47 @@
 import { CollectionConfig, FieldHook } from "payload/types";
 
-/*const formatLocation: FieldHook = async ({ data }) => (
- `${data.PaisUbicacion} - ${data.MunicipioUbicacion} (${data.DepartamentoUbicacion})`
-)
-*/
-/*const formatLocation: FieldHook = async ({ data }) => {
-    try {
-        if (data) {
-            const fieldID1 = data.DepartamentoUbicacion
-            const fieldID2 = data.MunicipioUbicacion
-            const deparmentResponse = await fetch(`http://localhost:3001/api/departamentos/${fieldID1}`)
-            const municipalityResponse = await fetch(`http://localhost:3001/api/municipios/${fieldID2}`)
-            if (!deparmentResponse.ok) {
-                throw new Error(`Error al obtener el Departamento y Municipio. Código de estado: ${deparmentResponse.status}`)
-            }
-            if (!municipalityResponse.ok) {
-                throw new Error(`Error al obtener el Municipio. Código de estado: ${deparmentResponse.status}`)
-            }
-            const departmentData = await deparmentResponse.json()
-            const departmentLocation = departmentData.NombreDepartamento;
-            const municipalityData = await municipalityResponse.json()
-            const municipalityName = municipalityData.NombreMunicipio;
-            return `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
-        }
-    } catch (error) {
-        console.log('Error de Consulta de la Ubicacion:', error);
-    }
-}*/
 
 const formatLocation: FieldHook = async ({ data }) => {
     try {
-        if (data) {
+        if (data && data.DepartamentoUbicacion !== undefined && data.MunicipioUbicacion !== undefined) {
+
             const fieldDeparmentLocationId = data.DepartamentoUbicacion;
+            console.log('ID Departamento Ubicacion: ', fieldDeparmentLocationId)
             const fieldMunicipalityLocationId = data.MunicipioUbicacion;
-            const fieldLocation = data.UbicacionDatos;
+            console.log('ID Municipio Ubicacion: ', fieldMunicipalityLocationId)
+
             const deparmentResponse = await fetch(`http://localhost:3000/api/departamentos/${fieldDeparmentLocationId}`)
             const municipalityResponse = await fetch(`http://localhost:3000/api/municipios/${fieldMunicipalityLocationId}`)
-            if (!deparmentResponse.ok) {
-                throw new Error(`Error al obtener el Departamento y Municipio. Código de estado: ${deparmentResponse.status}`)
+
+            if (deparmentResponse.ok && municipalityResponse.ok) {
+
+                const departmentData = await deparmentResponse.json()
+                const departmentLocation = departmentData.NombreDepartamento;
+
+                console.log('DATA Departamento Ubicacion: ', departmentLocation)
+
+                const municipalityData = await municipalityResponse.json()
+                const municipalityName = municipalityData.NombreMunicipio;
+
+                console.log('DATA Municipio Ubicacion: ', municipalityName)
+
+                const formatedLocation = `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
+
+                console.log('FORMAT Ubicacion: ', formatedLocation)
+
+                return formatedLocation;
             }
-            if (!municipalityResponse.ok) {
-                throw new Error(`Error al obtener el Municipio. Código de estado: ${deparmentResponse.status}`)
-            }
-            const departmentData = await deparmentResponse.json()
-            const departmentLocation = departmentData.NombreDepartamento;
-            const municipalityData = await municipalityResponse.json()
-            const municipalityName = municipalityData.NombreMunicipio;
-            const formatedLocation = `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
-            const comparedLocarion = fieldLocation !== formatedLocation
-            const validatedLocation = comparedLocarion ? formatedLocation : console.log('Ubicacion Ya Existe!')
-            return validatedLocation;
+
+            console.log('NOT Ubicacion ENCONTRADA')
+
+            return 'Ubicacion no Encontrada';
+
+            //throw new Error(`Error al obtener el Municipio. Código de estado: ${municipalityResponse.status}`)
+
         }
+        return 'MUST Completar Datos de la Ubicacion';
     } catch (error) {
-        console.log('Error de Consulta de la Ubicacion:', error);
+        console.log('Error de Consulta de la Ubicacion: ', error);
     }
 }
 
@@ -86,6 +75,7 @@ const Locations: CollectionConfig = {
                 beforeChange: [({ siblingData }) => {
                     siblingData.UbicacionDatos = undefined
                 }],
+
                 afterRead: [formatLocation]
             },
             admin: {

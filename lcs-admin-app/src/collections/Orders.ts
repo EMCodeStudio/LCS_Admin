@@ -157,31 +157,46 @@ function setCheckedClientLocationAtProductService(clientLocationString: string):
 }
 const getProductServiceLocation: FieldHook = async ({ data }) => {
     try {
+        
+        setClientLocationGlobal('')
+        
         if (data && data.ProductoServicioPedido !== undefined) {
+
             const fieldID = data.ProductoServicioPedido.value;
             const fieldProductServiceLocation = data.UbicacionProductoServicio;
+
             if (data.TipoVentaPedido === 'product') {
                 const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
                 if (!productResponse.ok) {
                     throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`)
                 }
+                
                 const productData = await productResponse.json()
                 const productLocation = productData.UbicacionProducto;
+
                 const formatLocationData = (ubicacion: Ubicacion): string => {
                     const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
                     return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
                 }
+
+
                 let locationData: LocationData[] = [];
                 productLocation.forEach((ubicacion: Ubicacion) => {
                     const getLocationString = formatLocationData(ubicacion);
                     locationData.push(getLocationString + '\n')
                 })
+
                 const resultProductLocation = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Producto.';
+
                 setClientLocationGlobal(resultProductLocation)
+
                 const comparedProductLocation = fieldProductServiceLocation !== resultProductLocation
                 const validatedProductLocation = comparedProductLocation ? resultProductLocation : console.log('Product Location Ya Existe!');;
                 return validatedProductLocation;
             }
+
+
+
             if (data.TipoVentaPedido === 'service') {
                 const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`);
                 if (!serviceResponse.ok) {
@@ -201,14 +216,14 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                 const resultServiceLocation = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Servicio.';
                 setClientLocationGlobal(resultServiceLocation)
                 const comparedServiceLocation = fieldProductServiceLocation !== resultServiceLocation;
-                const validatedServiceLocation = comparedServiceLocation ? resultServiceLocation : null //console.log('Service Location Ya Existe!');;
+                const validatedServiceLocation = comparedServiceLocation ? resultServiceLocation : console.log('Service Location Ya Existe!');;
                 return validatedServiceLocation;
             }
         }
     } catch (error) {
         return 'Error en la función getProductServiceLocation.';
     }
-    //return null;
+   
 }
 const getClientLocation: FieldHook = async ({ data }) => {
     try {
@@ -436,6 +451,7 @@ const Orders: CollectionConfig = {
     hooks: {
         beforeChange: [updateProductStock]
     },
+
     fields: [
         {
             name: 'ClientePedido',
@@ -624,9 +640,6 @@ const Orders: CollectionConfig = {
             ]
         },
 
-
-
-
         {
             type: 'row',
             fields: [
@@ -655,7 +668,7 @@ const Orders: CollectionConfig = {
                             },
                             hooks:{
                                 beforeChange: [ (args)  => {
-                                    if(args.data && args.data.AprobacionEstadoPedido !==  args.originalDoc.OfertaPedido ){
+                                    if(args.data && args.data.AprobacionEstadoPedido !== args.originalDoc.AprobacionEstadoPedido){
                                         return args.data.OfertaPedido = args.originalDoc.OfertaPedido;
                                     }
                                 }],
