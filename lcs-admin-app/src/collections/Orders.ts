@@ -338,23 +338,18 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
                         console.log('Producto Stock Actualizado.')
                     } else {
                         console.log('CANTIDAD SOLICITADA SUPERA EL STOCK DISPONIBLE!.')
-                        setProductStockStateGlobal('No Aprobado')
                     }
                 } else {
                     console.log('DEBE MARCAR LA CASILLA DE APROBACION!.');
-                    setProductStockStateGlobal('No Aprobado')
                 }
             }
             else {
                 console.log('Producto no encontrado en la funcion updateProductStock.')
-                setProductStockStateGlobal('No Aprobado')
             }
 
         } else {
             console.log('DEBE AGREGAR UNA CANTIDAD Y CAMBIAR EL ESTADO DE PAGO A REALIZADO')
-            setProductStockStateGlobal('No Aprobado')
         }
-
     } catch (error) {
         console.log('ERROR AL ACTULIZAR LA CANTIDAD DEL PRODUCTO: ', error)
     }
@@ -629,17 +624,10 @@ const Orders: CollectionConfig = {
                 },
             ]
         },
-        {
-            name: 'ErrorMessage',
-            type: 'ui',
-            admin: {
-                condition: ({ DescuentoPedido }) => DescuentoPedido >= 100,
-                width: '100%',
-                components: {
-                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 1 a 99.', showError: true }),
-                }
-            },
-        },
+
+
+
+
         {
             type: 'row',
             fields: [
@@ -665,8 +653,17 @@ const Orders: CollectionConfig = {
                             admin: {
                                 layout: 'horizontal',
                                 width: '50%'
-                            }
+                            },
+
+                            validate: (args) => {
+                                const approvedOrderState = args.data.AprobacionEstadoPedido.value;
+                                if (approvedOrderState === 'approved') {
+                                    return 'No puede Agregar el Descuento! el Pedido ya ha sido Aprobado.'
+                                }
+                            },
                         },
+
+                        
                         {
                             name: "DescuentoPedido",
                             type: "number",
@@ -674,24 +671,31 @@ const Orders: CollectionConfig = {
                             required: false,
                             admin: {
                                 condition: ({ OfertaPedido }) => OfertaPedido === 'apply',
-                                width: '50%'
+                                width: '50%',
+                                placeholder: '0'
                             },
                             hooks: {
-                                beforeChange: [
-                                    ({ data }) => {
-                                        if (data && data.length) {
-                                            const twoDigits = /^\d{2}$/;
-                                            const discount = data.DescuentoPedido;
-                                            if (twoDigits.test(discount)) {
-                                                return discount;
-                                            }
-                                            else {
-                                                return data.DescuentoPedido == 0
-                                            }
+                                beforeChange: [(args) => {
+                                    const twoDigits = /^\d{2}$/;
+                                    if(args.data && args.data.DescuentoPedido !== undefined ){
+                                        const discount = args.data.DescuentoPedido;
+                                        if (!twoDigits.test(discount)) {
+                                            return args.data.DescuentoPedido = 0;
                                         }
-                                    }
-                                ]
+                                    }          
+                                }]
                             }
+                        },
+                        {
+                            name: 'ErrorMessage',
+                            type: 'ui',
+                            admin: {
+                                condition: ({ DescuentoPedido }) => DescuentoPedido >= 100,
+                                width: '100%',
+                                components: {
+                                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 1 a 99.', showError: true }),
+                                }
+                            },
                         },
                     ]
                 },
@@ -771,6 +775,19 @@ const Orders: CollectionConfig = {
                             hooks: {
                                 beforeChange: [validateProductRequest],
                                 afterRead: [validateProductRequest]
+
+                                /*hooks: {
+                                    beforeChange: [(args) => {
+                                      // Aquí puedes restringir la actualización del campo
+                                      // Por ejemplo, solo permitir la actualización una vez cada X horas
+                                      const lastUpdateTime = args.previousDoc.updatedAt;
+                                      const currentTime = new Date();
+                                      const timeDifferenceInHours = (currentTime - lastUpdateTime) / 1000 / 60 / 60;
+                                      if (timeDifferenceInHours < X) {
+                                        throw new Error('No se puede actualizar el campo más de una vez cada X horas');
+                                      }
+                                    }],
+                                  },*/
                             },
 
 

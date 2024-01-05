@@ -9,6 +9,7 @@ const Departments: CollectionConfig = {
         useAsTitle: 'NombreDepartamento',
         group: 'SISTEMA'
     },
+    
    labels: {
       singular: 'Departamento',
       plural: 'Departamentos',
