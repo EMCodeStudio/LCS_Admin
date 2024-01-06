@@ -157,9 +157,9 @@ function setCheckedClientLocationAtProductService(clientLocationString: string):
 }
 const getProductServiceLocation: FieldHook = async ({ data }) => {
     try {
-        
+
         setClientLocationGlobal('')
-        
+
         if (data && data.ProductoServicioPedido !== undefined) {
 
             const fieldID = data.ProductoServicioPedido.value;
@@ -170,7 +170,7 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                 if (!productResponse.ok) {
                     throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`)
                 }
-                
+
                 const productData = await productResponse.json()
                 const productLocation = productData.UbicacionProducto;
 
@@ -223,7 +223,7 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
     } catch (error) {
         return 'Error en la función getProductServiceLocation.';
     }
-   
+
 }
 const getClientLocation: FieldHook = async ({ data }) => {
     try {
@@ -527,9 +527,10 @@ const Orders: CollectionConfig = {
                        }, */
                     relationTo: ['productos', 'servicios'],
                     hasMany: false,
-                    required: true,
+                    
                     maxDepth: 0,
                     filterOptions: ({ data, relationTo }) => {
+
                         if (relationTo === 'productos') {
                             if (data.TipoVentaPedido === 'product') {
                                 return {
@@ -537,13 +538,13 @@ const Orders: CollectionConfig = {
                                 }
                             }
                             return {
-                                NombreCategoria: { exists: false },
+                                NombreProducto: { exists: false },
                             }
-                        }
+                        }else
                         if (relationTo === 'servicios') {
                             if (data.TipoVentaPedido === 'service') {
                                 return {
-                                    EstadoServicio: { equals: 'published' }
+                                    EstadoServicio: { equals: 'published' },
                                 }
                             }
                             return {
@@ -666,21 +667,21 @@ const Orders: CollectionConfig = {
                                 layout: 'horizontal',
                                 width: '50%'
                             },
-                            hooks:{
-                                beforeChange: [ (args)  => {
-                                    if(args.data && args.data.AprobacionEstadoPedido !== args.originalDoc.AprobacionEstadoPedido){
+                            hooks: {
+                                beforeChange: [(args) => {
+                                    if (args.data && args.data.AprobacionEstadoPedido !== args.originalDoc.AprobacionEstadoPedido) {
                                         return args.data.OfertaPedido = args.originalDoc.OfertaPedido;
                                     }
                                 }],
-                               
+
                             }
 
-                           /* validate: ({data}) => {
-                                const approvedOrderState = data.AprobacionEstadoPedido;
-                                if (approvedOrderState === 'approved') {
-                                    return 'No puede Agregar el Descuento! el Pedido ya ha sido Aprobado.'
-                                }
-                            },*/
+                            /* validate: ({data}) => {
+                                 const approvedOrderState = data.AprobacionEstadoPedido;
+                                 if (approvedOrderState === 'approved') {
+                                     return 'No puede Agregar el Descuento! el Pedido ya ha sido Aprobado.'
+                                 }
+                             },*/
                         },
 
                         {
@@ -696,12 +697,12 @@ const Orders: CollectionConfig = {
                             hooks: {
                                 beforeChange: [(args) => {
                                     const twoDigits = /^\d{2}$/;
-                                    if(args.data && args.data.DescuentoPedido !== undefined ){
+                                    if (args.data && args.data.DescuentoPedido !== undefined) {
                                         const discount = args.data.DescuentoPedido;
                                         if (!twoDigits.test(discount)) {
                                             return args.data.DescuentoPedido = 0;
                                         }
-                                    }          
+                                    }
                                 }]
                             }
                         },

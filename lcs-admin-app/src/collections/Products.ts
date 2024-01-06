@@ -3,6 +3,7 @@ const Products: CollectionConfig = {
     slug: 'productos',
     access: {
         read: () => true,
+        
     },
     admin: {
         useAsTitle: 'NombreProducto',

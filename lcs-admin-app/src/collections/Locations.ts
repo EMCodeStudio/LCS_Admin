@@ -73,13 +73,14 @@ const Locations: CollectionConfig = {
             },
             hooks: {
                 beforeChange: [({ siblingData }) => {
-                    siblingData.UbicacionDatos = undefined
+                    delete siblingData.UbicacionDatos 
                 }],
 
                 afterRead: [formatLocation]
             },
             admin: {
-                hidden: true
+                hidden: true,
+                readOnly: true
             },
         },
         {
@@ -116,9 +117,10 @@ const Locations: CollectionConfig = {
             unique: true,
             required: true,
             admin: {
-                description: 'Selecciones un Municipio o Ciudad.'
+                description: 'Seleccione un Municipio o Ciudad.'
             }
         },
+
         {
             name: "EstadoUbicacion",
             type: "select",
