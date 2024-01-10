@@ -211,12 +211,12 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
                 const clientResponse = await fetch(`${process.env.PAYLOAD_URL}/api/clientes/${fieldClientId}`)
                 const clientData = await clientResponse.json()
                 if (clientResponse.ok) {
-                    const clientLocation = clientData.UbicacionCliente;
+                    const clientLocation = clientData.UbicacionCliente
                     const formatLocationData = (ubicacionCliente: Ubicacion): string => {
                         const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacionCliente
-                        return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
+                        return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
                     }
-                    let locationClientDataString: LocationData = '';
+                    let locationClientDataString: LocationData = ''
                     if (clientLocation) {
                         const getLocationFormatString = formatLocationData(clientLocation)
                         locationClientDataString = getLocationFormatString;
@@ -225,14 +225,14 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
                     return ValidatedLocation
 
                 } else {
-                    throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`)
+                    throw new Error(`Error al obtener la Ubicacion del Cliente: ${clientResponse.status}`)
                 }
             }
         }
     } catch (error) {
-        console.log('Error de Ubicacion del Cliente:', error);
+        console.log('ERROR EN LA FUNCION getClientLocation:', error)
     }
-
+    return null
 }
 const getProductServiceImageId: FieldHook = async ({ data }) => {
     try {
