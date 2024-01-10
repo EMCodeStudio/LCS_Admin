@@ -7,19 +7,19 @@ const getProductServicePrice: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
 
-            const fieldID = data.ProductoServicioPedido.value
+            const prodcuctServiceFieldId = data.ProductoServicioPedido.value
             const fieldProductServicePrice = data.PrecioProductoServicio
             const fieldProductServicePriceOrigin = originalDoc.PrecioProductoServicio
 
             if (fieldProductServicePrice !== fieldProductServicePriceOrigin || fieldProductServicePrice === undefined) {
                 if (data.TipoVentaPedido === 'product') {
-                    const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${fieldID}`)
+                    const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${prodcuctServiceFieldId}`)
                         .then(response => response.json())
                     const productPrice = productResponse.PrecioProducto
                     return productPrice
                 }
                 if (data.TipoVentaPedido === 'service') {
-                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${fieldID}`)
+                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${prodcuctServiceFieldId}`)
                         .then(response => response.json())
                     const servicePrice = serviceResponse.PrecioServicio
                     return servicePrice
@@ -33,65 +33,66 @@ const getProductServicePrice: FieldHook = async ({ data, originalDoc }) => {
     }
     return null
 }
-const getTotalPrice: FieldHook = async ({ data }) => {
+const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
     try {
-        if (data && data.ProductoServicioPedido !== undefined) {
-            const fieldID = data.ProductoServicioPedido.value;
-            const fieldProductServiceTotalPrice = data.TotalPricioPedido;
-            let PrecioProductoServicio: number = 0;
-            if (data.TipoVentaPedido === 'product') {
-                const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${fieldID}`)
-                    .then(productResponse => {
-                        if (!productResponse.ok) {
-                            throw new Error(`Error al obtener el Costo del Producto. Código de estado: ${productResponse.status}`)
-                        }
-                        return productResponse.json()
-                    })
-                    .then(productData => {
-                        const productPrice = productData.PrecioProducto;
-                        return productPrice;
-                    })
-                    .catch(error => {
-                        console.error('Error del Producto:', error);
-                        return 'No se puede obtener el Costo del Producto.';
-                    });
-                const { CantidadProductoPedido } = data.DetallesPagoPedido;
-                PrecioProductoServicio = productResponse;
-                const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : CantidadProductoPedido + PrecioProductoServicio
-                const validatedProductDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : calculatedProductPrice
-                const totalProductPrice = Math.round(validatedProductDiscount)
-                const comparedProductTotalPrice = fieldProductServiceTotalPrice !== totalProductPrice;
-                const checkedTotalProductPrice = comparedProductTotalPrice ? totalProductPrice : null //console.log('Total Product Price Ya Existe!');;
-                return checkedTotalProductPrice;
-            }
-            if (data.TipoVentaPedido === 'service') {
-                const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${fieldID}`)
-                    .then(serviceResponse => {
-                        if (!serviceResponse.ok) {
-                            throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
-                        }
-                        return serviceResponse.json()
-                    })
-                    .then(serviceData => {
-                        const servicePrice = serviceData.PrecioServicio;
-                        return servicePrice;
-                    })
-                    .catch(error => {
-                        console.log('Error del Servicio:', error)
-                        return 'No se puede obtener el Costo del Servicio.';
-                    });
-                PrecioProductoServicio = serviceResponse
-                const calculatedServiceDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
-                const totalServicePrice = Math.round(calculatedServiceDiscount)
-                const comparedServiceTotalPrice = fieldProductServiceTotalPrice !== totalServicePrice;
-                const checkedTotalServicePrice = comparedServiceTotalPrice ? totalServicePrice : console.log('Total Service Price Ya Existe!');;
-                return checkedTotalServicePrice;
+        if (data) {
+            const productServiceFieldID = data.ProductoServicioPedido.value
+            const fieldProductServiceTotalPrice = data.TotalPricioPedido
+            const fieldProductServiceTotalPriceOrigin = originalDoc.TotalPricioPedido
+
+            let PrecioProductoServicio: number = 0
+
+            if (fieldProductServiceTotalPrice !== fieldProductServiceTotalPriceOrigin || fieldProductServiceTotalPrice === undefined) {
+
+                if (data.TipoVentaPedido === 'product') {
+                    const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${productServiceFieldID}`)
+                        .then(productResponse => {
+                            if (!productResponse.ok) {
+                                throw new Error(`Error al obtener el Costo del Producto: ${productResponse.status}`)
+                            }
+                            return productResponse.json()
+                        })
+                        .then(productData => {
+                            const productPrice = productData.PrecioProducto
+                            return productPrice
+                        })
+                        .catch(error => {
+                            console.error('Error del Servidor al optener precio del Producto:', error)
+                        });
+                    const { CantidadProductoPedido } = data.DetallesPagoPedido;
+                    PrecioProductoServicio = productResponse
+                    const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : CantidadProductoPedido + PrecioProductoServicio
+                    const validatedProductDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : calculatedProductPrice
+                    const totalProductPrice = Math.round(validatedProductDiscount)
+                    return totalProductPrice
+                }
+
+                if (data.TipoVentaPedido === 'service') {
+                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${productServiceFieldID}`)
+                        .then(serviceResponse => {
+                            if (!serviceResponse.ok) {
+                                throw new Error(`Error al obtener el Costo del Servicio: ${serviceResponse.status}`)
+                            }
+                            return serviceResponse.json()
+                        })
+                        .then(serviceData => {
+                            const servicePrice = serviceData.PrecioServicio
+                            return servicePrice
+                        })
+                        .catch(error => {
+                            console.log('Error del Servidor al optener precio del Servicio:', error)
+                        })
+                    PrecioProductoServicio = serviceResponse
+                    const calculatedServiceDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
+                    const totalServicePrice = Math.round(calculatedServiceDiscount)
+                    return totalServicePrice
+                }
             }
         }
     } catch (error) {
-        console.log('Error en la función getTotalPrice: ', error);
+        console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
     }
-    //return null;
+    return null
 }
 interface Ubicacion {
     id: string,
@@ -495,6 +496,7 @@ const Orders: CollectionConfig = {
                     name: "ProductoServicioPedido",
                     label: "Productos - Servicios",
                     type: 'relationship',
+                    required: true,
                     /*  hooks: {
                          beforeChange: [
                            ({ data, value, operation }) => {
