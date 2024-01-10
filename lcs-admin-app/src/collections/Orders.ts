@@ -3,34 +3,35 @@ import { CollectionBeforeChangeHook, CollectionConfig, FieldHook } from "payload
 import ErrorMessages from "../components/Messages/ErrorMessages";
 import payload from "payload";
 
-const getProductServicePrice: FieldHook = async ({ data }) => {
+const getProductServicePrice: FieldHook = async ({ data, originalDoc }) => {
     try {
-        if (data && data.ProductoServicioPedido !== undefined) {
+        if (data) {
 
-            const fieldID = data.ProductoServicioPedido.value;
-            const fieldProductServicePrice = data.PrecioProductoServicio;
+            const fieldID = data.ProductoServicioPedido.value
+            const fieldProductServicePrice = data.PrecioProductoServicio
+            const fieldProductServicePriceOrigin = originalDoc.PrecioProductoServicio
 
-            if (data.TipoVentaPedido === 'product') {
-                const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
-                    .then(response => response.json())
-                const productPrice = productResponse.PrecioProducto;
-                const comparedProductPrice = productPrice !== fieldProductServicePrice;
-                const validatedProductPrice = comparedProductPrice ? productPrice : console.log('Product Price Ya Existe!');
-                return validatedProductPrice;
+            if (fieldProductServicePrice !== fieldProductServicePriceOrigin || fieldProductServicePrice === undefined) {
+                if (data.TipoVentaPedido === 'product') {
+                    const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${fieldID}`)
+                        .then(response => response.json())
+                    const productPrice = productResponse.PrecioProducto
+                    return productPrice
+                }
+                if (data.TipoVentaPedido === 'service') {
+                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${fieldID}`)
+                        .then(response => response.json())
+                    const servicePrice = serviceResponse.PrecioServicio
+                    return servicePrice
+                }
             }
-            if (data.TipoVentaPedido === 'service') {
-                const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
-                    .then(response => response.json())
-                const servicePrice = serviceResponse.PrecioServicio;
-                const comparedServicePrice = servicePrice !== fieldProductServicePrice;
-                const validatedServicePrice = comparedServicePrice ? servicePrice : null //console.log('Service Price Ya Existe!');
-                return validatedServicePrice;
-            }
+        } else {
+            console.log('NO SE A DEFINIDO VALORES EN DATA')
         }
     } catch (error) {
-        console.log('Error en la función getProductServicePrice: ', error);
+        console.log('ERROR EN LA FUNCION getProductServicePrice: ', error)
     }
-    //return null;
+    return null
 }
 const getTotalPrice: FieldHook = async ({ data }) => {
     try {
@@ -39,7 +40,7 @@ const getTotalPrice: FieldHook = async ({ data }) => {
             const fieldProductServiceTotalPrice = data.TotalPricioPedido;
             let PrecioProductoServicio: number = 0;
             if (data.TipoVentaPedido === 'product') {
-                const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
+                const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${fieldID}`)
                     .then(productResponse => {
                         if (!productResponse.ok) {
                             throw new Error(`Error al obtener el Costo del Producto. Código de estado: ${productResponse.status}`)
@@ -64,7 +65,7 @@ const getTotalPrice: FieldHook = async ({ data }) => {
                 return checkedTotalProductPrice;
             }
             if (data.TipoVentaPedido === 'service') {
-                const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
+                const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${fieldID}`)
                     .then(serviceResponse => {
                         if (!serviceResponse.ok) {
                             throw new Error(`Error al obtener el Costo del Servicio. Código de estado: ${serviceResponse.status}`);
@@ -119,9 +120,6 @@ interface Ubicacion {
 }*/
 type LocationData = string;
 let globalLocationString: string | undefined;
-let globalProductString: string | undefined;
-
-
 function setClientLocationGlobal(productServiceLocation: string): string {
     globalLocationString = globalLocationString || '';
     let LocationResult: string = '';
@@ -130,17 +128,6 @@ function setClientLocationGlobal(productServiceLocation: string): string {
     }
     globalLocationString = LocationResult
     return globalLocationString;
-}
-
-
-function setProductStockStateGlobal(productOrderState: string): string {
-    globalProductString = globalProductString || '';
-    let ProductResult: string = '';
-    if (!globalProductString.includes(productOrderState)) {
-        ProductResult = globalProductString += productOrderState;
-    }
-    globalProductString = ProductResult
-    return globalProductString;
 }
 function setCheckedClientLocationAtProductService(clientLocationString: string): string {
     if (clientLocationString) {
@@ -155,69 +142,63 @@ function setCheckedClientLocationAtProductService(clientLocationString: string):
         return 'Ubicacion del Cliente No Encontrada.';
     }
 }
-const getProductServiceLocation: FieldHook = async ({ data }) => {
+const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
-
-        setClientLocationGlobal('')
-
         if (data && data.ProductoServicioPedido !== undefined) {
-
-            const fieldID = data.ProductoServicioPedido.value;
+            const productServiceFieldId = data.ProductoServicioPedido.value;
             const fieldProductServiceLocation = data.UbicacionProductoServicio;
+            const fieldProductServiceLocationOrigin = originalDoc.UbicacionProductoServicio;
 
-            if (data.TipoVentaPedido === 'product') {
-                const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
-                if (!productResponse.ok) {
-                    throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`)
+            if (fieldProductServiceLocation !== fieldProductServiceLocationOrigin || fieldProductServiceLocation === undefined) {
+
+                if (data.TipoVentaPedido === 'product') {
+
+                    const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${productServiceFieldId}`)
+                    if (productResponse.ok) {
+                        const productData = await productResponse.json()
+                        const productLocation = productData.UbicacionProducto;
+                        const formatLocationData = (ubicacion: Ubicacion): string => {
+                            const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
+                            return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
+                        }
+                        let locationData: LocationData[] = [];
+                        productLocation.forEach((ubicacion: Ubicacion) => {
+                            const getLocationString = formatLocationData(ubicacion);
+                            locationData.push(getLocationString + '\n')
+                        })
+                        const resultProductLocation = locationData.join('')
+                        setClientLocationGlobal(resultProductLocation)
+                        return resultProductLocation;
+                    } else {
+                        throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`)
+                    }
+
+
                 }
 
-                const productData = await productResponse.json()
-                const productLocation = productData.UbicacionProducto;
+                if (data.TipoVentaPedido === 'service') {
 
-                const formatLocationData = (ubicacion: Ubicacion): string => {
-                    const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
-                    return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
+                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${productServiceFieldId}`)
+                    if (serviceResponse.ok) {
+                        const serviceData = await serviceResponse.json()
+                        const serviceLocation = serviceData.UbicacionServicio;
+                        const formatLocationData = (ubicacion: Ubicacion): string => {
+                            const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
+                            return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
+                        }
+                        let locationData: LocationData[] = [];
+                        serviceLocation.forEach((ubicacion: Ubicacion) => {
+                            const getLocationString = formatLocationData(ubicacion);
+                            locationData.push(getLocationString + '\n')
+                        })
+                        const resultServiceLocation = locationData.join('')
+                        setClientLocationGlobal(resultServiceLocation)
+                        return resultServiceLocation;
+                    } else {
+                        throw new Error(`Error al obtener la Ubicacion del Servicio. Código de estado: ${serviceResponse.status}`);
+                    }
+
                 }
-
-
-                let locationData: LocationData[] = [];
-                productLocation.forEach((ubicacion: Ubicacion) => {
-                    const getLocationString = formatLocationData(ubicacion);
-                    locationData.push(getLocationString + '\n')
-                })
-
-                const resultProductLocation = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Producto.';
-
-                setClientLocationGlobal(resultProductLocation)
-
-                const comparedProductLocation = fieldProductServiceLocation !== resultProductLocation
-                const validatedProductLocation = comparedProductLocation ? resultProductLocation : console.log('Product Location Ya Existe!');;
-                return validatedProductLocation;
-            }
-
-
-
-            if (data.TipoVentaPedido === 'service') {
-                const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`);
-                if (!serviceResponse.ok) {
-                    throw new Error(`Error al obtener la Ubicacion del Servicio. Código de estado: ${serviceResponse.status}`);
-                }
-                const serviceData = await serviceResponse.json();
-                const serviceLocation = serviceData.UbicacionServicio;
-                const formatLocationData = (ubicacion: Ubicacion): string => {
-                    const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
-                    return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
-                }
-                let locationData: LocationData[] = [];
-                serviceLocation.forEach((ubicacion: Ubicacion) => {
-                    const getLocationString = formatLocationData(ubicacion);
-                    locationData.push(getLocationString + '\n')
-                })
-                const resultServiceLocation = locationData ? locationData.join('') : 'No se puede obtener la Ubicacion del Servicio.';
-                setClientLocationGlobal(resultServiceLocation)
-                const comparedServiceLocation = fieldProductServiceLocation !== resultServiceLocation;
-                const validatedServiceLocation = comparedServiceLocation ? resultServiceLocation : console.log('Service Location Ya Existe!');;
-                return validatedServiceLocation;
             }
         }
     } catch (error) {
@@ -225,34 +206,33 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
     }
 
 }
-const getClientLocation: FieldHook = async ({ data }) => {
+const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data && data.ClientePedido !== undefined) {
+            const clientFieldLocation = data.UbicacionClientePedido
+            const clientFieldLocationOrigin = originalDoc.UbicacionClientePedido
             const fieldClientId = data.ClientePedido
-            //const fieldClientLocation = data.UbicacionClientePedido
-            const clientResponse = await fetch(`http://localhost:3000/api/clientes/${fieldClientId}`)
+            if (clientFieldLocation !== clientFieldLocationOrigin || clientFieldLocation === undefined) {
+                const clientResponse = await fetch(`${process.env.PAYLOAD_URL}/api/clientes/${fieldClientId}`)
+                const clientData = await clientResponse.json()
+                if (clientResponse.ok) {
+                    const clientLocation = clientData.UbicacionCliente;
+                    const formatLocationData = (ubicacionCliente: Ubicacion): string => {
+                        const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacionCliente
+                        return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
+                    }
+                    let locationClientDataString: LocationData = '';
+                    if (clientLocation) {
+                        const getLocationFormatString = formatLocationData(clientLocation)
+                        locationClientDataString = getLocationFormatString;
+                    }
+                    const ValidatedLocation = setCheckedClientLocationAtProductService(locationClientDataString)
+                    return ValidatedLocation
 
-            if (!clientResponse.ok) {
-                throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`)
+                } else {
+                    throw new Error(`Error al obtener la Ubicacion del Cliente. Código de estado: ${clientResponse.status}`)
+                }
             }
-            const clientData = await clientResponse.json()
-            const clientLocation = clientData.UbicacionCliente;
-
-            const formatLocationData = (ubicacionCliente: Ubicacion): string => {
-                const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacionCliente
-                return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
-            }
-            let locationClientDataString: LocationData = '';
-
-            if (clientLocation) {
-                const getLocationFormatString = formatLocationData(clientLocation)
-                locationClientDataString = getLocationFormatString;
-            } else {
-                console.log('Error: clientLocation es Nulo o Indefinido.')
-            }
-            const ValidatedLocation = setCheckedClientLocationAtProductService(locationClientDataString)
-
-            return ValidatedLocation
         }
     } catch (error) {
         console.log('Error de Ubicacion del Cliente:', error);
@@ -262,10 +242,13 @@ const getClientLocation: FieldHook = async ({ data }) => {
 const getProductServiceImageId: FieldHook = async ({ data }) => {
     try {
         if (data && data.ProductoServicioPedido !== undefined) {
+
             const fieldID = data.ProductoServicioPedido.value
             const fieldImageProductServiceId = data.ImagenServicioProductoId
+
+
             if (data.TipoVentaPedido === 'product') {
-                const productResponse = await fetch(`http://localhost:3000/api/productos/${fieldID}`)
+                const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${fieldID}`)
                 if (!productResponse.ok) {
                     throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`)
                 }
@@ -275,8 +258,9 @@ const getProductServiceImageId: FieldHook = async ({ data }) => {
                 const comparedImagenProductId = fieldImageProductServiceId !== getImageProductStringId
                 return comparedImagenProductId ? getImageProductStringId : console.log('Product ID Ya Existe!');
             }
+
             if (data.TipoVentaPedido === 'service') {
-                const serviceResponse = await fetch(`http://localhost:3000/api/servicios/${fieldID}`)
+                const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${fieldID}`)
                 if (!serviceResponse.ok) {
                     throw new Error(`Error al obtener la URL del Serviceo. Código de estado: ${serviceResponse.status}`)
                 }
@@ -323,6 +307,7 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
         const stateOrderApproved = data.EstadoCompraPedido;
         const isOrderApproved = data.AprobacionEstadoPedido;
         console.log('FIELD  ORDER APROBACION updateProductStock: ', isOrderApproved)
+
         if (CantidadProductoPedido > 0 && stateOrderPayment === 'paid') {
             const productFieldId = data.ProductoServicioPedido.value;
             const collectionName = 'productos';
@@ -338,11 +323,11 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
                 const resultProductId = productResponse.docs[0].id;
                 const resultProductStock = productResponse.docs[0].CantidadProducto;
                 const countStockNumber = resultProductStock as number;
-                setProductStockStateGlobal('')
+
                 if (stateOrderApproved && isOrderApproved === 'notApproved') {
                     if (countStockNumber >= CantidadProductoPedido) {
                         const newStock = countStockNumber - CantidadProductoPedido;
-                        setProductStockStateGlobal('Aprobado')
+
                         await payload.update({
                             collection: 'productos',
                             id: resultProductId,
@@ -370,18 +355,13 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
     }
 
 }
-const getOrderApproved: FieldHook = async ({ data }) => {
-    console.log('VARIABLE GLOBAL PRODUCT STATE STOCK', globalProductString)
-    // console.log('FIELD  ORDER APROBACION getOrderApproved: ', isOrderApproved)
-    if (data && globalProductString === 'Aprobado' && data.AprobacionEstadoPedido === 'notApproved') {
-        return 'approved'
-    }
-}
 const getProductOrderStockState: FieldHook = async ({ data }) => {
-    const isOrderApproved = data ? data.AprobacionEstadoPedido : undefined;
-    //console.log('FIELD  ORDER APROBACION getProductOrderStockState: ', isOrderApproved)
-    if (data && isOrderApproved === 'approved') {
-        return false;
+
+    if (data && data.AprobacionEstadoPedido) {
+        const changeOrderFieldState = data.EstadoCompraPedido;
+        if (changeOrderFieldState && data.EstadoPagoPedido === 'paid') {
+            data.AprobacionEstadoPedido = 'approved';
+        }
     }
 }
 const validateProductRequest: FieldHook = async ({ data, originalDoc }) => {
@@ -391,7 +371,6 @@ const validateProductRequest: FieldHook = async ({ data, originalDoc }) => {
         return CantidadProductoPedido
     }
 }
-
 const getProductStockOrder: FieldHook = async ({ data }) => {
     try {
         if (data && data.TipoVentaPedido === 'product' && data.ProductoServicioPedido !== undefined) {
@@ -416,7 +395,6 @@ const getProductStockOrder: FieldHook = async ({ data }) => {
         console.log('Error en la Funcion getProductStockOrder: ', error)
     }
 }
-
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -525,9 +503,9 @@ const Orders: CollectionConfig = {
                            },
                          ],
                        }, */
+
                     relationTo: ['productos', 'servicios'],
                     hasMany: false,
-                    
                     maxDepth: 0,
                     filterOptions: ({ data, relationTo }) => {
 
@@ -540,7 +518,7 @@ const Orders: CollectionConfig = {
                             return {
                                 NombreProducto: { exists: false },
                             }
-                        }else
+                        }
                         if (relationTo === 'servicios') {
                             if (data.TipoVentaPedido === 'service') {
                                 return {
@@ -557,6 +535,7 @@ const Orders: CollectionConfig = {
                         width: '50%',
                     }
                 },
+
                 {
                     name: "VentaImagenOrder",
                     type: "upload",
@@ -640,7 +619,6 @@ const Orders: CollectionConfig = {
                 },
             ]
         },
-
         {
             type: 'row',
             fields: [
@@ -951,7 +929,7 @@ const Orders: CollectionConfig = {
         {
             name: "EstadoCompraPedido",
             type: "checkbox",
-            label: "Estado de Compra Aprobado?",
+            label: "Cambiar estado de Compra en Aprobado?",
             defaultValue: false,
             admin: {
                 position: 'sidebar'
@@ -986,10 +964,10 @@ const Orders: CollectionConfig = {
                 position: 'sidebar',
 
             },
-            hooks: {
-                beforeChange: [getOrderApproved],
-                afterRead: [getOrderApproved]
-            }
+
+
+
+
         },
     ],
     timestamps: true,
