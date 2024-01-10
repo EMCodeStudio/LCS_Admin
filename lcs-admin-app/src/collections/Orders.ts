@@ -203,7 +203,7 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
 }
 const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
-        if (data && data.ClientePedido !== undefined) {
+        if (data) {
             const clientFieldLocation = data.UbicacionClientePedido
             const clientFieldLocationOrigin = originalDoc.UbicacionClientePedido
             const fieldClientId = data.ClientePedido
@@ -234,43 +234,43 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
     }
     return null
 }
-const getProductServiceImageId: FieldHook = async ({ data }) => {
+const getProductServiceImageId: FieldHook = async ({ data, originalDoc }) => {
     try {
-        if (data && data.ProductoServicioPedido !== undefined) {
-
-            const fieldID = data.ProductoServicioPedido.value
+        if (data) {
+            const ImageProductServiceFieldId = data.ProductoServicioPedido.value
             const fieldImageProductServiceId = data.ImagenServicioProductoId
+            const fieldImageProductServiceIdOrigin = data.ImagenServicioProductoId
+            if (fieldImageProductServiceId !== fieldImageProductServiceIdOrigin || fieldImageProductServiceId === undefined) {
 
-
-            if (data.TipoVentaPedido === 'product') {
-                const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${fieldID}`)
-                if (!productResponse.ok) {
-                    throw new Error(`Error al obtener la URL del Producto. Código de estado: ${productResponse.status}`)
+                if (data.TipoVentaPedido === 'product') {
+                    const imageProductResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${ImageProductServiceFieldId}`)
+                    if (imageProductResponse.ok) {
+                        const imageProductData = await imageProductResponse.json()
+                        const productImage = imageProductData.ImagenesProducto
+                        const getImageProductStringId = productImage?.[0]?.ImagenProducto || null
+                        return getImageProductStringId
+                    } else {
+                        throw new Error(`Error al obtener la Image URL del Producto: ${imageProductResponse.status}`)
+                    }
                 }
-                const productData = await productResponse.json()
-                const productImage = productData.ImagenesProducto;
-                const getImageProductStringId = productImage?.[0]?.ImagenProducto || null;
-                const comparedImagenProductId = fieldImageProductServiceId !== getImageProductStringId
-                return comparedImagenProductId ? getImageProductStringId : console.log('Product ID Ya Existe!');
-            }
 
-            if (data.TipoVentaPedido === 'service') {
-                const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${fieldID}`)
-                if (!serviceResponse.ok) {
-                    throw new Error(`Error al obtener la URL del Serviceo. Código de estado: ${serviceResponse.status}`)
+                if (data.TipoVentaPedido === 'service') {
+                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${ImageProductServiceFieldId}`)
+                    if (serviceResponse.ok) {
+                        const serviceData = await serviceResponse.json();
+                        const serviceImage = serviceData.ImagenesServicio;
+                        const getImageServiceStringId = serviceImage?.[0]?.ImagenServicio || null
+                        return getImageServiceStringId
+                    } else {
+                        throw new Error(`Error al obtener la Image URL del Servicio: ${serviceResponse.status}`)
+                    }
                 }
-                const serviceData = await serviceResponse.json();
-                const serviceImage = serviceData.ImagenesServicio;
-                const getImageServiceStringId = serviceImage?.[0]?.ImagenServicio || null;
-                // console.log('Service ID de getProductServiceImageId!', getImageServiceStringId );
-                const comparedImageServiceId = fieldImageProductServiceId !== getImageServiceStringId
-                return comparedImageServiceId ? getImageServiceStringId : null //console.log('Service ID Ya Existe!');
             }
         }
     } catch (error) {
-        console.log('Error en la funcion getProductServiceImageId: ', error)
+        console.log('ERROR EN LA FUNCION getProductServiceImageId: ', error)
     }
-    // return null
+    return null
 }
 const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     try {
