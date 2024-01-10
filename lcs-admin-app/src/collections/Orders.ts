@@ -145,15 +145,13 @@ function setCheckedClientLocationAtProductService(clientLocationString: string):
 }
 const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
-        if (data && data.ProductoServicioPedido !== undefined) {
-            const productServiceFieldId = data.ProductoServicioPedido.value;
-            const fieldProductServiceLocation = data.UbicacionProductoServicio;
-            const fieldProductServiceLocationOrigin = originalDoc.UbicacionProductoServicio;
-
+        if (data) {
+            const productServiceFieldId = data.ProductoServicioPedido.value
+            const fieldProductServiceLocation = data.UbicacionProductoServicio
+            const fieldProductServiceLocationOrigin = originalDoc.UbicacionProductoServicio
             if (fieldProductServiceLocation !== fieldProductServiceLocationOrigin || fieldProductServiceLocation === undefined) {
 
                 if (data.TipoVentaPedido === 'product') {
-
                     const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${productServiceFieldId}`)
                     if (productResponse.ok) {
                         const productData = await productResponse.json()
@@ -171,14 +169,11 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
                         setClientLocationGlobal(resultProductLocation)
                         return resultProductLocation;
                     } else {
-                        throw new Error(`Error al obtener la Ubicacion del Producto. Código de estado: ${productResponse.status}`)
+                        throw new Error(`Error al obtener la Ubicacion del Producto: ${productResponse.status}`)
                     }
-
-
                 }
 
                 if (data.TipoVentaPedido === 'service') {
-
                     const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${productServiceFieldId}`)
                     if (serviceResponse.ok) {
                         const serviceData = await serviceResponse.json()
@@ -196,14 +191,13 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
                         setClientLocationGlobal(resultServiceLocation)
                         return resultServiceLocation;
                     } else {
-                        throw new Error(`Error al obtener la Ubicacion del Servicio. Código de estado: ${serviceResponse.status}`);
+                        throw new Error(`Error al obtener la Ubicacion del Servicio: ${serviceResponse.status}`);
                     }
-
                 }
             }
         }
     } catch (error) {
-        return 'Error en la función getProductServiceLocation.';
+        return 'ERROR EN LA FUNCION getProductServiceLocation.';
     }
 
 }
