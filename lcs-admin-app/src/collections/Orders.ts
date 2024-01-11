@@ -6,11 +6,9 @@ import payload from "payload";
 const getProductServicePrice: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
-
             const prodcuctServiceFieldId = data.ProductoServicioPedido.value
             const fieldProductServicePrice = data.PrecioProductoServicio
             const fieldProductServicePriceOrigin = originalDoc.PrecioProductoServicio
-
             if (fieldProductServicePrice !== fieldProductServicePriceOrigin || fieldProductServicePrice === undefined) {
                 if (data.TipoVentaPedido === 'product') {
                     const productResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${prodcuctServiceFieldId}`)
@@ -26,10 +24,10 @@ const getProductServicePrice: FieldHook = async ({ data, originalDoc }) => {
                 }
             }
         } else {
-            console.log('NO SE A DEFINIDO VALORES EN DATA')
+            // console.log('NO SE A DEFINIDO VALORES EN DATA')
         }
     } catch (error) {
-        console.log('ERROR EN LA FUNCION getProductServicePrice: ', error)
+        // console.log('ERROR EN LA FUNCION getProductServicePrice: ', error)
     }
     return null
 }
@@ -57,7 +55,7 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
                             return productPrice
                         })
                         .catch(error => {
-                            console.error('Error del Servidor al optener precio del Producto:', error)
+                            // console.error('Error del Servidor al optener precio del Producto:', error)
                         });
                     const { CantidadProductoPedido } = data.DetallesPagoPedido;
                     PrecioProductoServicio = productResponse
@@ -80,7 +78,7 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
                             return servicePrice
                         })
                         .catch(error => {
-                            console.log('Error del Servidor al optener precio del Servicio:', error)
+                            // console.log('Error del Servidor al optener precio del Servicio:', error)
                         })
                     PrecioProductoServicio = serviceResponse
                     const calculatedServiceDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
@@ -90,7 +88,7 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
             }
         }
     } catch (error) {
-        console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
+        //console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
     }
     return null
 }
@@ -149,6 +147,7 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
             const productServiceFieldId = data.ProductoServicioPedido.value
             const fieldProductServiceLocation = data.UbicacionProductoServicio
             const fieldProductServiceLocationOrigin = originalDoc.UbicacionProductoServicio
+
             if (fieldProductServiceLocation !== fieldProductServiceLocationOrigin || fieldProductServiceLocation === undefined) {
 
                 if (data.TipoVentaPedido === 'product') {
@@ -230,70 +229,84 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
             }
         }
     } catch (error) {
-        console.log('ERROR EN LA FUNCION getClientLocation:', error)
+        //console.log('ERROR EN LA FUNCION getClientLocation:', error)
     }
     return null
 }
+
+interface ImagenProducto {
+    ImagenProducto: {
+        id: string;
+        // other properties...
+      };
+    id: string;
+}
+
 const getProductServiceImageId: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const ImageProductServiceFieldId = data.ProductoServicioPedido.value
-            const fieldImageProductServiceId = data.ImagenServicioProductoId
-            const fieldImageProductServiceIdOrigin = data.ImagenServicioProductoId
-            if (fieldImageProductServiceId !== fieldImageProductServiceIdOrigin || fieldImageProductServiceId === undefined) {
-
-                if (data.TipoVentaPedido === 'product') {
-                    const imageProductResponse = await fetch(`${process.env.PAYLOAD_URL}/api/productos/${ImageProductServiceFieldId}`)
-                    if (imageProductResponse.ok) {
-                        const imageProductData = await imageProductResponse.json()
-                        const productImage = imageProductData.ImagenesProducto
-                        const getImageProductStringId = productImage?.[0]?.ImagenProducto || null
-                        return getImageProductStringId
-                    } else {
-                        throw new Error(`Error al obtener la Image URL del Producto: ${imageProductResponse.status}`)
+            if (data.TipoVentaPedido === 'product') {
+                const responseImageProduct = await payload.find({
+                    collection: 'productos',
+                    where: {
+                        id: ImageProductServiceFieldId
                     }
+                })
+                if (responseImageProduct.docs.length > 0 && responseImageProduct.docs) {
+
+                    const resultImageProductId = responseImageProduct.docs[0]?.ImagenesProducto as ImagenProducto[] ;
+                    console.log('OBJETO DE IMAGEN PRODUCTO: ', resultImageProductId)
+                    const getImageProductStringId = resultImageProductId?.[0]?.ImagenProducto.id
+
+                    console.log('ID DE IMAGEN PRODUCTO: ', getImageProductStringId)
+                    return getImageProductStringId;
+
+                    /* const imageProductData = await imageProductResponse.json()
+                     const productImage = imageProductData.ImagenesProducto
+                     const getImageProductStringId = productImage?.[0]?.ImagenProducto || null
+                     return getImageProductStringId*/
                 }
-
-                if (data.TipoVentaPedido === 'service') {
-                    const serviceResponse = await fetch(`${process.env.PAYLOAD_URL}/api/servicios/${ImageProductServiceFieldId}`)
-                    if (serviceResponse.ok) {
-                        const serviceData = await serviceResponse.json();
-                        const serviceImage = serviceData.ImagenesServicio;
-                        const getImageServiceStringId = serviceImage?.[0]?.ImagenServicio || null
-                        return getImageServiceStringId
-                    } else {
-                        throw new Error(`Error al obtener la Image URL del Servicio: ${serviceResponse.status}`)
+            }
+            if (data.TipoVentaPedido === 'service') {
+                const responseImageService = await payload.find({
+                    collection: 'servicios',
+                    where: {
+                        id: ImageProductServiceFieldId
                     }
+                })
+                if (responseImageService.docs.length > 0 && responseImageService.docs) {
+                    const resultImageServiceId = responseImageService.docs[0].id
+                    console.log('ID DE IMAGEN SERVICIO: ', resultImageServiceId)
+                    return resultImageServiceId
                 }
             }
         }
     } catch (error) {
         console.log('ERROR EN LA FUNCION getProductServiceImageId: ', error)
     }
-    return null
+
 }
 const setProductServiceImageChecked: FieldHook = async ({ data }) => {
     try {
-        if (data) {
-            const fieldProductServiceId = data.ImagenServicioProductoId
-            // console.log('RESULTADO DE FIELD ID IMAGE : ', fieldProductServiceId)
+        if (data && data.ImagenServicioProductoId !== undefined) {
             const mediaProductService = await payload.find({
                 collection: 'imagenes',
                 where: {
-                    id: {
-                        equals: fieldProductServiceId,
-                    }
+                    id: data.ImagenServicioProductoId,
                 }
             })
+            console.log('ID CHECKED RESPONSE DE IMAGEN : ', mediaProductService)
             if (mediaProductService.docs && mediaProductService.docs.length > 0) {
-                const imageProductService = mediaProductService.docs[0].id  // return media.docs[0].filename;
-                //console.log('RESULTADO DE FIND ID IMAGE : ', imageProductService)
+                const imageProductService = mediaProductService.docs[0].id
+                console.log('ID CHECKED DE IMAGEN : ', imageProductService)
                 return imageProductService;
             }
         }
     } catch (error) {
-        console.log("Error en la funcion setProductServiceImageChecked: ", error)
+        // console.log("ERROR EN LA FUNCION setProductServiceImageChecked: ", error)
     }
+    // return null
 }
 const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
     try {
@@ -301,9 +314,11 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
         const stateOrderPayment = data.EstadoPagoPedido;
         const stateOrderApproved = data.EstadoCompraPedido;
         const isOrderApproved = data.AprobacionEstadoPedido;
+
         console.log('FIELD  ORDER APROBACION updateProductStock: ', isOrderApproved)
 
         if (CantidadProductoPedido > 0 && stateOrderPayment === 'paid') {
+
             const productFieldId = data.ProductoServicioPedido.value;
             const collectionName = 'productos';
             const productResponse = await payload.find({
@@ -314,12 +329,15 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
                     }
                 }
             })
+
             if (productResponse.docs && productResponse.docs.length > 0) {
+
                 const resultProductId = productResponse.docs[0].id;
                 const resultProductStock = productResponse.docs[0].CantidadProducto;
                 const countStockNumber = resultProductStock as number;
 
                 if (stateOrderApproved && isOrderApproved === 'notApproved') {
+                    data.AprobacionEstadoPedido = 'approved';
                     if (countStockNumber >= CantidadProductoPedido) {
                         const newStock = countStockNumber - CantidadProductoPedido;
 
@@ -330,7 +348,9 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
                                 CantidadProducto: newStock
                             },
                         })
+
                         console.log('Producto Stock Actualizado.')
+
                     } else {
                         console.log('CANTIDAD SOLICITADA SUPERA EL STOCK DISPONIBLE!.')
                     }
@@ -346,31 +366,31 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
             console.log('DEBE AGREGAR UNA CANTIDAD Y CAMBIAR EL ESTADO DE PAGO A REALIZADO')
         }
     } catch (error) {
-        console.log('ERROR AL ACTULIZAR LA CANTIDAD DEL PRODUCTO: ', error)
+        console.log('ERROR EN LA FUNCION updateProductStock: ', error)
     }
+    return null
 
 }
-const getProductOrderStockState: FieldHook = async ({ data }) => {
 
+/*const getProductOrderStockState: FieldHook = async ({ data }) => {
     if (data && data.AprobacionEstadoPedido) {
         const changeOrderFieldState = data.EstadoCompraPedido;
         if (changeOrderFieldState && data.EstadoPagoPedido === 'paid') {
             data.AprobacionEstadoPedido = 'approved';
         }
     }
-}
+}*/
 const validateProductRequest: FieldHook = async ({ data, originalDoc }) => {
     if (data && data.AprobacionEstadoPedido === 'approved') {
         const { CantidadProductoPedido } = originalDoc.DetallesPagoPedido
-        console.log('ULTIMA CANTIDAD ORDER APROBACION validateProductRequest: ', CantidadProductoPedido)
         return CantidadProductoPedido
     }
 }
 const getProductStockOrder: FieldHook = async ({ data }) => {
     try {
-        if (data && data.TipoVentaPedido === 'product' && data.ProductoServicioPedido !== undefined) {
+        if (data) {
             const fieldProductId = data.ProductoServicioPedido.value;
-            console.log('ID DEL PRODUCTO getProductStockOrder: ', fieldProductId)
+            //  console.log('ID DEL PRODUCTO getProductStockOrder: ', fieldProductId)
             const responseProductoStock = await payload.find({
                 collection: 'productos',
                 where: {
@@ -381,13 +401,13 @@ const getProductStockOrder: FieldHook = async ({ data }) => {
                 const productStockData = responseProductoStock.docs[0].CantidadProducto;
                 return productStockData;
             } else {
-                console.log('SIN STOCK DE PRODUCTOS!')
+                //console.log('SIN STOCK DE PRODUCTOS!')
             }
         } else {
-            console.log('DEBE SELECCIONAR UN PRODUCTO DE LA LISTA!')
+            // console.log('DATA UNDEFINED!')
         }
     } catch (error) {
-        console.log('Error en la Funcion getProductStockOrder: ', error)
+        // console.log('Error en la Funcion getProductStockOrder: ', error)
     }
 }
 
@@ -461,16 +481,9 @@ const Orders: CollectionConfig = {
             required: false,
             admin: {
                 readOnly: true,
-                hidden: true
-            },
-            access: {
-                // read:() => false,
-                // update: ()=> false,
+                hidden: false
             },
             hooks: {
-                /*beforeChange: [({ siblingData }) => {
-                    return siblingData.ImagenServicioProductoId = undefined
-                }],*/
                 beforeChange: [getProductServiceImageId],
                 afterRead: [getProductServiceImageId]
             }
@@ -531,7 +544,6 @@ const Orders: CollectionConfig = {
                         width: '50%',
                     }
                 },
-
                 {
                     name: "VentaImagenOrder",
                     type: "upload",
@@ -544,11 +556,12 @@ const Orders: CollectionConfig = {
                         condition: ({ ImagenServicioProductoId }) => ImagenServicioProductoId !== undefined
                     },
                     access: {
-                        update: () => false,
+                        read: () => true,
+                        update: () => true,
                     },
                     hooks: {
                         beforeChange: [({ siblingData }) => {
-                            siblingData.VentaImagenOrder = undefined
+                            delete siblingData.VentaImagenOrder
                         }],
                         afterRead: [setProductServiceImageChecked]
                     }
@@ -930,10 +943,10 @@ const Orders: CollectionConfig = {
             admin: {
                 position: 'sidebar'
             },
-            hooks: {
-                beforeChange: [getProductOrderStockState],
-                afterRead: [getProductOrderStockState]
-            }
+            /*  hooks: {
+                  beforeChange: [getProductOrderStockState],
+                  afterRead: [getProductOrderStockState]
+              }*/
         },
         {
             name: "AprobacionEstadoPedido",

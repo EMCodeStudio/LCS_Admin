@@ -6,32 +6,35 @@ const formatLocation: FieldHook = async ({ data, originalDoc }) => {
         if (data && data.DepartamentoUbicacion !== undefined && data.MunicipioUbicacion !== undefined) {
 
             const fieldDeparmentLocationId = data.DepartamentoUbicacion;
-            console.log('ID Departamento Ubicacion: ', fieldDeparmentLocationId)
+           // console.log('ID Departamento Ubicacion: ', fieldDeparmentLocationId)
             const fieldMunicipalityLocationId = data.MunicipioUbicacion;
-            console.log('ID Municipio Ubicacion: ', fieldMunicipalityLocationId)
+          //  console.log('ID Municipio Ubicacion: ', fieldMunicipalityLocationId)
             const locationFieldData = data.UbicacionDatos;
             const locationFieldDataOrigin = originalDoc.UbicacionDatos;
 
             if (locationFieldData !== locationFieldDataOrigin || locationFieldData === undefined) {
+
                 const deparmentResponse = await fetch(`http://localhost:3000/api/departamentos/${fieldDeparmentLocationId}`)
                 const municipalityResponse = await fetch(`http://localhost:3000/api/municipios/${fieldMunicipalityLocationId}`)
+
                 if (deparmentResponse.ok && municipalityResponse.ok) {
                     const departmentData = await deparmentResponse.json()
                     const departmentLocation = departmentData.NombreDepartamento;
-                    console.log('DATA Departamento Ubicacion: ', departmentLocation)
+                    //console.log('DATA Departamento Ubicacion: ', departmentLocation)
                     const municipalityData = await municipalityResponse.json()
                     const municipalityName = municipalityData.NombreMunicipio;
-                    console.log('DATA Municipio Ubicacion: ', municipalityName)
+                   // console.log('DATA Municipio Ubicacion: ', municipalityName)
                     const formatedLocation = `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
-                    console.log('FORMAT Ubicacion: ', formatedLocation)
+                   // console.log('FORMAT Ubicacion: ', formatedLocation)
                     return formatedLocation;
                 }
-                console.log('NOT Ubicacion ENCONTRADA')
+               // console.log('NOT Ubicacion ENCONTRADA')
             }
+           // console.log('Ubicacion Ya Existe')
         }
         
     } catch (error) {
-        console.log('Error de Consulta de la Ubicacion: ', error);
+      //  console.log('Error de Consulta de la Ubicacion: ', error);
     }
 }
 
