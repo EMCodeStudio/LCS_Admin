@@ -504,14 +504,6 @@ const Orders: CollectionConfig = {
                 afterRead: [getProductServiceImageId]
             }
         },
-        /*  { */
-        /*      name: "MediaProductServiceOrder",  */
-        /*      type: "text",  */
-        /*      label: "Imagen de Venta", */
-        /*      hooks: { */
-        /*          afterRead: [setProductServiceImageChecked] */
-        /*      } */
-        /*  }, */
         {
             type: 'row',
             fields: [
@@ -520,14 +512,6 @@ const Orders: CollectionConfig = {
                     label: "Productos - Servicios",
                     type: 'relationship',
                     required: true,
-                    /*  hooks: {
-                         beforeChange: [
-                           ({ data, value, operation }) => {
-                             data.PrecioProducto = typeof value === 'string' ? value.split(' ')[0] : '';
-                             return value;
-                           },
-                         ],
-                       }, */
 
                     relationTo: ['productos', 'servicios'],
                     hasMany: false,
@@ -582,30 +566,12 @@ const Orders: CollectionConfig = {
                         afterRead: [setProductServiceImageChecked]
                     }
                 },
-                /*  {
-                      name: 'ProductImageOrder',
-                      type: 'ui',
-                      admin: {
-                          condition: ({ TipoVentaPedido }) => {
-                              console.log("Valor de TipoVentaPedido:", TipoVentaPedido);
-                              return TipoVentaPedido === 'product';
-                          },
-                          width: '50%',
-                          components: {
-                              //Field:  ({ data }) => {
-                              //    const urlImage =  setProductServiceImageChecked; 
-                              //  return ImageProduct({ ...data, urlImage });
-                              //}
-                              Field: PreviewImage
-                          }
-                      },
-                  },*/
             ]
         },
 
 
 
-        
+
         {
             type: 'row',
             fields: [
@@ -792,6 +758,14 @@ const Orders: CollectionConfig = {
                                 }],
                                 afterRead: [getProductServicePrice]
                             },
+                            /*  hooks: {
+     beforeChange: [
+       ({ data, value, operation }) => {
+         data.PrecioProducto = typeof value === 'string' ? value.split(' ')[0] : '';
+         return value;
+       },
+     ],
+   }, */
                         },
                         {
                             name: "CantidadProductoPedido",

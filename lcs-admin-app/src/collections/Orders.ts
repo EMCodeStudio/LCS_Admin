@@ -1,5 +1,5 @@
 import { CollectionConfig } from "payload/types";
-import {  ImagePreviewOrderField } from "../components/Orders/ImagenOrder/PreviewImageOrderField";
+import { ImagePreviewOrderField } from "../components/Orders/ImagenOrderFields/PreviewImageOrderField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -12,6 +12,20 @@ const Orders: CollectionConfig = {
         defaultColumns: ['ClienteIdPedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS',
     },
+    /*  endpoints: [
+      {
+        path: '/:id/tracking',
+        method: 'get',
+        handler: async (req, res, next) => {
+          const tracking = await getTrackingInfo(req.params.id)
+          if (tracking) {
+            res.status(200).send({ tracking })
+          } else {
+            res.status(404).send({ error: 'not found' })
+          }
+        },
+      },
+    ],*/
     fields: [
 
         {
