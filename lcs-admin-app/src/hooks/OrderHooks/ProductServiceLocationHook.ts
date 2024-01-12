@@ -19,18 +19,23 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                 }
             })
             if (respondeLocation.docs && respondeLocation.docs.length > 0) {
+                
                 const formatLocationData = (ubicacion: Ubicacion): string => {
                     const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
                     return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
                 }
+
                 let locationData: LocationData[] = []
+
                 const dataServerLocation = collection === 'productos' ?
                     respondeLocation.docs[0]?.UbicacionProducto as Ubicacion[] :
                     respondeLocation.docs[0]?.UbicacionServicio as Ubicacion[]
+
                 dataServerLocation.forEach((ubicacion: Ubicacion) => {
                     const getLocationString = formatLocationData(ubicacion)
                     locationData.push(getLocationString + '\n')
                 })
+
                 const resultLocation = locationData.join('')
                 return resultLocation;
             }
