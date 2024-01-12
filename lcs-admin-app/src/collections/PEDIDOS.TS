@@ -155,6 +155,7 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
                     if (productResponse.ok) {
                         const productData = await productResponse.json()
                         const productLocation = productData.UbicacionProducto;
+                        
                         const formatLocationData = (ubicacion: Ubicacion): string => {
                             const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
                             return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
@@ -575,6 +576,9 @@ const Orders: CollectionConfig = {
         {
             type: 'row',
             fields: [
+
+
+
                 {
                     name: 'UbicacionProductoServicio',
                     label: 'Ubicaciones Disponibles',
@@ -593,6 +597,11 @@ const Orders: CollectionConfig = {
                         afterRead: [getProductServiceLocation]
                     }
                 },
+
+
+
+
+
                 {
                     name: "UbicacionClientePedido",
                     type: "textarea",
@@ -614,6 +623,10 @@ const Orders: CollectionConfig = {
                 },
             ]
         },
+
+
+
+
         {
             type: 'row',
             fields: [

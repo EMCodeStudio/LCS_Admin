@@ -1,10 +1,10 @@
-import { Field } from "payload/types";
-import getProductServiceImage from "../../../hooks/OrderHooks/ImageOrderHook";
+import { Field } from "payload/types"
+import getProductServiceImage from "../../../hooks/OrderHooks/ImageOrderHook"
 
 const ImagePreviewOrderField: Field = {
     name: "ImagenServicioProductoId",
     type: "upload",
-    label: "ID de Producto - Servicio",
+    label: "Imagen de Producto - Servicio",
     required: false,
     relationTo: 'imagenes',
     admin: {
@@ -24,4 +24,4 @@ const ImagePreviewOrderField: Field = {
     }
 }
 
-export { ImagePreviewOrderField };
+export { ImagePreviewOrderField }

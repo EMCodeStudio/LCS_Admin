@@ -1,5 +1,6 @@
 import { CollectionConfig } from "payload/types";
-import { ImagePreviewOrderField } from "../components/Orders/ImagenOrderFields/PreviewImageOrderField";
+import { ImagePreviewOrderField } from "../components/Orders/ImageOrderFields/PreviewImageOrderField";
+import ProductServiceLocationField from "../components/Orders/LocationOrderFields/ProductServiceLocationField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -98,8 +99,42 @@ const Orders: CollectionConfig = {
                     }
                 },
                 ImagePreviewOrderField,
+                
             ]
-        }
+        },
+
+
+        {
+            type: 'row',
+            fields: [
+
+
+                
+                ProductServiceLocationField,
+        
+                {
+                    name: "UbicacionClientePedido",
+                    type: "textarea",
+                    label: "Ubicacion del Cliente",
+                    required: false,
+                    admin: {
+                        width: '50%',
+                        readOnly: true,
+                    },
+                    access: {
+                        update: () => false
+                    },
+                  /*  hooks: {
+                        beforeChange: [({ siblingData }) => {
+                            return siblingData.UbicacionProductoServicio = undefined
+                        }],
+                        afterRead: [getClientLocation]
+                    }*/
+                },
+
+
+            ]
+        },
 
 
     ],
