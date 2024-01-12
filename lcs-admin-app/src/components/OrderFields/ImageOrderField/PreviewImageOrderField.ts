@@ -11,11 +11,13 @@ const ImagePreviewOrderField: Field = {
         readOnly: true,
         hidden: false,
         width: '100%',
+        condition: ({UbicacionProductoServicioPedido}) => UbicacionProductoServicioPedido !== undefined,
     },
     access: {
         update: () => false,
         create: () => false
     },
+    
     hooks: {
         beforeChange: [({ siblingData }) => {
             delete siblingData.VentaImagenOrder
