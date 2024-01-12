@@ -155,7 +155,7 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
                     if (productResponse.ok) {
                         const productData = await productResponse.json()
                         const productLocation = productData.UbicacionProducto;
-                        
+
                         const formatLocationData = (ubicacion: Ubicacion): string => {
                             const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion;
                             return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`;
@@ -569,10 +569,6 @@ const Orders: CollectionConfig = {
                 },
             ]
         },
-
-
-
-
         {
             type: 'row',
             fields: [
@@ -623,10 +619,6 @@ const Orders: CollectionConfig = {
                 },
             ]
         },
-
-
-
-
         {
             type: 'row',
             fields: [
@@ -661,15 +653,7 @@ const Orders: CollectionConfig = {
                                 }],
 
                             }
-
-                            /* validate: ({data}) => {
-                                 const approvedOrderState = data.AprobacionEstadoPedido;
-                                 if (approvedOrderState === 'approved') {
-                                     return 'No puede Agregar el Descuento! el Pedido ya ha sido Aprobado.'
-                                 }
-                             },*/
                         },
-
                         {
                             name: "DescuentoPedido",
                             type: "number",
@@ -706,7 +690,7 @@ const Orders: CollectionConfig = {
                     ]
                 },
 
-
+                
                 {
                     name: "StockProductoPedido",
                     label: "Stock Disponible:",

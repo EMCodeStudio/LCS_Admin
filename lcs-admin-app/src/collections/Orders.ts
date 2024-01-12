@@ -2,6 +2,8 @@ import { CollectionConfig } from "payload/types";
 import ClientLocationField from "../components/OrderFields/LocationOrderFields/ClientLocationField";
 import { ImagePreviewOrderField } from "../components/OrderFields/ImageOrderField/PreviewImageOrderField";
 import ProductServiceLocationField from "../components/OrderFields/LocationOrderFields/ProductServiceLocationField";
+import ErrorMessages from "../components/Messages/ErrorMessages";
+import ProductStockField from "../components/OrderFields/ProductOrderField/ProdutStockField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -14,7 +16,7 @@ const Orders: CollectionConfig = {
         defaultColumns: ['ClienteIdPedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS',
     },
-    /*  endpoints: [
+    /*endpoints: [
       {
         path: '/:id/tracking',
         method: 'get',
@@ -29,7 +31,6 @@ const Orders: CollectionConfig = {
       },
     ],*/
     fields: [
-
         {
             name: 'ClienteIdPedido',
             label: 'Datos del Cliente',
@@ -107,8 +108,81 @@ const Orders: CollectionConfig = {
                 ClientLocationField,
             ]
         },
+        {
+            type: 'row',
+            fields: [
+                {
+                    type: 'row',
+                    fields: [
+                        {
+                            name: "OfertaPedido",
+                            label: "Aplicar Descuento?",
+                            type: 'radio',
+                            required: false,
+                            options: [
+                                {
+                                    label: 'Si',
+                                    value: 'apply',
+                                },
+                                {
+                                    label: 'No',
+                                    value: 'noApply',
+                                },
+                            ],
+                            defaultValue: 'noApply',
+                            admin: {
+                                layout: 'horizontal',
+                                width: '50%'
+                            },
+                            /*hooks: {
+                                beforeChange: [(args) => {
+                                    if (args.data && args.data.AprobacionEstadoPedido !== args.originalDoc.AprobacionEstadoPedido) {
+                                        return args.data.OfertaPedido = args.originalDoc.OfertaPedido;
+                                    }
+                                }],
+                            }*/
+                        },
+                        {
+                            name: "DescuentoPedido",
+                            type: "number",
+                            label: "% Descuento %",
+                            required: false,
+                            admin: {
+                                condition: ({ OfertaPedido }) => OfertaPedido === 'apply',
+                                width: '50%',
+                                placeholder: '0'
+                            },
+                            hooks: {
+                                beforeChange: [(args) => {
+                                    const twoDigits = /^\d{2}$/;
+                                    if (args.data && args.data.DescuentoPedido !== undefined) {
+                                        const discount = args.data.DescuentoPedido;
+                                        if (!twoDigits.test(discount)) {
+                                            return args.data.DescuentoPedido = 0;
+                                        }
+                                    }
+                                }]
+                            }
+                        },
+                        {
+                            name: 'ErrorMessage',
+                            type: 'ui',
+                            admin: {
+                                condition: ({ DescuentoPedido }) => DescuentoPedido >= 100,
+                                width: '100%',
+                                components: {
+                                    Field: ({ data }) => ErrorMessages({ ...data, message: 'Debe Ingresar Numeros de 1 a 99.', showError: true }),
+                                }
+                            },
+                        },
+                    ]
+                },
+                ProductStockField
+            ]
+        }
+
     ],
     timestamps: true,
-};
+}
 
 export default Orders;

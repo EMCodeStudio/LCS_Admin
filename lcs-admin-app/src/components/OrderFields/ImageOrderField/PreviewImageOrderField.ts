@@ -17,7 +17,6 @@ const ImagePreviewOrderField: Field = {
         update: () => false,
         create: () => false
     },
-    
     hooks: {
         beforeChange: [({ siblingData }) => {
             delete siblingData.VentaImagenOrder
