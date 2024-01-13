@@ -12,7 +12,7 @@ const ProductStockField: Field = {
         width: '18%',
         readOnly: true,
         step: 1,
-        condition: ({ TipoVentaPedido }) => TipoVentaPedido !== 'product'
+        condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'product'
     },
     access: {
         update: () => false,

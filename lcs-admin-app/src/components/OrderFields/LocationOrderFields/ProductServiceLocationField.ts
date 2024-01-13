@@ -9,14 +9,8 @@ const ProductServiceLocationField: Field ={
             readOnly: true,
             width: '50%'
         },
-        access: {
-            update: () => false,
-            create: () => false,
-        },
         hooks: {
-            beforeChange: [({ siblingData }) => {
-                delete siblingData.UbicacionProductoServicio 
-            }],
+            beforeChange: [getProductServiceLocation],
             afterRead: [getProductServiceLocation]
         }
 }

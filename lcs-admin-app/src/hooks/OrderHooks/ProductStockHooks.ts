@@ -22,7 +22,7 @@ const getProductStockOrder: FieldHook = async ({ data }) => {
             // console.log('DATA UNDEFINED!')
         }
     } catch (error) {
-        // console.log('Error en la Funcion getProductStockOrder: ', error)
+         console.log('Error en la Funcion getProductStockOrder: ', error)
     }
 }
 export {getProductStockOrder}
