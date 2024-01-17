@@ -426,8 +426,6 @@ const getProductStockOrder: FieldHook = async ({ data }) => {
 }
 
 
-
-
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     access: {
@@ -572,9 +570,6 @@ const Orders: CollectionConfig = {
         {
             type: 'row',
             fields: [
-
-
-
                 {
                     name: 'UbicacionProductoServicio',
                     label: 'Ubicaciones Disponibles',
@@ -593,11 +588,6 @@ const Orders: CollectionConfig = {
                         afterRead: [getProductServiceLocation]
                     }
                 },
-
-
-
-
-
                 {
                     name: "UbicacionClientePedido",
                     type: "textarea",
@@ -654,6 +644,7 @@ const Orders: CollectionConfig = {
 
                             }
                         },
+
                         {
                             name: "DescuentoPedido",
                             type: "number",
@@ -690,7 +681,6 @@ const Orders: CollectionConfig = {
                     ]
                 },
 
-                
                 {
                     name: "StockProductoPedido",
                     label: "Stock Disponible:",
@@ -709,21 +699,6 @@ const Orders: CollectionConfig = {
                 },
             ],
         },
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -833,6 +808,21 @@ const Orders: CollectionConfig = {
 
             ],
         },
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        
         {
             name: "EstadoPagoPedido",
             type: "select",

@@ -4,6 +4,7 @@ import { ImagePreviewOrderField } from "../components/OrderFields/ImageOrderFiel
 import ProductServiceLocationField from "../components/OrderFields/LocationOrderFields/ProductServiceLocationField";
 import ErrorMessages from "../components/Messages/ErrorMessages";
 import ProductStockField from "../components/OrderFields/ProductOrderField/ProdutStockField";
+import PriceProdServField from "../components/OrderFields/PriceOrderFields/PriceProdServField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -134,13 +135,15 @@ const Orders: CollectionConfig = {
                                 layout: 'horizontal',
                                 width: '50%'
                             },
-                            /*hooks: {
+                            /*
+                            hooks: {
                                 beforeChange: [(args) => {
                                     if (args.data && args.data.AprobacionEstadoPedido !== args.originalDoc.AprobacionEstadoPedido) {
                                         return args.data.OfertaPedido = args.originalDoc.OfertaPedido;
                                     }
                                 }],
-                            }*/
+                            }
+                            */
                         },
                         {
                             name: "DescuentoPedido",
@@ -179,7 +182,30 @@ const Orders: CollectionConfig = {
                 },
                 ProductStockField
             ]
+        },
+
+
+
+        {
+            name: "DetallesPagoPedido",
+            type: "group",
+            label: "Detalles de Pago",
+            fields: [
+                {
+                    type: 'row',
+                    fields: [
+                       
+                       PriceProdServField,
+
+                       
+                       
+                       
+                    ]
+                }
+
+            ]
         }
+
 
     ],
     timestamps: true,

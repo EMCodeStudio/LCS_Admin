@@ -1,5 +1,5 @@
 import { Field } from "payload/types"
-import { getProductStockOrder } from "../../../hooks/OrderHooks/ProductStockHooks"
+import { getProductStockOrder } from "../../../hooks/OrderHooks/ProductStockHook"
 
 
 const ProductStockField: Field = {

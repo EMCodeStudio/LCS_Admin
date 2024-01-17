@@ -2,10 +2,11 @@ import { FieldHook } from "payload/types"
 import { LocationData, Ubicacion } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 import payload from "payload"
 
-
 const getClientLocation: FieldHook = async ({ data, }) => {
     try {
         if (data) {
+
+
             const clientFieldId = data.ClienteIdPedido
             const locationProdServField = data.UbicacionProductoServicioPedido
             const responseClientLocation = await payload.find({
@@ -14,6 +15,7 @@ const getClientLocation: FieldHook = async ({ data, }) => {
                     id: clientFieldId
                 }
             })
+            
             if (responseClientLocation.docs && responseClientLocation.docs.length > 0) {
                 let locationDataString: LocationData = ''
                 const clientLocationData = responseClientLocation.docs[0].UbicacionCliente
