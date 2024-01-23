@@ -710,6 +710,7 @@ const Orders: CollectionConfig = {
                 {
                     type: 'row',
                     fields: [
+
                         {
                             name: "PrecioProductoServicio",
                             type: "number",
@@ -739,6 +740,8 @@ const Orders: CollectionConfig = {
      ],
    }, */
                         },
+
+
                         {
                             name: "CantidadProductoPedido",
                             label: "Cantidad Solicitada",
@@ -748,7 +751,6 @@ const Orders: CollectionConfig = {
                             hooks: {
                                 beforeChange: [validateProductRequest],
                                 afterRead: [validateProductRequest]
-
                                 /*hooks: {
                                     beforeChange: [(args) => {
                                       // Aquí puedes restringir la actualización del campo
@@ -762,8 +764,6 @@ const Orders: CollectionConfig = {
                                     }],
                                   },*/
                             },
-
-
                             admin: {
                                 placeholder: '0',
                                 width: '50%',
@@ -777,6 +777,8 @@ const Orders: CollectionConfig = {
                                 }
                             }
                         },
+
+
                     ],
                 },
                 {

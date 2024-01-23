@@ -5,6 +5,7 @@ import ProductServiceLocationField from "../components/OrderFields/LocationOrder
 import ErrorMessages from "../components/Messages/ErrorMessages";
 import ProductStockField from "../components/OrderFields/ProductOrderField/ProdutStockField";
 import PriceProdServField from "../components/OrderFields/PriceOrderFields/PriceProdServField";
+import QuantityProdField from "../components/OrderFields/QuantityProdField/QuantityProdField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -194,12 +195,8 @@ const Orders: CollectionConfig = {
                 {
                     type: 'row',
                     fields: [
-                       
-                       PriceProdServField,
-
-                       
-                       
-                       
+                        PriceProdServField,
+                        QuantityProdField
                     ]
                 }
 
