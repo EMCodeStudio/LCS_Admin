@@ -6,6 +6,7 @@ import ErrorMessages from "../components/Messages/ErrorMessages";
 import ProductStockField from "../components/OrderFields/ProductOrderField/ProdutStockField";
 import PriceProdServField from "../components/OrderFields/PriceOrderFields/PriceProdServField";
 import QuantityProdField from "../components/OrderFields/QuantityProdField/QuantityProdField";
+import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrderField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -185,8 +186,6 @@ const Orders: CollectionConfig = {
             ]
         },
 
-
-
         {
             name: "DetallesPagoPedido",
             type: "group",
@@ -198,12 +197,16 @@ const Orders: CollectionConfig = {
                         PriceProdServField,
                         QuantityProdField
                     ]
+                },
+                {
+                    type: 'row',
+                    fields: [
+                        TotalOrderField
+                    ]
                 }
 
             ]
         }
-
-
     ],
     timestamps: true,
 }
