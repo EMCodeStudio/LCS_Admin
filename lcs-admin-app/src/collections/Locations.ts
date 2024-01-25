@@ -1,40 +1,34 @@
+import payload from "payload";
 import { CollectionConfig, FieldHook } from "payload/types";
 
 
-const formatLocation: FieldHook = async ({ data, originalDoc }) => {
+const formatLocation: FieldHook = async ({ data }) => {
     try {
-        if (data && data.DepartamentoUbicacion !== undefined && data.MunicipioUbicacion !== undefined) {
-
+        if (data) {
             const fieldDeparmentLocationId = data.DepartamentoUbicacion;
-           // console.log('ID Departamento Ubicacion: ', fieldDeparmentLocationId)
             const fieldMunicipalityLocationId = data.MunicipioUbicacion;
-          //  console.log('ID Municipio Ubicacion: ', fieldMunicipalityLocationId)
-            const locationFieldData = data.UbicacionDatos;
-            const locationFieldDataOrigin = originalDoc.UbicacionDatos;
-
-            if (locationFieldData !== locationFieldDataOrigin || locationFieldData === undefined) {
-
-                const deparmentResponse = await fetch(`http://localhost:3000/api/departamentos/${fieldDeparmentLocationId}`)
-                const municipalityResponse = await fetch(`http://localhost:3000/api/municipios/${fieldMunicipalityLocationId}`)
-
-                if (deparmentResponse.ok && municipalityResponse.ok) {
-                    const departmentData = await deparmentResponse.json()
-                    const departmentLocation = departmentData.NombreDepartamento;
-                    //console.log('DATA Departamento Ubicacion: ', departmentLocation)
-                    const municipalityData = await municipalityResponse.json()
-                    const municipalityName = municipalityData.NombreMunicipio;
-                   // console.log('DATA Municipio Ubicacion: ', municipalityName)
-                    const formatedLocation = `${data.PaisUbicacion} - ${municipalityName} (${departmentLocation})`;
-                   // console.log('FORMAT Ubicacion: ', formatedLocation)
-                    return formatedLocation;
+            const deparmentResponse = await payload.find({
+                collection: "departamentos",
+                where: {
+                    id: fieldDeparmentLocationId
                 }
-               // console.log('NOT Ubicacion ENCONTRADA')
+            })
+            const municipalityResponse = await payload.find({
+                collection: "municipios",
+                where: {
+                    id: fieldMunicipalityLocationId
+                }
+            })
+
+            if (deparmentResponse.docs && deparmentResponse.docs.length > 0 && municipalityResponse.docs && municipalityResponse.docs.length > 0) {
+                const municipalityData = municipalityResponse.docs[0].NombreMunicipio
+                const departmentData = deparmentResponse.docs[0].NombreDepartamento
+                const formatedLocation = `${data.PaisUbicacion} - ${municipalityData} (${departmentData})`;
+                return formatedLocation;
             }
-           // console.log('Ubicacion Ya Existe')
         }
-        
     } catch (error) {
-      //  console.log('Error de Consulta de la Ubicacion: ', error);
+        console.log('Error de Consulta de la Ubicacion de la Funcion formatLocation: ', error);
     }
 }
 
@@ -94,6 +88,7 @@ const Locations: CollectionConfig = {
             name: "DepartamentoUbicacion",
             label: 'Nombre del Departamento',
             type: 'relationship',
+            index: true,
             relationTo: "departamentos",
             hasMany: false,
             required: true,
@@ -105,12 +100,37 @@ const Locations: CollectionConfig = {
             name: "MunicipioUbicacion",
             type: 'relationship',
             label: 'Nombre de Municipio | Ciudad',
+            index: true,
             hasMany: false,
             relationTo: 'municipios',
             unique: true,
             required: true,
             admin: {
                 description: 'Seleccione un Municipio o Ciudad.'
+            },
+            maxDepth: 0,
+            filterOptions: ({ data, relationTo }) => {
+                if (relationTo === 'municipios') {
+                    if (data.DepartamentoUbicacion) {
+                        return {
+                            DepartamentoMunicipio: { contains: data.DepartamentoUbicacion } //? { exists: true } : { exists: false }
+                        }
+                    }
+                }
+            }
+        },
+        {
+            name: "PrecioEnvioUbicacion",
+            label: "Costo de Envio",
+            type: "number",
+
+
+
+            required: true,
+            admin: {
+                description: "Ingrese el Costo de Envio a esta Ubicacion.",
+                step: 1,
+                placeholder: "$ 0.00",
             }
         },
 

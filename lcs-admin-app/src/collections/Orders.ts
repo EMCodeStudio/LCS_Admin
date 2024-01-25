@@ -75,6 +75,7 @@ const Orders: CollectionConfig = {
                     name: "ProductoServicioPedido",
                     label: "Productos - Servicios",
                     type: 'relationship',
+                    index: true,
                     required: true,
                     relationTo: ['productos', 'servicios'],
                     hasMany: false,
@@ -86,9 +87,9 @@ const Orders: CollectionConfig = {
                                     CantidadProducto: { greater_than_equal: 1 },
                                 }
                             }
-                            return {
-                                NombreProducto: { exists: false },
-                            }
+                            /* return { */
+                            /*     NombreProducto: { exists: false }, */
+                            /* } */
                         }
                         if (relationTo === 'servicios') {
                             if (data.TipoVentaPedido === 'service') {
@@ -96,9 +97,9 @@ const Orders: CollectionConfig = {
                                     EstadoServicio: { equals: 'published' },
                                 }
                             }
-                            return {
-                                NombreServicio: { exists: false },
-                            }
+                           /*  return { */
+                           /*      NombreServicio: { exists: false }, */
+                           /*  } */
                         }
                     },
                     admin: {

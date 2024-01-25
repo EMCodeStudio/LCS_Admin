@@ -24,6 +24,15 @@ const Municipalities: CollectionConfig = {
                 placeholder: 'Nombre aqui'
             }
         },
+        {
+            name: "DepartamentoMunicipio", 
+            label: "Nombre del Departamento",
+            index: true,
+            type: 'relationship', 
+            relationTo: 'departamentos',
+            hasMany: false,
+            required: false
+        },
     ],
     timestamps: true,
 }

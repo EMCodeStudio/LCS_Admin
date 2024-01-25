@@ -22,7 +22,8 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
             if (productResponse.docs && productResponse.docs.length > 0) {
                 const resultProductId = productResponse.docs[0].id
                 const resultProductStock = productResponse.docs[0].CantidadProducto
-                const countStockNumber = resultProductStock as number
+                //const countStockNumber = resultProductStock as number
+                const countStockNumber = Number(resultProductStock)
                 if (stateOrderApproved && isOrderApproved === 'notApproved') {
                     data.AprobacionEstadoPedido = 'approved'
                     if (countStockNumber >= CantidadProductoPedido) {

@@ -1,7 +1,7 @@
 import { CollectionConfig } from "payload/types";
 const Departments: CollectionConfig = {
     slug: 'departamentos',
-    access:{
+    access: {
         read: () => true,
         update: () => true
     },
@@ -9,10 +9,10 @@ const Departments: CollectionConfig = {
         useAsTitle: 'NombreDepartamento',
         group: 'SISTEMA'
     },
-    
-   labels: {
-      singular: 'Departamento',
-      plural: 'Departamentos',
+
+    labels: {
+        singular: 'Departamento',
+        plural: 'Departamentos',
     },
     fields: [
         {
@@ -21,12 +21,15 @@ const Departments: CollectionConfig = {
             type: 'text',
             unique: true,
             required: true,
-            admin:{
-                placeholder:  'Nombre aqui'
-            }
+            admin: {
+                placeholder: 'Nombre aqui'
+            },
         },
+
+
+
     ],
-   
+
     timestamps: true,
 }
 
