@@ -3,6 +3,7 @@ import getTotalPrice from "../../../hooks/OrderHooks/TotalPriceOrderHook"
 
 const TotalOrderField: Field = {
 
+
     name: "TotalPricioPedido",
     label: "$ Total a Pagar:",
     type: "number",
@@ -22,5 +23,6 @@ const TotalOrderField: Field = {
         placeholder: '0.00',
     }
 }
+
 
 export default TotalOrderField

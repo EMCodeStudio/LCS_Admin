@@ -926,10 +926,6 @@ const Orders: CollectionConfig = {
             admin: {
                 position: 'sidebar'
             },
-            /*  hooks: {
-                  beforeChange: [getProductOrderStockState],
-                  afterRead: [getProductOrderStockState]
-              }*/
         },
         {
             name: "AprobacionEstadoPedido",

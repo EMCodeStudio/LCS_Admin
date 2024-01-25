@@ -29,9 +29,9 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
                 const { CantidadProductoPedido } = data.DetallesPagoPedido
                 PrecioProductoServicio = Number(productServicePrice)
                 const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : PrecioProductoServicio
-                const validatedProductServiceDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : collection === 'productos' ? calculatedProductPrice : PrecioProductoServicio
+                const validatedProdServDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : collection === 'productos' ? calculatedProductPrice : PrecioProductoServicio
 
-                const totalProductServicePrice = Math.round(validatedProductServiceDiscount)
+                const totalProductServicePrice = Math.round(validatedProdServDiscount)
                 return totalProductServicePrice
             } else {
                 console.log(`No se Calculo el Precio Total del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)

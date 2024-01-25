@@ -1,5 +1,5 @@
 import { Field } from "payload/types"
-import validateProductRequest from "../../../hooks/OrderHooks/QuantityProdHook"
+import {validatedStockApproval} from "../../../hooks/OrderHooks/OrderApprovalHooks"
 
 
 const QuantityProdField: Field = {
@@ -10,8 +10,8 @@ const QuantityProdField: Field = {
     required: true,
     //defaultValue: 0,
     hooks: {
-        beforeChange: [validateProductRequest],
-        afterRead: [validateProductRequest]
+        beforeChange: [validatedStockApproval],
+        afterRead: [validatedStockApproval]
         /*hooks: {
             beforeChange: [(args) => {
               // Aquí puedes restringir la actualización del campo
@@ -28,6 +28,7 @@ const QuantityProdField: Field = {
     admin: {
         placeholder: '0',
         width: '50%',
+        description: 'Para Que el Stock disminuya la Compra debe estar Aprobada.',
         condition: (data) => {
             if (data.TipoVentaPedido === 'product') {
                 return true

@@ -7,6 +7,8 @@ import ProductStockField from "../components/OrderFields/ProductOrderField/Produ
 import PriceProdServField from "../components/OrderFields/PriceOrderFields/PriceProdServField";
 import QuantityProdField from "../components/OrderFields/QuantityProdField/QuantityProdField";
 import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrderField";
+import updateProductStock from "../Services/OrderService/UpdateProdStockService";
+import { validatedPaymentApproval } from "../hooks/OrderHooks/OrderApprovalHooks";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -18,6 +20,9 @@ const Orders: CollectionConfig = {
         useAsTitle: 'ClientePedido',
         defaultColumns: ['ClienteIdPedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS',
+    },
+    hooks: {
+        beforeChange: [updateProductStock]
     },
     /*endpoints: [
       {
@@ -204,9 +209,169 @@ const Orders: CollectionConfig = {
                         TotalOrderField
                     ]
                 }
-
             ]
-        }
+        },
+        {
+            name: "EstadoPagoPedido",
+            type: "select",
+            label: 'Estado del Pago',
+            hasMany: false,
+            admin: {
+                position: 'sidebar',
+            },
+            hooks: {
+                beforeChange: [validatedPaymentApproval],
+                afterRead: [validatedPaymentApproval]
+            },
+            options: [
+                {
+                    label: "Pendiente",
+                    value: "pending",
+                },
+                {
+                    label: "Realizado",
+                    value: "paid",
+                },
+                {
+                    label: "Cancelado",
+                    value: "canceled",
+                },
+            ],
+            defaultValue: 'pending',
+            required: false,
+        },
+        {
+            name: "EstadoPedido",
+            type: "select",
+            label: 'Estado del Pedido',
+            hasMany: false,
+            admin: {
+                position: 'sidebar',
+            },
+            options: [
+                {
+                    label: "En Revision",
+                    value: "checking",
+                },
+                {
+                    label: "En Proceso",
+                    value: "processing",
+                },
+                {
+                    label: "En Envio",
+                    value: "shipping",
+                },
+                {
+                    label: "Entregado",
+                    value: "delivered",
+                },
+                {
+                    label: "Finalizado",
+                    value: "done",
+                },
+                {
+                    label: "Cancelado",
+                    value: "canceled",
+                },
+            ],
+            defaultValue: 'checking',
+            required: false,
+        },
+        {
+            name: "FechaPedido",
+            type: "date",
+            label: "Fecha del Pedido",
+            localized: true,
+            required: true,
+            admin: {
+                position: 'sidebar',
+                date: {
+                    pickerAppearance: 'dayOnly',
+                    displayFormat: 'dd-MM-yyyy'
+                }
+            }
+        },
+        {
+            name: "FechaEntregaPedido",
+            type: "date",
+            label: "Fecha de Entrega",
+            localized: true,
+            required: true,
+            admin: {
+                position: 'sidebar',
+                date: {
+                    pickerAppearance: 'dayOnly',
+                    displayFormat: 'dd-MM-yyyy'
+                }
+            }
+        },
+        {
+            name: "EstadoCompraPedido",
+            type: "checkbox",
+            label: "Cambiar estado de Compra en Aprobado?",
+            defaultValue: false,
+            admin: {
+                position: 'sidebar',
+                description: 'Para cambiar el estado de la compra en aprobado, el Pago debe estar Realizado y la Ubicacion debe Coincidir.'
+            },
+            hooks: {
+                beforeChange: [(args) => {
+
+                    if (args.data) {
+                        if (args.data.EstadoPagoPedido === 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
+                            return true
+                        } else if (args.data.EstadoPagoPedido !== 'paid') {
+                            return false
+                        } else if (args.data.AprobacionEstadoPedido === 'approved') {
+                            return true
+                        }
+                    }
+                }],
+            }
+        },
+
+        {
+            name: "AprobacionEstadoPedido",
+            label: "Aprobacion de la Compra:",
+            type: 'radio',
+            required: false,
+            options: [
+                {
+                    label: 'Aprobado',
+                    value: 'approved',
+                },
+                {
+                    label: 'Sin Aprobar',
+                    value: 'notApproved',
+                },
+            ],
+            defaultValue: 'notApproved',
+            admin: {
+                readOnly: true,
+                layout: 'horizontal',
+                position: 'sidebar',
+            },
+
+            hooks: {
+                beforeChange: [(args) => {
+                    if (args.data && args.data.AprobacionEstadoPedido === 'notApproved') {
+                        if (args.data.EstadoCompraPedido === true) {
+                            const clientLocationData = args.data.UbicacionClientePedido;
+                            // Verificar si clientLocationData no es undefined y si contiene la palabra "Coincidencia"
+                            const getCoincidence = clientLocationData && clientLocationData.includes('Coincidencia');
+                            if (getCoincidence === true) {
+                                return args.data.AprobacionEstadoPedido = 'approved';
+                            } else {
+                                return args.data.AprobacionEstadoPedido = 'notApproved';
+                            }
+                        } else {
+                            return args.data.AprobacionEstadoPedido = 'notApproved';
+                        }
+                    }
+                }]
+            }
+        },
+
     ],
     timestamps: true,
 }
