@@ -320,7 +320,7 @@ const Orders: CollectionConfig = {
                     if (args.data) {
                         if (args.data.EstadoPagoPedido === 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
                             return true
-                        } else if (args.data.EstadoPagoPedido !== 'paid') {
+                        } else if (args.data.EstadoPagoPedido !== 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
                             return false
                         } else if (args.data.AprobacionEstadoPedido === 'approved') {
                             return true
@@ -355,14 +355,20 @@ const Orders: CollectionConfig = {
             hooks: {
                 beforeChange: [(args) => {
                     if (args.data && args.data.AprobacionEstadoPedido === 'notApproved') {
-                        if (args.data.EstadoCompraPedido === true) {
+
+                        if (args.data.EstadoCompraPedido === true && args.data.EstadoPagoPedido === 'paid') {
+
                             const clientLocationData = args.data.UbicacionClientePedido;
-                            // Verificar si clientLocationData no es undefined y si contiene la palabra "Coincidencia"
                             const getCoincidence = clientLocationData && clientLocationData.includes('Coincidencia');
+
                             if (getCoincidence === true) {
+
                                 return args.data.AprobacionEstadoPedido = 'approved';
+
                             } else {
+
                                 return args.data.AprobacionEstadoPedido = 'notApproved';
+
                             }
                         } else {
                             return args.data.AprobacionEstadoPedido = 'notApproved';
