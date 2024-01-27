@@ -9,6 +9,7 @@ import QuantityProdField from "../components/OrderFields/QuantityProdField/Quant
 import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrderField";
 import updateProductStock from "../Services/OrderService/UpdateProdStockService";
 import { validatedPaymentApproval } from "../hooks/OrderHooks/OrderApprovalHooks";
+import PriceShippingField from "../components/OrderFields/PriceOrderFields/PriceShippingField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -97,9 +98,9 @@ const Orders: CollectionConfig = {
                                     EstadoServicio: { equals: 'published' },
                                 }
                             }
-                           /*  return { */
-                           /*      NombreServicio: { exists: false }, */
-                           /*  } */
+                            /*  return { */
+                            /*      NombreServicio: { exists: false }, */
+                            /*  } */
                         }
                     },
                     admin: {
@@ -207,7 +208,13 @@ const Orders: CollectionConfig = {
                 {
                     type: 'row',
                     fields: [
-                        TotalOrderField
+                        {
+                            type: 'row',
+                            fields:[
+                                PriceShippingField,
+                                TotalOrderField
+                            ]
+                        }
                     ]
                 }
             ]

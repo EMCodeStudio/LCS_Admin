@@ -18,7 +18,7 @@ const TotalOrderField: Field = {
     },
     admin: {
         readOnly: true,
-        width: '100%',
+        width: '50%',
         step: 1,
         placeholder: '0.00',
     }

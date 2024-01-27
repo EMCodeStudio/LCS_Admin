@@ -18,7 +18,8 @@ const PriceProdServField: Field = {
     },
     hooks: {
         beforeChange: [({ siblingData }) => {
-            return siblingData.PrecioProductoServicio = undefined
+            //return siblingData.PrecioProductoServicio = undefined
+            delete siblingData.PrecioProductoServicio
         }],
         afterRead: [getProductServicePrice]
     },

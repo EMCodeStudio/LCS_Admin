@@ -25,9 +25,6 @@ const Departments: CollectionConfig = {
                 placeholder: 'Nombre aqui'
             },
         },
-
-
-
     ],
 
     timestamps: true,

@@ -123,9 +123,6 @@ const Locations: CollectionConfig = {
             name: "PrecioEnvioUbicacion",
             label: "Costo de Envio",
             type: "number",
-
-
-
             required: true,
             admin: {
                 description: "Ingrese el Costo de Envio a esta Ubicacion.",
@@ -133,7 +130,6 @@ const Locations: CollectionConfig = {
                 placeholder: "$ 0.00",
             }
         },
-
         {
             name: "EstadoUbicacion",
             type: "select",
