@@ -1,11 +1,10 @@
 import { FieldHook } from "payload/types"
-import { LocationData, Ubicacion } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
+import { LocationType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 import payload from "payload"
 
 const getClientLocation: FieldHook = async ({ data, }) => {
     try {
         if (data) {
-
 
             const clientFieldId = data.ClienteIdPedido
             const locationProdServField = data.UbicacionProductoServicioPedido
@@ -17,22 +16,20 @@ const getClientLocation: FieldHook = async ({ data, }) => {
             })
             
             if (responseClientLocation.docs && responseClientLocation.docs.length > 0) {
-                let locationDataString: LocationData = ''
+                let locationDataString: LocationType = ''
                 const clientLocationData = responseClientLocation.docs[0].UbicacionCliente
-                //console.log('CLIENTE ORDER DATA LOCATION: ', clientLocationData)
-                const formatLocationData = (ubicacionCliente: Ubicacion): string => {
+              
+                const formatLocationData = (ubicacionCliente: UbicacionInterface): string => {
                     const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacionCliente
                     return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
                 }
                 if (clientLocationData) {
-                    const getLocationFormatString = formatLocationData(clientLocationData as Ubicacion)
+                    const getLocationFormatString = formatLocationData(clientLocationData as UbicacionInterface)
                     locationDataString = getLocationFormatString
-                    //console.log('CLIENTE ORDER LOCATION FORMATED: ', locationDataString)
+                    
                 }
                 if (locationDataString) {
                     const valueCaseClientLocation = locationDataString
-                    //console.log('CLIENTE LOCATION LOWER: ', valueCaseClientLocation)
-                    //console.log('PROD and SERV  LOCATION LOWER: ', locationProdServField)
                     const foundedClientLocation = locationProdServField.includes(valueCaseClientLocation)
                     if (foundedClientLocation) {
                         return `Coincidencia: ${locationDataString}`

@@ -25,6 +25,27 @@ const Departments: CollectionConfig = {
                 placeholder: 'Nombre aqui'
             },
         },
+        {
+            name: "EstadoDepartamento",
+            type: "select",
+            label: 'Estado del Departamento',
+            hasMany: false,
+            options: [
+                {
+                    label: "Disponible",
+                    value: "published",
+                },
+                {
+                    label: "No Disponible",
+                    value: "draft",
+                },
+            ],
+            defaultValue: 'published',
+            required: false,
+            admin: {
+                position: 'sidebar'
+            }
+        },
     ],
 
     timestamps: true,

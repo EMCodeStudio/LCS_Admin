@@ -33,6 +33,27 @@ const Municipalities: CollectionConfig = {
             hasMany: false,
             required: false
         },
+        {
+            name: "EstadoMunicipio",
+            type: "select",
+            label: 'Estado del Municipio',
+            hasMany: false,
+            options: [
+                {
+                    label: "Disponible",
+                    value: "published",
+                },
+                {
+                    label: "No Disponible",
+                    value: "draft",
+                },
+            ],
+            defaultValue: 'published',
+            required: false,
+            admin: {
+                position: 'sidebar'
+            }
+        },
     ],
     timestamps: true,
 }

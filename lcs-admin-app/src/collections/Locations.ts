@@ -1,36 +1,71 @@
-import payload from "payload";
-import { CollectionConfig, FieldHook } from "payload/types";
+import payload from "payload"
+import { CollectionConfig, FieldHook } from "payload/types"
 
 
 const formatLocation: FieldHook = async ({ data }) => {
     try {
         if (data) {
-            const fieldDeparmentLocationId = data.DepartamentoUbicacion;
-            const fieldMunicipalityLocationId = data.MunicipioUbicacion;
-            const deparmentResponse = await payload.find({
-                collection: "departamentos",
-                where: {
-                    id: fieldDeparmentLocationId
-                }
-            })
-            const municipalityResponse = await payload.find({
+            const fieldDeparmentLocationId = data.DepartamentoUbicacion
+            const fieldMunicipalityLocationId = data.MunicipioUbicacion
+            //console.log('ID DE FIELD DEPARTAMENTO:', fieldDeparmentLocationId)
+            //console.log('ID DE FIELD MUNICIPIO:', fieldMunicipalityLocationId)
+            const municipalityResponse = payload.findByID({
                 collection: "municipios",
-                where: {
-                    id: fieldMunicipalityLocationId
-                }
+                id: fieldMunicipalityLocationId
             })
-
-            if (deparmentResponse.docs && deparmentResponse.docs.length > 0 && municipalityResponse.docs && municipalityResponse.docs.length > 0) {
-                const municipalityData = municipalityResponse.docs[0].NombreMunicipio
-                const departmentData = deparmentResponse.docs[0].NombreDepartamento
-                const formatedLocation = `${data.PaisUbicacion} - ${municipalityData} (${departmentData})`;
+            //console.log('DATA DE MUNICIPIO:', municipalityResponse)
+            let departmentData: string | undefined;
+            let municipalityData: string | undefined;
+            if (municipalityResponse) {
+                municipalityData = String((await municipalityResponse).NombreMunicipio)
+                const departamentoAsociado = payload.findByID(
+                    {
+                        collection: "departamentos",
+                        id: fieldDeparmentLocationId
+                    })
+                //console.log('DATA DE DEPARTAMENTO:', departamentoAsociado)
+                if (departamentoAsociado) {
+                    departmentData = String((await departamentoAsociado).NombreDepartamento)
+                }
+            }
+            //console.log('NOMBRE DE DEPARTAMENTO:', departmentData)
+            //console.log('NOMBRE DE MUNICIPIO:', municipalityData)
+            if (departmentData && municipalityData) {
+                const formatedLocation = `${data.PaisUbicacion} - ${municipalityData} (${departmentData})`
                 return formatedLocation;
+            }else{
+                //console.log('No se encontro el Departamento o el Municipio!')
             }
         }
     } catch (error) {
-        console.log('Error de Consulta de la Ubicacion de la Funcion formatLocation: ', error);
+        //console.log('Error de Consulta de la Ubicacion de la Funcion formatLocation: ', error)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 const Locations: CollectionConfig = {
     slug: 'ubicaciones',

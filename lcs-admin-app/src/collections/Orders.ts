@@ -48,8 +48,11 @@ const Orders: CollectionConfig = {
             required: true,
             admin: {
                 description: 'Seleccion un busque un Cliente de la lista',
+                width: '50%'
             }
         },
+
+
         {
             name: "TipoVentaPedido",
             label: "Tipo de Venta",
@@ -111,6 +114,9 @@ const Orders: CollectionConfig = {
                 ImagePreviewOrderField,
             ]
         },
+
+
+        
         {
             type: 'row',
             fields: [
