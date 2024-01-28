@@ -5,14 +5,16 @@ import { FieldHook } from "payload/types"
 const getProductServicePrice: FieldHook = async ({ data }) => {
     try {
         if (data) {
+
             const prodcuctServiceFieldId = data.ProductoServicioPedido.value
+
             let collection = ''
             if (data.TipoVentaPedido === 'product' && data.ProductoServicioPedido.relationTo === 'productos') {
                 collection = 'productos'
             } else if (data.TipoVentaPedido === 'service' && data.ProductoServicioPedido.relationTo === 'servicios') {
                 collection = 'servicios'
             }
-           // console.log('COLLECTION NAME : ', collection)
+            // console.log('COLLECTION NAME : ', collection)
             const responseProdServData = await payload.find({
                 collection,
                 where: {
@@ -20,10 +22,17 @@ const getProductServicePrice: FieldHook = async ({ data }) => {
                 }
             })
             if (responseProdServData.docs && responseProdServData.docs.length > 0) {
+
                 const resultPriceData = collection === 'productos' ?
                     responseProdServData.docs[0].PrecioProducto :
                     responseProdServData.docs[0].PrecioServicio
-                return resultPriceData
+
+                const PrecioProductoServicio = Number(resultPriceData)
+
+                const validatedProdServDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? PrecioProductoServicio * (1 - (data.DescuentoPedido / 100)) : PrecioProductoServicio
+
+                const totalProductServicePrice = Math.round(validatedProdServDiscount)
+                return totalProductServicePrice
             } else {
                 console.log(`No se encontro el precio del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)
             }
