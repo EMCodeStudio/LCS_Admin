@@ -19,14 +19,14 @@ interface UbicacionInterface {
     UbicacionDatos: string
 }
 
-type DepartmentType = {
+/*type DepartmentType = {
         id: string;
         NombreDepartamento: string;
         EstadoDepartamento: string;
         createdAt: string;
         updatedAt: string;
-}
+}*/
 
 type LocationType = string
 
-export { UbicacionInterface, DepartmentType, LocationType }
+export { UbicacionInterface, LocationType }

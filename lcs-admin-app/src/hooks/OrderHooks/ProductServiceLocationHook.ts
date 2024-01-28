@@ -24,18 +24,14 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                     const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
                     return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
                 }
-
                 let locationData: LocationType[] = []
-
                 const dataServerLocation = collection === 'productos' ?
                     respondeLocation.docs[0]?.UbicacionProducto as UbicacionInterface[] :
                     respondeLocation.docs[0]?.UbicacionServicio as UbicacionInterface[]
-
                 dataServerLocation.forEach((ubicacion: UbicacionInterface) => {
                     const getLocationString = formatLocationData(ubicacion)
                     locationData.push(getLocationString + '\n')
                 })
-
                 const resultLocation = locationData.join('')
                 return resultLocation;
             }

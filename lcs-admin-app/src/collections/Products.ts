@@ -109,7 +109,7 @@ const Products: CollectionConfig = {
         {
             name: "esMarcaProducto",
             type: "checkbox",
-            label: "Tiene una Marca?",
+            label: "Agregar Marca?",
             defaultValue: false,
             admin: {
                 description: 'Marque esta casilla si Desea agregar una Marca.'
@@ -128,7 +128,7 @@ const Products: CollectionConfig = {
         {
             name: "esMedidaPesoProducto",
             type: "checkbox",
-            label: "Tiene Medidas y Peso?",
+            label: "Agregar Medidas y Peso?",
             defaultValue: false,
             admin: {
                 description: 'Marque esta casilla si Desea agregar Medidas y Peso.'
@@ -392,9 +392,9 @@ const Products: CollectionConfig = {
             ]
         },
         {
-            name: "EstadoProducto",
+            name: "CondicionProducto",
             type: "select",
-            label: "Estado del Producto",
+            label: "Condicion del Producto",
             hasMany: false,
             options: [
                 {
@@ -407,6 +407,27 @@ const Products: CollectionConfig = {
                 },
             ],
             defaultValue: 'new',
+            required: false,
+            admin: {
+                position: 'sidebar'
+            }
+        },
+        {
+            name: "EstadoProducto",
+            type: "select",
+            label: "Estado del Producto",
+            hasMany: false,
+            options: [
+                {
+                    label: "Disponible",
+                    value: "published",
+                },
+                {
+                    label: "No Diponible",
+                    value: "draft",
+                },
+            ],
+            defaultValue: 'published',
             required: false,
             admin: {
                 position: 'sidebar'
