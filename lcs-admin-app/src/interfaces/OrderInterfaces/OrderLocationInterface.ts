@@ -13,20 +13,16 @@ interface UbicacionInterface {
         createdAt: string,
         updatedAt: string
     },
+    PrecioEnvioUbicacion: number,
     EstadoUbicacion: string,
     createdAt: string,
     updatedAt: string,
     UbicacionDatos: string
 }
 
-/*type DepartmentType = {
-        id: string;
-        NombreDepartamento: string;
-        EstadoDepartamento: string;
-        createdAt: string;
-        updatedAt: string;
-}*/
 
 type LocationType = string
+type LocationPriceType = number
 
-export { UbicacionInterface, LocationType }
+
+export { UbicacionInterface, LocationType, LocationPriceType }

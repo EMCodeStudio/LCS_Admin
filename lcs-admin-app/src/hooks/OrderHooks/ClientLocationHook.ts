@@ -23,11 +23,13 @@ const getClientLocation: FieldHook = async ({ data, }) => {
                     const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacionCliente
                     return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
                 }
+                
                 if (clientLocationData) {
                     const getLocationFormatString = formatLocationData(clientLocationData as UbicacionInterface)
                     locationDataString = getLocationFormatString
                     
                 }
+
                 if (locationDataString) {
                     const valueCaseClientLocation = locationDataString
                     const foundedClientLocation = locationProdServField.includes(valueCaseClientLocation)

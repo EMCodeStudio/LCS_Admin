@@ -91,9 +91,9 @@ const Orders: CollectionConfig = {
                                     CantidadProducto: { greater_than_equal: 1 },
                                 }
                             }
-                            /* return { */
-                            /*     NombreProducto: { exists: false }, */
-                            /* } */
+                            return {
+                                NombreProducto: { exists: false },
+                            }
                         }
                         if (relationTo === 'servicios') {
                             if (data.TipoVentaPedido === 'service') {
@@ -101,9 +101,9 @@ const Orders: CollectionConfig = {
                                     EstadoServicio: { equals: 'published' },
                                 }
                             }
-                            /*  return { */
-                            /*      NombreServicio: { exists: false }, */
-                            /*  } */
+                            return {
+                                NombreServicio: { exists: false },
+                            }
                         }
                     },
                     admin: {
@@ -116,7 +116,7 @@ const Orders: CollectionConfig = {
         },
 
 
-        
+
         {
             type: 'row',
             fields: [
@@ -216,7 +216,7 @@ const Orders: CollectionConfig = {
                     fields: [
                         {
                             type: 'row',
-                            fields:[
+                            fields: [
                                 PriceShippingField,
                                 TotalOrderField
                             ]
