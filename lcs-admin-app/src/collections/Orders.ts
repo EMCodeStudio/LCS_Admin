@@ -51,8 +51,6 @@ const Orders: CollectionConfig = {
                 width: '50%'
             }
         },
-
-
         {
             name: "TipoVentaPedido",
             label: "Tipo de Venta",
@@ -114,9 +112,6 @@ const Orders: CollectionConfig = {
                 ImagePreviewOrderField,
             ]
         },
-
-
-
         {
             type: 'row',
             fields: [

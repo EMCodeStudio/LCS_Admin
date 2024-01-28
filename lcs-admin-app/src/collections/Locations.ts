@@ -143,7 +143,7 @@ const Locations: CollectionConfig = {
             admin: {
                 description: 'Seleccione un Municipio o Ciudad.'
             },
-            maxDepth: 0,
+            //maxDepth: 0, profundidad de muestra de datos
             filterOptions: ({ data, relationTo }) => {
                 if (relationTo === 'municipios') {
                     if (data.DepartamentoUbicacion) {
