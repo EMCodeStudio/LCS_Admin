@@ -5,8 +5,8 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const productServiceFieldID = data.ProductoServicioPedido.value
-            // const fieldProductServiceTotalPrice = data.TotalPricioPedido
-            // const fieldProductServiceTotalPriceOrigin = originalDoc.TotalPricioPedido
+      
+           
             let collection = ''
             if (data.TipoVentaPedido === 'product' && data.ProductoServicioPedido.relationTo === 'productos') {
                 collection = 'productos'
@@ -26,17 +26,20 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
                     productServiceResponse.docs[0].PrecioProducto :
                     productServiceResponse.docs[0].PrecioServicio
 
-                const { CantidadProductoPedido } = data.DetallesPagoPedido
+                const { CantidadProductoPedido, PrecioEnvioPedido } = data.DetallesPagoPedido
                 PrecioProductoServicio = Number(productServicePrice)
+
                 const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : PrecioProductoServicio
+
                 const validatedProdServDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : collection === 'productos' ? calculatedProductPrice : PrecioProductoServicio
 
-                const totalProductServicePrice = Math.round(validatedProdServDiscount)
-                return totalProductServicePrice
+                const totalProductServicePrice = Math.round(validatedProdServDiscount+(PrecioEnvioPedido? PrecioEnvioPedido : 0))
+                return totalProductServicePrice 
             } else {
                 console.log(`No se Calculo el Precio Total del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)
             }
         }
+
     } catch (error) {
         console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
     }

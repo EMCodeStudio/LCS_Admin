@@ -11,7 +11,7 @@ const ImagePreviewOrderField: Field = {
     admin: {
         readOnly: true,
         hidden: false,
-        width: '100%',
+        width: '50%',
         condition: ({UbicacionProductoServicioPedido}) => UbicacionProductoServicioPedido !== undefined,
     },
     access: {

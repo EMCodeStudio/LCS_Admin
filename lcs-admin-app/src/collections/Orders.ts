@@ -338,7 +338,6 @@ const Orders: CollectionConfig = {
                 }],
             }
         },
-
         {
             name: "AprobacionEstadoPedido",
             label: "Aprobacion de la Compra:",
@@ -360,24 +359,17 @@ const Orders: CollectionConfig = {
                 layout: 'horizontal',
                 position: 'sidebar',
             },
-
             hooks: {
                 beforeChange: [(args) => {
                     if (args.data && args.data.AprobacionEstadoPedido === 'notApproved') {
 
                         if (args.data.EstadoCompraPedido === true && args.data.EstadoPagoPedido === 'paid') {
-
                             const clientLocationData = args.data.UbicacionClientePedido;
                             const getCoincidence = clientLocationData && clientLocationData.includes('Coincidencia');
-
                             if (getCoincidence === true) {
-
                                 return args.data.AprobacionEstadoPedido = 'approved';
-
                             } else {
-
                                 return args.data.AprobacionEstadoPedido = 'notApproved';
-
                             }
                         } else {
                             return args.data.AprobacionEstadoPedido = 'notApproved';
