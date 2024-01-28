@@ -17,13 +17,13 @@ const getLocationPrice: FieldHook = async ({ data }) => {
             if(clientLocationResponse.docs && clientLocationResponse.docs.length > 0){
                 const clientLocationData = clientLocationResponse.docs[0].UbicacionCliente
                 console.log('DATA CLIENTE UBICACION:', clientLocationData)
-                const formatLocationData = (ubicacionCliente: UbicacionInterface): number => {
+                const formatLocationPriceData = (ubicacionCliente: UbicacionInterface): number => {
                     const { PrecioEnvioUbicacion} = ubicacionCliente
                     return PrecioEnvioUbicacion
                 }
                 let locationDataNumber : LocationPriceType = 0
                 if (clientLocationData) {
-                    const getLocationPrice = formatLocationData(clientLocationData as UbicacionInterface)
+                    const getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
                     locationDataNumber = getLocationPrice
                     console.log('PRECIO DE ENVIO:', locationDataNumber)
                     return locationDataNumber
