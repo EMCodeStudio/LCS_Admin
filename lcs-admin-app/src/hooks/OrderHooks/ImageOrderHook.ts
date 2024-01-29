@@ -6,12 +6,7 @@ const getProductServiceImage: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const ImageProductServiceFieldId = data.ProductoServicioPedido.value
-            const imagePreviewField = data.ImagenServicioProductoId
-            //console.log('VALOR DE IMAGEN FIELD: ', imagePreviewField)
-            const imagePreviewOriginalField = originalDoc.ImagenServicioProductoId
-            //console.log('VALOR DE IMAGEN ORIGINAL FIELD: ', imagePreviewField)
-            if (imagePreviewField === undefined && imagePreviewOriginalField === undefined || imagePreviewField !== imagePreviewOriginalField ) {
-                let collection = ''
+                let collection: string = ''
                 if (data.TipoVentaPedido === 'product' && data.ProductoServicioPedido.relationTo === 'productos') {
                     collection = 'productos'
                 } else if (data.TipoVentaPedido === 'service' && data.ProductoServicioPedido.relationTo === 'servicios') {
@@ -30,10 +25,7 @@ const getProductServiceImage: FieldHook = async ({ data, originalDoc }) => {
                         //console.log('RETURN DE IMAGEN ORDEN: ', resultImageId)
                     return resultImageId
                 }
-            }else{
-                console.log('IMAGEN DEL PEDIDO YA EXISTE!')
             }
-        }
     } catch (error) {
         console.log('ERROR EN LA FUNCION getProductServiceImage: ', error)
     }

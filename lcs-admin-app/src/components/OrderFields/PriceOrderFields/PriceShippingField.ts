@@ -1,9 +1,7 @@
 import { Field } from "payload/types"
 import getLocationPrice from "../../../hooks/OrderHooks/PriceLocationHook"
 
-
 const PriceShippingField: Field = {
-
     name: "PrecioEnvioPedido",
     label: "$ Costo de Envio:",
     type: "number",
@@ -17,11 +15,11 @@ const PriceShippingField: Field = {
         readOnly: true,
         placeholder: '$ 0.00'
     },
-
     hooks: {
-        beforeChange: [({ siblingData }) => {
+        /*beforeChange: [({ siblingData }) => {
             delete siblingData.PrecioEnvioPedido
-        }],
+        }],*/
+        beforeChange: [getLocationPrice],
         afterRead: [getLocationPrice]
     }
 }

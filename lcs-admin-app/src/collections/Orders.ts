@@ -8,7 +8,6 @@ import PriceProdServField from "../components/OrderFields/PriceOrderFields/Price
 import QuantityProdField from "../components/OrderFields/QuantityProdField/QuantityProdField";
 import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrderField";
 import updateProductStock from "../Services/OrderService/UpdateProdStockService";
-import { validatedPaymentApproval } from "../hooks/OrderHooks/OrderApprovalHooks";
 import PriceShippingField from "../components/OrderFields/PriceOrderFields/PriceShippingField";
 
 const Orders: CollectionConfig = {
@@ -49,7 +48,16 @@ const Orders: CollectionConfig = {
             admin: {
                 description: 'Seleccion un busque un Cliente de la lista',
                 width: '50%'
-            }
+            },
+            hooks:{
+                beforeChange: [(args) => {
+                    const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
+                    if (stateApprovalField === 'approved') {
+                        const orderClient = args.originalDoc.ClienteIdPedido
+                        return orderClient
+                    }
+                }]
+            },
         },
         {
             name: "TipoVentaPedido",
@@ -67,10 +75,20 @@ const Orders: CollectionConfig = {
                 },
             ],
             defaultValue: 'product',
+            hooks:
+            {
+                beforeChange: [(args) => {
+                    const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
+                    if (stateApprovalField === 'approved') {
+                        const orderType = args.originalDoc.TipoVentaPedido
+                        return orderType
+                    }
+                }]
+            },
             admin: {
-                layout: 'horizontal',
-            }
-        },
+                    layout: 'horizontal',
+                }
+            },
         {
             type: 'row', fields: [
                 {
@@ -104,6 +122,18 @@ const Orders: CollectionConfig = {
                             }
                         }
                     },
+                    hooks:
+                    {
+                        beforeChange: [(args) => {
+                            const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
+                            if (stateApprovalField === 'approved') {
+                                const productService = args.originalDoc.ProductoServicioPedido
+                                return productService
+                            }
+                        }]
+                    }
+
+                    ,
                     admin: {
                         description: 'Seleccione un Producto o Servicio de la Lista',
                         width: '50%',
@@ -145,15 +175,15 @@ const Orders: CollectionConfig = {
                                 layout: 'horizontal',
                                 width: '50%'
                             },
-                            /*
+
                             hooks: {
                                 beforeChange: [(args) => {
-                                    if (args.data && args.data.AprobacionEstadoPedido !== args.originalDoc.AprobacionEstadoPedido) {
+                                    if (args.data && args.data.AprobacionEstadoPedido === 'approved') {
                                         return args.data.OfertaPedido = args.originalDoc.OfertaPedido;
                                     }
                                 }],
                             }
-                            */
+
                         },
                         {
                             name: "DescuentoPedido",
@@ -167,13 +197,20 @@ const Orders: CollectionConfig = {
                             },
                             hooks: {
                                 beforeChange: [(args) => {
+
                                     const twoDigits = /^\d{2}$/;
+                                    const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
+                                    if (stateApprovalField === 'approved') {
+                                        const discountOrder = args.originalDoc.DescuentoPedido
+                                        return discountOrder
+                                    }
                                     if (args.data && args.data.DescuentoPedido !== undefined) {
                                         const discount = args.data.DescuentoPedido;
                                         if (!twoDigits.test(discount)) {
                                             return args.data.DescuentoPedido = 0;
                                         }
                                     }
+
                                 }]
                             }
                         },
@@ -229,8 +266,13 @@ const Orders: CollectionConfig = {
                 position: 'sidebar',
             },
             hooks: {
-                beforeChange: [validatedPaymentApproval],
-                afterRead: [validatedPaymentApproval]
+                beforeChange: [(args) => {
+                    const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
+                    if (stateApprovalField === 'approved') {
+                        const paymentState = args.originalDoc.EstadoPagoPedido
+                        return paymentState
+                    }
+                }]
             },
             options: [
                 {

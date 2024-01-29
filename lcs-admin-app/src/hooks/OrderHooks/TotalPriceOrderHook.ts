@@ -5,8 +5,8 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const productServiceFieldID = data.ProductoServicioPedido.value
-      
-           
+            const stateApprovalField = data.AprobacionEstadoPedido
+        
             let collection = ''
             if (data.TipoVentaPedido === 'product' && data.ProductoServicioPedido.relationTo === 'productos') {
                 collection = 'productos'
@@ -20,6 +20,12 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
                 }
             })
             let PrecioProductoServicio: number = 0
+
+            if (data && stateApprovalField === 'approved') {
+                const { TotalPricioPedido } = originalDoc.DetallesPagoPedido
+                return TotalPricioPedido
+            } else {
+                
             if (productServiceResponse.docs && productServiceResponse.docs.length > 0) {
 
                 const productServicePrice = collection === 'productos' ?
@@ -38,6 +44,7 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
             } else {
                 console.log(`No se Calculo el Precio Total del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)
             }
+        }
         }
 
     } catch (error) {

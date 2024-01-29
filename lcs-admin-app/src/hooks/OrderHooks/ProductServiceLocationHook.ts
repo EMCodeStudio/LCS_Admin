@@ -2,10 +2,11 @@ import payload from "payload"
 import { FieldHook } from "payload/types"
 import { LocationType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 
-const getProductServiceLocation: FieldHook = async ({ data }) => {
+const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const productServiceFieldId = data.ProductoServicioPedido.value
+            const stateApprovalField = data.AprobacionEstadoPedido
             let collection = ''
             if (data.TipoVentaPedido === 'product' && data.ProductoServicioPedido.relationTo === 'productos') {
                 collection = 'productos'
@@ -18,6 +19,11 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                     id: productServiceFieldId
                 }
             })
+
+            if (stateApprovalField === 'approved') {
+                const  clientLocation  = originalDoc.UbicacionProductoServicioPedido
+                return clientLocation
+            } else {
             if (respondeLocation.docs && respondeLocation.docs.length > 0) {
                 
                 const formatLocationData = (ubicacion: UbicacionInterface): string => {
@@ -36,6 +42,7 @@ const getProductServiceLocation: FieldHook = async ({ data }) => {
                 return resultLocation;
             }
         }
+    }
     } catch (error) {
         return 'ERROR EN LA FUNCION getProductServiceLocation.'
     }

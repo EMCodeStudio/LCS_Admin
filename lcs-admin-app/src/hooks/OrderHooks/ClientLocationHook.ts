@@ -2,19 +2,22 @@ import { FieldHook } from "payload/types"
 import { LocationType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 import payload from "payload"
 
-const getClientLocation: FieldHook = async ({ data, }) => {
+const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const clientFieldId = data.ClienteIdPedido
             const locationProdServField = data.UbicacionProductoServicioPedido
-            //console.log('FIELD ID PROD SERV UBICACION:', locationProdServField)
+
+            console.log('FIELD ID PROD SERV UBICACION:', locationProdServField)
+
             const responseClientLocation = await payload.find({
                 collection: 'clientes',
                 where: {
                     id: clientFieldId
                 }
             })
-            //console.log('DATA CLIENTE:', responseClientLocation)
+            console.log('DATA CLIENTE:', responseClientLocation)
+
             if (responseClientLocation.docs && responseClientLocation.docs.length > 0) {
                 let locationDataString: LocationType = ''
                 const clientLocationData = responseClientLocation.docs[0].UbicacionCliente
@@ -39,7 +42,9 @@ const getClientLocation: FieldHook = async ({ data, }) => {
                 } else {
                     return 'Ubicacion del Cliente No Encontrada.'
                 }
-            }
+            
+        }
+
         }
     } catch (error) {
         console.log('ERROR EN LA FUNCION getClientLocation:', error)

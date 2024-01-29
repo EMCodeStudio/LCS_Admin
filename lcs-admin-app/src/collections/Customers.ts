@@ -218,7 +218,7 @@ const Customers: CollectionConfig = {
             name: "UbicacionCliente", 
             label: "Ubicacion del Cliente",
             type: 'relationship', 
-            relationTo: 'ubicaciones', 
+            relationTo: ['ubicaciones'], 
             hasMany: false,
             unique: true,
             required: false,
