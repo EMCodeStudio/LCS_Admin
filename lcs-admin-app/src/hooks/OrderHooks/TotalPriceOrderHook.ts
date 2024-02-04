@@ -6,7 +6,7 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
         if (data) {
             const productServiceFieldID = data.ProductoServicioPedido.value
             const stateApprovalField = data.AprobacionEstadoPedido
-        
+
             let collection = ''
             if (data.TipoVentaPedido === 'product' && data.ProductoServicioPedido.relationTo === 'productos') {
                 collection = 'productos'
@@ -25,30 +25,36 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
                 const { TotalPricioPedido } = originalDoc.DetallesPagoPedido
                 return TotalPricioPedido
             } else {
-                
-            if (productServiceResponse.docs && productServiceResponse.docs.length > 0) {
 
-                const productServicePrice = collection === 'productos' ?
-                    productServiceResponse.docs[0].PrecioProducto :
-                    productServiceResponse.docs[0].PrecioServicio
+                if (productServiceResponse.docs && productServiceResponse.docs.length > 0) {
 
-                const { CantidadProductoPedido, PrecioEnvioPedido } = data.DetallesPagoPedido
-                PrecioProductoServicio = Number(productServicePrice)
+                    const productServicePrice = collection === 'productos' ?
+                        productServiceResponse.docs[0].PrecioProducto :
+                        productServiceResponse.docs[0].PrecioServicio
 
-                const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : PrecioProductoServicio
+                    const { CantidadProductoPedido, PrecioEnvioPedido } = data.DetallesPagoPedido
+                    PrecioProductoServicio = Number(productServicePrice)
 
-                const validatedProdServDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : collection === 'productos' ? calculatedProductPrice : PrecioProductoServicio
+                    const calculatedProductPrice = CantidadProductoPedido > 0 ? CantidadProductoPedido * PrecioProductoServicio : PrecioProductoServicio
 
-                const totalProductServicePrice = Math.round(validatedProdServDiscount+(PrecioEnvioPedido? PrecioEnvioPedido : 0))
-                return totalProductServicePrice 
-            } else {
-               // console.log(`No se Calculo el Precio Total del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)
+                    const validatedProdServDiscount = data.DescuentoPedido > 0 && data.OfertaPedido === 'apply' ? calculatedProductPrice * (1 - (data.DescuentoPedido / 100)) : collection === 'productos' ? calculatedProductPrice : PrecioProductoServicio
+
+
+                    const calculatedTotalShipping = CantidadProductoPedido ? CantidadProductoPedido * PrecioEnvioPedido : PrecioEnvioPedido
+
+                    const validatedTotalPrice = validatedProdServDiscount + (calculatedTotalShipping ? calculatedTotalShipping : 0)
+
+                    const totalProductServicePrice = Math.round(validatedTotalPrice)
+
+                    return totalProductServicePrice
+                } else {
+                    // console.log(`No se Calculo el Precio Total del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)
+                }
             }
-        }
         }
 
     } catch (error) {
-       // console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
+        // console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
     }
 }
 

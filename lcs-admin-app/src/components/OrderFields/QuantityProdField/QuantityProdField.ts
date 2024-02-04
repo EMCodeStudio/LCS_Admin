@@ -28,7 +28,7 @@ const QuantityProdField: Field = {
     admin: {
         placeholder: '0',
         width: '50%',
-        description: 'Para Que el Stock disminuya la Compra debe estar Aprobada.',
+        description: 'Para Que el Stock disminuya la Compra debe ser Aprobada.',
         condition: (data) => {
             if (data.TipoVentaPedido === 'product') {
                 return true
