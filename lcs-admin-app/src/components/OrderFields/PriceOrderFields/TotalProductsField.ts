@@ -10,11 +10,13 @@ const TotalProductsField: Field = {
         readOnly: true,
         width: '30%',
         placeholder: '$ 0.00',
+        condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'product'
     },
     hooks:{
         beforeChange: [getTotalProductsOrder],
         afterRead: [getTotalProductsOrder]
     }
 }
+
 
 export default TotalProductsField
