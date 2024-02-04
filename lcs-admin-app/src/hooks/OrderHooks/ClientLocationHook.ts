@@ -25,7 +25,7 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
             if (responseClientLocation.docs && responseClientLocation.docs.length > 0) {
 
                 const clientLocationData = responseClientLocation.docs[0].UbicacionCliente
-                console.log('DATA CLIENTE UBICACION:', clientLocationData)
+                //console.log('DATA CLIENTE UBICACION:', clientLocationData)
 
 
                 const formatLocationClient = (ubicacionCliente: UbicacionInterface): string => {
@@ -37,7 +37,7 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
                 if (clientLocationData) {
                     const getLocationFormatString = formatLocationClient(clientLocationData as UbicacionInterface)
                     locationDataString = getLocationFormatString
-                    console.log('FORMATED UBICACION CLIENTE:', locationDataString)
+                    //console.log('FORMATED UBICACION CLIENTE:', locationDataString)
                 }
 
                 if (locationDataString) {

@@ -10,7 +10,6 @@ import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrd
 import updateProductStock from "../Services/OrderService/UpdateProdStockService";
 import PriceShippingField from "../components/OrderFields/PriceOrderFields/PriceShippingField";
 
-
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     labels: {

@@ -13,8 +13,10 @@ const PriceShippingField: Field = {
         step: 1,
         width: '50%',
         readOnly: true,
-        placeholder: '$ 0.00'
+        placeholder: '$ 0.00',
+        condition: ({ TipoVentaPublicacion }) => TipoVentaPublicacion === 'service',
     },
+    
     hooks: {
         /*beforeChange: [({ siblingData }) => {
             delete siblingData.PrecioEnvioPedido

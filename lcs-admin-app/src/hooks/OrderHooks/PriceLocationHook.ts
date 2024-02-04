@@ -5,16 +5,19 @@ import { LocationPriceType, UbicacionInterface } from "../../interfaces/OrderInt
 const getLocationPrice: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
+
             const clientLocactionFieldId = data.ClienteIdPedido
             const stateApprovalField = data.AprobacionEstadoPedido
-            // console.log('FIELD ID CLIENTE:', clientLocactionFieldId)
+
+            //console.log('FIELD ID CLIENTE:', clientLocactionFieldId)
+
             const clientLocationResponse = await payload.find({
                 collection: 'clientes',
                 where: {
                     id: clientLocactionFieldId
                 }
             })
-            // console.log('DATA CLIENTE:', clientLocationResponse)
+            //console.log('DATA CLIENTE:', clientLocationResponse)
             if (stateApprovalField === 'approved') {
                 const { PrecioEnvioPedido } = originalDoc.DetallesPagoPedido
                 return PrecioEnvioPedido
@@ -24,14 +27,19 @@ const getLocationPrice: FieldHook = async ({ data, originalDoc }) => {
                     const clientLocationData = clientLocationResponse.docs[0].UbicacionCliente
                     //console.log('DATA CLIENTE UBICACION:', clientLocationData)
                     const formatLocationPriceData = (ubicacionCliente: UbicacionInterface): number => {
-                        const { PrecioEnvioUbicacion } = ubicacionCliente
-                        return PrecioEnvioUbicacion
+                        const { value } = ubicacionCliente
+                        return value.PrecioEnvioUbicacion
                     }
                     let locationDataNumber: LocationPriceType = 0
                     if (clientLocationData) {
                         const getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
                         locationDataNumber = getLocationPrice
                         //console.log('PRECIO DE ENVIO:', locationDataNumber)
+
+                        const isLocationCoincidence = data.UbicacionClientePedido && data.UbicacionClientePedido.includes('Coincidencia: ') ? true : false
+                        if (!isLocationCoincidence) {
+                            locationDataNumber = 0
+                        }
                         return locationDataNumber
                     }
                 }
