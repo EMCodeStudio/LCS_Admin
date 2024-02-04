@@ -9,7 +9,7 @@ const ProductStockField: Field = {
     type: "number",
     required: false,
     admin: {
-        width: '18%',
+        width: '50%',
         readOnly: true,
         step: 1,
         condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'product'

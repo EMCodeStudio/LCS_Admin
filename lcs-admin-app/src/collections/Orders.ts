@@ -11,6 +11,7 @@ import updateProductStock from "../Services/OrderService/UpdateProdStockService"
 import PriceShippingField from "../components/OrderFields/PriceOrderFields/PriceShippingField";
 import TotalProductsField from "../components/OrderFields/PriceOrderFields/TotalProductsField";
 import TotalShippingField from "../components/OrderFields/PriceOrderFields/TotalShippingField";
+import ProdServUnitPriceField from "../components/OrderFields/PriceOrderFields/ProdServUnitPriceField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -226,7 +227,13 @@ const Orders: CollectionConfig = {
                         },
                     ]
                 },
-                ProductStockField
+            ]
+        },
+        {
+            type: 'row',
+            fields:[
+                ProdServUnitPriceField,
+                ProductStockField,
             ]
         },
         {
