@@ -156,7 +156,7 @@ const Locations: CollectionConfig = {
         },
         {
             name: "PrecioEnvioUbicacion",
-            label: "Costo de Envio",
+            label: "$ Costo de Envio :",
             type: "number",
             required: true,
             admin: {

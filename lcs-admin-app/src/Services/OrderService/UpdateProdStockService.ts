@@ -7,7 +7,7 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
         const stateOrderPayment = data.EstadoPagoPedido
         const stateOrderApproved = data.EstadoCompraPedido
         const isOrderApproved = data.AprobacionEstadoPedido
-        console.log('FIELD  ORDER APROBACION updateProductStock: ', isOrderApproved)
+       // console.log('FIELD  ORDER APROBACION updateProductStock: ', isOrderApproved)
         if (CantidadProductoPedido > 0 && stateOrderPayment === 'paid') {
             const productFieldId = data.ProductoServicioPedido.value
             const collectionName = 'productos'

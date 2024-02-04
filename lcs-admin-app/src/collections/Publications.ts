@@ -53,7 +53,7 @@ const Publications: CollectionConfig = {
             relationTo: ['productos', 'servicios'],
             hasMany: false,
             required: true,
-            maxDepth: 0,
+           // maxDepth: 0,
             filterOptions: ({ data, relationTo, siblingData, }) => {
 
                 if (relationTo === 'productos') {

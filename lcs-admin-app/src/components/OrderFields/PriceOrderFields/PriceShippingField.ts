@@ -3,7 +3,7 @@ import getLocationPrice from "../../../hooks/OrderHooks/PriceLocationHook"
 
 const PriceShippingField: Field = {
     name: "PrecioEnvioPedido",
-    label: "$ Costo de Envio:",
+    label: "$ Costo de Envio :",
     type: "number",
     required: false,
     access: {

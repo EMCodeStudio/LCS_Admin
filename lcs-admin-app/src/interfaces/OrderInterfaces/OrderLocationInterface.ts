@@ -1,23 +1,26 @@
 interface UbicacionInterface {
-    id: string,
-    PaisUbicacion: string,
-    DepartamentoUbicacion: {
+    value: {
         id: string,
-        NombreDepartamento: string,
+        PaisUbicacion: string,
+        DepartamentoUbicacion: {
+            id: string,
+            NombreDepartamento: string,
+            createdAt: string,
+            updatedAt: string
+        },
+        MunicipioUbicacion: {
+            id: string,
+            NombreMunicipio: string,
+            createdAt: string,
+            updatedAt: string
+        },
+        PrecioEnvioUbicacion: number,
+        EstadoUbicacion: string,
         createdAt: string,
-        updatedAt: string
-    },
-    MunicipioUbicacion: {
-        id: string,
-        NombreMunicipio: string,
-        createdAt: string,
-        updatedAt: string
-    },
-    PrecioEnvioUbicacion: number,
-    EstadoUbicacion: string,
-    createdAt: string,
-    updatedAt: string,
-    UbicacionDatos: string
+        updatedAt: string,
+        UbicacionDatos: string
+    }
+    relationTo: string
 }
 
 

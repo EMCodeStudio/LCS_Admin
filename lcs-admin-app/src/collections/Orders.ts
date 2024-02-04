@@ -10,6 +10,7 @@ import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrd
 import updateProductStock from "../Services/OrderService/UpdateProdStockService";
 import PriceShippingField from "../components/OrderFields/PriceOrderFields/PriceShippingField";
 
+
 const Orders: CollectionConfig = {
     slug: 'pedidos',
     labels: {
@@ -17,7 +18,7 @@ const Orders: CollectionConfig = {
         plural: 'Pedidos',
     },
     admin: {
-        useAsTitle: 'ClientePedido',
+        useAsTitle: 'ClienteIdPedido',
         defaultColumns: ['ClienteIdPedido', 'TipoVentaPedido', 'ProductoServicioPedido', 'EstadoPagoPedido', 'EstadoPedido'],
         group: 'VENTAS',
     },
@@ -49,7 +50,7 @@ const Orders: CollectionConfig = {
                 description: 'Seleccion un busque un Cliente de la lista',
                 width: '50%'
             },
-            hooks:{
+            hooks: {
                 beforeChange: [(args) => {
                     const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
                     if (stateApprovalField === 'approved') {
@@ -86,20 +87,20 @@ const Orders: CollectionConfig = {
                 }]
             },
             admin: {
-                    layout: 'horizontal',
-                }
-            },
+                layout: 'horizontal',
+            }
+        },
         {
             type: 'row', fields: [
                 {
                     name: "ProductoServicioPedido",
                     label: "Productos - Servicios",
                     type: 'relationship',
-                    index: true,
+                   // index: true,
                     required: true,
                     relationTo: ['productos', 'servicios'],
                     hasMany: false,
-                    maxDepth: 0,
+                   // maxDepth: 0,
                     filterOptions: ({ data, relationTo }) => {
                         if (relationTo === 'productos') {
                             if (data.TipoVentaPedido === 'product') {
@@ -131,9 +132,7 @@ const Orders: CollectionConfig = {
                                 return productService
                             }
                         }]
-                    }
-
-                    ,
+                    },
                     admin: {
                         description: 'Seleccione un Producto o Servicio de la Lista',
                         width: '50%',
@@ -175,7 +174,6 @@ const Orders: CollectionConfig = {
                                 layout: 'horizontal',
                                 width: '50%'
                             },
-
                             hooks: {
                                 beforeChange: [(args) => {
                                     if (args.data && args.data.AprobacionEstadoPedido === 'approved') {
@@ -230,7 +228,6 @@ const Orders: CollectionConfig = {
                 ProductStockField
             ]
         },
-
         {
             name: "DetallesPagoPedido",
             type: "group",

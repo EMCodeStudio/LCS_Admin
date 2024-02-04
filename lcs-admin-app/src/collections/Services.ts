@@ -33,7 +33,7 @@ const Services: CollectionConfig = {
                     label: "Subcategoria del Servicio",
                     type: 'relationship',
                     relationTo: 'subcategorias',
-                    maxDepth: 0,
+                    //maxDepth: 0,
                     filterOptions: ({ relationTo }) => {
                         if (relationTo === 'subcategorias') {
                             const isContainService = 'Service';
