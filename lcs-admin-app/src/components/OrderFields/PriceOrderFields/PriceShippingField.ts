@@ -14,7 +14,13 @@ const PriceShippingField: Field = {
         width: '50%',
         readOnly: true,
         placeholder: '$ 0.00',
-        condition: ({ TipoVentaPublicacion }) => TipoVentaPublicacion === 'service',
+        condition: (data) => {
+            if (data.TipoVentaPedido === 'product') {
+                return true
+            } else {
+                return false
+            }
+        }
     },
     
     hooks: {

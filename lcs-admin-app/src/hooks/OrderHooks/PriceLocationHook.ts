@@ -36,7 +36,7 @@ const getLocationPrice: FieldHook = async ({ data, originalDoc }) => {
                         locationDataNumber = getLocationPrice
                         //console.log('PRECIO DE ENVIO:', locationDataNumber)
 
-                        const isLocationCoincidence = data.UbicacionClientePedido && data.UbicacionClientePedido.includes('Coincidencia: ') ? true : false
+                        const isLocationCoincidence = data.UbicacionClientePedido && data.UbicacionClientePedido.includes('Coincidencia') ? true : false
                         if (!isLocationCoincidence) {
                             locationDataNumber = 0
                         }
