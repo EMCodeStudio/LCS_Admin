@@ -1,5 +1,5 @@
 import { Field } from "payload/types"
-import getTotalPrice from "../../../hooks/OrderHooks/TotalPriceOrderHook"
+import getTotalPriceOrder from "../../../hooks/OrderHooks/TotalPriceOrderHook"
 
 const TotalOrderField: Field = {
 
@@ -9,8 +9,8 @@ const TotalOrderField: Field = {
     type: "number",
     required: false,
     hooks: {
-        beforeChange: [getTotalPrice],
-        afterRead: [getTotalPrice]
+        beforeChange: [getTotalPriceOrder],
+        afterRead: [getTotalPriceOrder]
     },
     access: {
         update: () => true,
@@ -18,7 +18,7 @@ const TotalOrderField: Field = {
     },
     admin: {
         readOnly: true,
-        width: '50%',
+        width: '30%',
         step: 1,
         placeholder: '0.00',
     }

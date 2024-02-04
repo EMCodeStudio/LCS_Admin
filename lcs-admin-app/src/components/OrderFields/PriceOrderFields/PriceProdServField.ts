@@ -9,13 +9,10 @@ const PriceProdServField: Field = {
     required: false,
     admin: {
         readOnly: true,
-        width: '50%',
+        width: '30%',
         placeholder: '$ 0.00',
     },
-    access: {
-        create: () => false,
-        update: () => false,
-    },
+    
     hooks: {
        // beforeChange: [({ siblingData }) => {
             //return siblingData.PrecioProductoServicio = undefined

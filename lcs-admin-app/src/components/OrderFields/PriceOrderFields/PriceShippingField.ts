@@ -11,7 +11,7 @@ const PriceShippingField: Field = {
     },
     admin: {
         step: 1,
-        width: '50%',
+        width: '30%',
         readOnly: true,
         placeholder: '$ 0.00',
         condition: (data) => {

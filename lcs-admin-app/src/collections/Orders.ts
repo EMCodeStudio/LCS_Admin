@@ -9,6 +9,8 @@ import QuantityProdField from "../components/OrderFields/QuantityProdField/Quant
 import TotalOrderField from "../components/OrderFields/PriceOrderFields/TotalOrderField";
 import updateProductStock from "../Services/OrderService/UpdateProdStockService";
 import PriceShippingField from "../components/OrderFields/PriceOrderFields/PriceShippingField";
+import TotalProductsField from "../components/OrderFields/PriceOrderFields/TotalProductsField";
+import TotalShippingField from "../components/OrderFields/PriceOrderFields/TotalShippingField";
 
 const Orders: CollectionConfig = {
     slug: 'pedidos',
@@ -236,9 +238,11 @@ const Orders: CollectionConfig = {
                     type: 'row',
                     fields: [
                         PriceProdServField,
+                        TotalProductsField,
                         QuantityProdField
                     ]
                 },
+
                 {
                     type: 'row',
                     fields: [
@@ -246,6 +250,7 @@ const Orders: CollectionConfig = {
                             type: 'row',
                             fields: [
                                 PriceShippingField,
+                                TotalShippingField,
                                 TotalOrderField
                             ]
                         }

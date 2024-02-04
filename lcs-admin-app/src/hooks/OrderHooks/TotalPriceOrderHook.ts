@@ -1,7 +1,7 @@
 import payload from "payload"
 import { FieldHook } from "payload/types"
 
-const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
+const getTotalPriceOrder: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
             const productServiceFieldID = data.ProductoServicioPedido.value
@@ -58,4 +58,4 @@ const getTotalPrice: FieldHook = async ({ data, originalDoc }) => {
     }
 }
 
-export default getTotalPrice
+export default getTotalPriceOrder
