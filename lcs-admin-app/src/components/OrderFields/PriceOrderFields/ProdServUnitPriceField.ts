@@ -4,7 +4,7 @@ import getProdServUnitPrice from "../../../hooks/OrderHooks/UnitProdServPriceHoo
 const ProdServUnitPriceField: Field = {
 
     name: "PrecioProductoServicioUnidad",
-    label: "$ Costo Unico :",
+    label: "$ Precio Unitario :",
     type: "number",
     required: false,
     admin: {

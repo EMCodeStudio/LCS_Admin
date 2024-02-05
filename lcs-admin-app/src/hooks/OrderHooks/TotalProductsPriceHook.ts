@@ -3,8 +3,8 @@ import { FieldHook } from "payload/types"
 const getTotalProductsOrder: FieldHook = async ({ data, originalDoc }) => {
     if (data && data.TipoVentaPedido === 'product') {
         const { CantidadProductoPedido, PrecioProductoServicio } = data.DetallesPagoPedido
-        console.log("Cantidad Producto Pedido: ", CantidadProductoPedido)
-        console.log("Precio Producto Pedido: ", PrecioProductoServicio)
+        //console.log("Cantidad Producto Pedido: ", CantidadProductoPedido)
+        //console.log("Precio Producto Pedido: ", PrecioProductoServicio)
 
         if (!isNaN(CantidadProductoPedido) && !isNaN(PrecioProductoServicio)) {
             if (CantidadProductoPedido > 0 && PrecioProductoServicio !== 0) {

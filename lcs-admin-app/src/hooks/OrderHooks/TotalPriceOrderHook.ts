@@ -42,11 +42,12 @@ const getTotalPriceOrder: FieldHook = async ({ data, originalDoc }) => {
 
                     const calculatedTotalShipping = CantidadProductoPedido ? CantidadProductoPedido * PrecioEnvioPedido : PrecioEnvioPedido
 
-                    const validatedTotalPrice = validatedProdServDiscount + (calculatedTotalShipping ? calculatedTotalShipping : 0)
+                    const validatedTotalPrice =  collection === 'productos' ?  validatedProdServDiscount + (calculatedTotalShipping ? calculatedTotalShipping : 0): validatedProdServDiscount
 
                     const totalProductServicePrice = Math.round(validatedTotalPrice)
 
                     return totalProductServicePrice
+
                 } else {
                     // console.log(`No se Calculo el Precio Total del ${collection === 'productos' ? 'Producto' : 'Servicio'}`)
                 }
@@ -56,6 +57,8 @@ const getTotalPriceOrder: FieldHook = async ({ data, originalDoc }) => {
     } catch (error) {
         // console.log('ERROR EN LA FUNCION getTotalPrice: ', error)
     }
+
+    return 0
 }
 
 export default getTotalPriceOrder
