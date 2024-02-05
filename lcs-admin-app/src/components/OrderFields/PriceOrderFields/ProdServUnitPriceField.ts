@@ -12,7 +12,6 @@ const ProdServUnitPriceField: Field = {
         width: '50%',
         placeholder: '$ 0.00',
     },
-
     hooks: {
          beforeChange: [getProdServUnitPrice],
          afterRead: [getProdServUnitPrice]

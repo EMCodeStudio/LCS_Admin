@@ -1,6 +1,6 @@
 import payload from "payload"
 import { FieldHook } from "payload/types"
-import { LocationType, UbicacionInterface, UbicacionInterfaceProdServ } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
+import { LocationType, UbicacionInterfaceProdServ } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 
 const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
@@ -21,6 +21,7 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
             })
             if (stateApprovalField === 'approved') {
                 const clientLocation = originalDoc.UbicacionProductoServicioPedido
+                console.log('Ubicacion PRODUT SERVICE ORIGEN: ', clientLocation)
                 return clientLocation
             } else {
                 if (respondeLocation.docs && respondeLocation.docs.length > 0) {

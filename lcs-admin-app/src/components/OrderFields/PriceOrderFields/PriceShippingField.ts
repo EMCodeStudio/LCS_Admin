@@ -6,9 +6,6 @@ const PriceShippingField: Field = {
     label: "$ Costo de Envio :",
     type: "number",
     required: false,
-    access: {
-        create: () => false
-    },
     admin: {
         step: 1,
         width: '30%',
@@ -22,11 +19,7 @@ const PriceShippingField: Field = {
             }
         }
     },
-    
     hooks: {
-        /*beforeChange: [({ siblingData }) => {
-            delete siblingData.PrecioEnvioPedido
-        }],*/
         beforeChange: [getLocationPrice],
         afterRead: [getLocationPrice]
     }

@@ -201,7 +201,7 @@ const Orders: CollectionConfig = {
                                     if (stateApprovalField === 'approved') {
                                         const discountOrder = args.originalDoc.DescuentoPedido
                                         return discountOrder
-                                    }else{
+                                    } else {
                                         const twoDigits = /^\d{2}$/;
                                         if (args.data && args.data.DescuentoPedido !== undefined) {
                                             const discount = args.data.DescuentoPedido;
@@ -274,10 +274,8 @@ const Orders: CollectionConfig = {
             },
             hooks: {
                 beforeChange: [(args) => {
-                    const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
-                    if (stateApprovalField === 'approved') {
-                        const paymentState = args.originalDoc.EstadoPagoPedido
-                        return paymentState
+                    if (args.data && args.data.AprobacionEstadoPedido === 'approved') {
+                        return args.originalDoc.EstadoPagoPedido
                     }
                 }]
             },
@@ -376,11 +374,17 @@ const Orders: CollectionConfig = {
                 beforeChange: [(args) => {
 
                     if (args.data) {
-                        if (args.data.EstadoPagoPedido === 'paid' && args.data.AprobacionEstadoPedido !== 'approved' && args.data.CantidadProductoPedido <= args.originalDoc.StockProductoPedido) {
-                            return true
-                        } else if (args.data.EstadoPagoPedido !== 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
+                        if (args.data.EstadoPagoPedido === 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
+
+                            if (args.data.TipoVentaPedido === 'product' && args.data.CantidadProductoPedido <= args.originalDoc.StockProductoPedido) {
+                                return true
+                            } else if (args.data.TipoVentaPedido === 'service') {
+                                return true
+                            }
+                        } else if (args.data.EstadoPagoPedido !== 'paid' && args.data.AprobacionEstadoPedido !== 'approved' || args.data.CantidadProductoPedido > args.originalDoc.StockProductoPedido) {
                             return false
-                        } else if (args.data.AprobacionEstadoPedido === 'approved' ) {
+
+                        } else if (args.data.AprobacionEstadoPedido === 'approved') {
                             return true
                         }
                     }

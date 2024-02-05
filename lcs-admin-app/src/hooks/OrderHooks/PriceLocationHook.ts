@@ -9,23 +9,19 @@ const getLocationPrice: FieldHook = async ({ data, originalDoc }) => {
             const clientLocactionFieldId = data.ClienteIdPedido
             const stateApprovalField = data.AprobacionEstadoPedido
 
-            //console.log('FIELD ID CLIENTE:', clientLocactionFieldId)
-
             const clientLocationResponse = await payload.find({
                 collection: 'clientes',
                 where: {
                     id: clientLocactionFieldId
                 }
             })
-            //console.log('DATA CLIENTE:', clientLocationResponse)
+
             if (stateApprovalField === 'approved') {
                 const { PrecioEnvioPedido } = originalDoc.DetallesPagoPedido
                 return PrecioEnvioPedido
             } else {
-
                 if (clientLocationResponse.docs && clientLocationResponse.docs.length > 0) {
                     const clientLocationData = clientLocationResponse.docs[0].UbicacionCliente
-                    //console.log('DATA CLIENTE UBICACION:', clientLocationData)
                     const formatLocationPriceData = (ubicacionCliente: UbicacionInterface): number => {
                         const { value } = ubicacionCliente
                         return value.PrecioEnvioUbicacion
@@ -34,12 +30,6 @@ const getLocationPrice: FieldHook = async ({ data, originalDoc }) => {
                     if (clientLocationData) {
                         const getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
                         locationDataNumber = getLocationPrice
-                        //console.log('PRECIO DE ENVIO:', locationDataNumber)
-
-                        const isLocationCoincidence = data.UbicacionClientePedido && data.UbicacionClientePedido.includes('Coincidencia') ? true : false
-                        if (!isLocationCoincidence) {
-                            locationDataNumber = 0
-                        }
                         return locationDataNumber
                     }
                 }

@@ -12,10 +12,6 @@ const TotalOrderField: Field = {
         beforeChange: [getTotalPriceOrder],
         afterRead: [getTotalPriceOrder]
     },
-    access: {
-        update: () => true,
-        read: () => true
-    },
     admin: {
         readOnly: true,
         width: '30%',

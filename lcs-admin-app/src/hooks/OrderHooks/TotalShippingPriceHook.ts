@@ -1,36 +1,54 @@
-import { FieldHook } from "payload/types";
+import { FieldHook } from "payload/types"
+import { LocationPriceType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
+import payload from "payload"
+
+
 
 const getTotalShippingOrder: FieldHook = async ({ data, originalDoc }) => {
 
-    if (data && data.TipoVentaPedido === 'product') {
-        const { CantidadProductoPedido, PrecioEnvioPedido } = data.DetallesPagoPedido
-        //console.log("Cantidad Producto Pedido: ", CantidadProductoPedido)
-        //console.log("Precio Envio Pedido: ", PrecioEnvioPedido)
+    try {
 
-        const stateApprovalField = data.AprobacionEstadoPedido
-        if (stateApprovalField === 'approved') {
-            const { TotalEnvioPedido } = originalDoc.DetallesPagoPedido
-            console.log('PRECIO TOTAL ENVIO ORIGEN: ', TotalEnvioPedido)
-            return TotalEnvioPedido
-        } else {
-            if (!isNaN(CantidadProductoPedido) && !isNaN(PrecioEnvioPedido)) {
-                if (CantidadProductoPedido > 0 && PrecioEnvioPedido !== 0) {
-                    let totalShippingPrice = Number(CantidadProductoPedido * PrecioEnvioPedido)
-                    if (!isNaN(totalShippingPrice)) {
-                        return totalShippingPrice;
-                    } else {
-                        console.error("El cálculo resultó en NaN. Revisa los valores de CantidadProductoPedido y PrecioEnvioPedido.");
-                    }
-                } else {
-                    console.error("CantidadProductoPedido debe ser mayor que cero y PrecioEnvioPedido no debe ser cero.")
-                }
+        if (data && data.TipoVentaPedido === 'product') {
+            const { CantidadProductoPedido, PrecioEnvioPedido } = data.DetallesPagoPedido
+            const stateApprovalField = data.AprobacionEstadoPedido
+            console.log('CANTIDAD Y PRECIO ENVIO: ', CantidadProductoPedido, ' y ', PrecioEnvioPedido)
+            if (stateApprovalField === 'approved') {
+                const { TotalEnvioPedido } = originalDoc.DetallesPagoPedido
+                console.log('PRECIO TOTAL ENVIO ORIGEN: ', TotalEnvioPedido)
+                return TotalEnvioPedido
             } else {
-                console.error("CantidadProductoPedido y PrecioEnvioPedido deben ser números válidos.")
-            }
 
+                const clientLocactionFieldId = data.ClienteIdPedido
+                const clientLocationResponse = await payload.find({
+                    collection: 'clientes',
+                    where: {
+                        id: clientLocactionFieldId
+                    }
+                })
+                if (clientLocationResponse.docs && clientLocationResponse.docs.length > 0) {
+                    const clientLocationData = clientLocationResponse.docs[0].UbicacionCliente
+                   
+                    const formatLocationPriceData = (ubicacionCliente: UbicacionInterface): number => {
+                        const { value } = ubicacionCliente
+                        return value.PrecioEnvioUbicacion
+                    }
+                    let locationDataNumber: LocationPriceType = 0
+
+                    if (clientLocationData) {
+                        const getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
+                        locationDataNumber = getLocationPrice
+                       const totalShippingPrice = Number(CantidadProductoPedido * locationDataNumber)
+                        return totalShippingPrice
+                    }
+                }
+            }
         }
+    } catch (error) {
+        console.log('Error en la Funcion getTotalShippingOrder :', error)
     }
-    return 0
+  
 }
+
+
 
 export default getTotalShippingOrder

@@ -1,11 +1,9 @@
 import { FieldHook } from "payload/types"
 
-const getTotalProductsOrder: FieldHook = async ({ data, originalDoc }) => {
+const getTotalProductsOrder: FieldHook = ({ data, originalDoc }) => {
 
     if (data && data.TipoVentaPedido === 'product') {
         const { CantidadProductoPedido, PrecioProductoServicio } = data.DetallesPagoPedido
-        //console.log("Cantidad Producto Pedido: ", CantidadProductoPedido)
-        //console.log("Precio Producto Pedido: ", PrecioProductoServicio)
         const stateApprovalField = data.AprobacionEstadoPedido
         if (stateApprovalField === 'approved') {
             const { TotalProductosPedido } = originalDoc.DetallesPagoPedido
@@ -14,7 +12,7 @@ const getTotalProductsOrder: FieldHook = async ({ data, originalDoc }) => {
         } else {
             if (!isNaN(CantidadProductoPedido) && !isNaN(PrecioProductoServicio)) {
                 if (CantidadProductoPedido > 0 && PrecioProductoServicio !== 0) {
-                    let totalProductsPrice = Number(CantidadProductoPedido * PrecioProductoServicio)
+                const totalProductsPrice = Number(CantidadProductoPedido * PrecioProductoServicio)
                     if (!isNaN(totalProductsPrice)) {
                         return totalProductsPrice
                     } else {
@@ -28,7 +26,7 @@ const getTotalProductsOrder: FieldHook = async ({ data, originalDoc }) => {
             }
         }
     }
-    return 0
+  
 }
 
 export default getTotalProductsOrder
