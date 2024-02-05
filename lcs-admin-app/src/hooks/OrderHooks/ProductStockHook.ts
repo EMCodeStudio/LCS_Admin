@@ -16,13 +16,13 @@ const getProductStockOrder: FieldHook = async ({ data }) => {
                 const productStockData = responseProductoStock.docs[0].CantidadProducto;
                 return productStockData
             } else {
-                //console.log('SIN STOCK DE PRODUCTOS!')
+                console.log('SIN STOCK DE PRODUCTOS!')
             }
-        } else {
-            // console.log('DATA UNDEFINED!')
         }
+         
     } catch (error) {
-         console.log('Error en la Funcion getProductStockOrder: ', error)
+        console.log('Error en la Funcion getProductStockOrder: ', error)
     }
+    return 0
 }
-export {getProductStockOrder}
+export { getProductStockOrder }

@@ -7,10 +7,8 @@ const ImagePreviewOrderField: Field = {
     label: "Imagen de Producto - Servicio",
     required: false,
     relationTo: 'imagenes',
-    index: true,
     admin: {
         readOnly: true,
-        hidden: false,
         width: '50%',
         condition: ({UbicacionProductoServicioPedido}) => UbicacionProductoServicioPedido !== undefined,
     },

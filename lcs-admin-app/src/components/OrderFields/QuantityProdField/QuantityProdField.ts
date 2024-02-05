@@ -5,7 +5,7 @@ import {validatedStockApproval} from "../../../hooks/OrderHooks/OrderApprovalHoo
 const QuantityProdField: Field = {
 
     name: "CantidadProductoPedido",
-    label: "Cantidad Solicitada",
+    label: "Cantidad Solicitada :",
     type: "number",
     required: true,
     //defaultValue: 0,

@@ -1,6 +1,6 @@
 import payload from "payload"
 import { FieldHook } from "payload/types"
-import { LocationType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
+import { LocationType, UbicacionInterface, UbicacionInterfaceProdServ } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 
 const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
@@ -26,15 +26,15 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
             } else {
             if (respondeLocation.docs && respondeLocation.docs.length > 0) {
                 
-                const formatLocationData = (ubicacion: UbicacionInterface): string => {
+                const formatLocationData = (ubicacion: UbicacionInterfaceProdServ): string => {
                     const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
                     return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
                 }
                 let locationData: LocationType[] = []
                 const dataServerLocation = collection === 'productos' ?
-                    respondeLocation.docs[0]?.UbicacionProducto as UbicacionInterface[] :
-                    respondeLocation.docs[0]?.UbicacionServicio as UbicacionInterface[]
-                dataServerLocation.forEach((ubicacion: UbicacionInterface) => {
+                    respondeLocation.docs[0]?.UbicacionProducto as UbicacionInterfaceProdServ[] :
+                    respondeLocation.docs[0]?.UbicacionServicio as UbicacionInterfaceProdServ[]
+                dataServerLocation.forEach((ubicacion: UbicacionInterfaceProdServ) => {
                     const getLocationString = formatLocationData(ubicacion)
                     locationData.push(getLocationString + '\n')
                 })
