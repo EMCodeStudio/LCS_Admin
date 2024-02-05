@@ -19,30 +19,37 @@ const getProductServiceLocation: FieldHook = async ({ data, originalDoc }) => {
                     id: productServiceFieldId
                 }
             })
-
             if (stateApprovalField === 'approved') {
-                const  clientLocation  = originalDoc.UbicacionProductoServicioPedido
+                const clientLocation = originalDoc.UbicacionProductoServicioPedido
                 return clientLocation
             } else {
-            if (respondeLocation.docs && respondeLocation.docs.length > 0) {
-                
-                const formatLocationData = (ubicacion: UbicacionInterfaceProdServ): string => {
-                    const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
-                    return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
+                if (respondeLocation.docs && respondeLocation.docs.length > 0) {
+
+                    const formatLocationData = (ubicacion: UbicacionInterfaceProdServ): string => {
+                        const { PaisUbicacion, DepartamentoUbicacion, MunicipioUbicacion } = ubicacion
+                        return `${PaisUbicacion} - ${DepartamentoUbicacion.NombreDepartamento} - ${MunicipioUbicacion.NombreMunicipio}`
+                    }
+                    let locationData: LocationType[] = []
+                    const dataServerLocation = collection === 'productos' ?
+                        respondeLocation.docs[0]?.UbicacionProducto as UbicacionInterfaceProdServ[] :
+                        respondeLocation.docs[0]?.UbicacionServicio as UbicacionInterfaceProdServ[]
+                    dataServerLocation.forEach((ubicacion: UbicacionInterfaceProdServ) => {
+                        const getLocationString = formatLocationData(ubicacion)
+                        locationData.push(getLocationString + '\n')
+                    })
+                    const resultLocation = locationData.join('')
+
+                    if (data.AprobacionEstadoPedido === 'approved') {
+                        const locationProdServData = originalDoc.UbicacionProductoServicioPedido
+                        console.log('DATA PROD SERV UBICACION  RETURN ORIGEN: ', locationProdServData)
+                        return locationProdServData
+                    } else {
+                        return resultLocation;
+                    }
+
                 }
-                let locationData: LocationType[] = []
-                const dataServerLocation = collection === 'productos' ?
-                    respondeLocation.docs[0]?.UbicacionProducto as UbicacionInterfaceProdServ[] :
-                    respondeLocation.docs[0]?.UbicacionServicio as UbicacionInterfaceProdServ[]
-                dataServerLocation.forEach((ubicacion: UbicacionInterfaceProdServ) => {
-                    const getLocationString = formatLocationData(ubicacion)
-                    locationData.push(getLocationString + '\n')
-                })
-                const resultLocation = locationData.join('')
-                return resultLocation;
             }
         }
-    }
     } catch (error) {
         return 'ERROR EN LA FUNCION getProductServiceLocation.'
     }

@@ -25,9 +25,10 @@ const getProdServUnitPrice: FieldHook = async ({ data, originalDoc }) => {
                     id: prodcuctServiceFieldId
                 }
             })
-            if (data && stateApprovalField === 'approved') {
-                const { PrecioProductoServicio } = originalDoc.DetallesPagoPedido
-                return PrecioProductoServicio
+            if (stateApprovalField === 'approved') {
+                const { PrecioProductoServicioUnidad } = originalDoc.DetallesPagoPedido
+                console.log('PRECIO UNIDAD ORIGEN: ', PrecioProductoServicioUnidad)
+                return PrecioProductoServicioUnidad
             } else {
                 if (responseProdServData.docs && responseProdServData.docs.length > 0) {
                     const resultPriceData = collection === 'productos' ?

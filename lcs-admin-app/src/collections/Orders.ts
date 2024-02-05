@@ -98,11 +98,11 @@ const Orders: CollectionConfig = {
                     name: "ProductoServicioPedido",
                     label: "Productos - Servicios",
                     type: 'relationship',
-                   // index: true,
+                    // index: true,
                     required: true,
                     relationTo: ['productos', 'servicios'],
                     hasMany: false,
-                   // maxDepth: 0,
+                    // maxDepth: 0,
                     filterOptions: ({ data, relationTo }) => {
                         if (relationTo === 'productos') {
                             if (data.TipoVentaPedido === 'product') {
@@ -183,7 +183,6 @@ const Orders: CollectionConfig = {
                                     }
                                 }],
                             }
-
                         },
                         {
                             name: "DescuentoPedido",
@@ -198,19 +197,19 @@ const Orders: CollectionConfig = {
                             hooks: {
                                 beforeChange: [(args) => {
 
-                                    const twoDigits = /^\d{2}$/;
                                     const stateApprovalField = args.data && args.data.AprobacionEstadoPedido
                                     if (stateApprovalField === 'approved') {
                                         const discountOrder = args.originalDoc.DescuentoPedido
                                         return discountOrder
-                                    }
-                                    if (args.data && args.data.DescuentoPedido !== undefined) {
-                                        const discount = args.data.DescuentoPedido;
-                                        if (!twoDigits.test(discount)) {
-                                            return args.data.DescuentoPedido = 0;
+                                    }else{
+                                        const twoDigits = /^\d{2}$/;
+                                        if (args.data && args.data.DescuentoPedido !== undefined) {
+                                            const discount = args.data.DescuentoPedido;
+                                            if (!twoDigits.test(discount)) {
+                                                return args.data.DescuentoPedido = 0;
+                                            }
                                         }
                                     }
-
                                 }]
                             }
                         },
@@ -231,7 +230,7 @@ const Orders: CollectionConfig = {
         },
         {
             type: 'row',
-            fields:[
+            fields: [
                 ProdServUnitPriceField,
                 ProductStockField,
             ]
@@ -377,11 +376,11 @@ const Orders: CollectionConfig = {
                 beforeChange: [(args) => {
 
                     if (args.data) {
-                        if (args.data.EstadoPagoPedido === 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
+                        if (args.data.EstadoPagoPedido === 'paid' && args.data.AprobacionEstadoPedido !== 'approved' && args.data.CantidadProductoPedido <= args.originalDoc.StockProductoPedido) {
                             return true
                         } else if (args.data.EstadoPagoPedido !== 'paid' && args.data.AprobacionEstadoPedido !== 'approved') {
                             return false
-                        } else if (args.data.AprobacionEstadoPedido === 'approved') {
+                        } else if (args.data.AprobacionEstadoPedido === 'approved' ) {
                             return true
                         }
                     }
