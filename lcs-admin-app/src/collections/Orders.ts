@@ -267,7 +267,7 @@ const Orders: CollectionConfig = {
         {
             name: "EstadoPagoPedido",
             type: "select",
-            label: 'Estado del Pago',
+            label: 'Estado del Pago: ',
             hasMany: false,
             admin: {
                 position: 'sidebar',
@@ -275,7 +275,12 @@ const Orders: CollectionConfig = {
             hooks: {
                 beforeChange: [(args) => {
                     if (args.data && args.data.AprobacionEstadoPedido === 'approved') {
-                        return args.originalDoc.EstadoPagoPedido
+                        return args.data.EstadoPagoPedido = 'paid'
+                    }
+                }],
+                afterRead: [(args) => {
+                    if (args.data && args.data.AprobacionEstadoPedido === 'approved') {
+                        return args.data.EstadoPagoPedido = 'paid'
                     }
                 }]
             },

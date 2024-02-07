@@ -5,7 +5,7 @@ import { getProductStockOrder } from "../../../hooks/OrderHooks/ProductStockHook
 const ProductStockField: Field = {
 
     name: "StockProductoPedido",
-    label: "Stock Disponible:",
+    label: "Stock Disponible :",
     type: "number",
     required: false,
     admin: {

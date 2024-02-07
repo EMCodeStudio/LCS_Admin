@@ -27,7 +27,7 @@ const getTotalShippingOrder: FieldHook = async ({ data, originalDoc }) => {
                 })
                 if (clientLocationResponse.docs && clientLocationResponse.docs.length > 0) {
                     const clientLocationData = clientLocationResponse.docs[0].UbicacionCliente
-                   
+
                     const formatLocationPriceData = (ubicacionCliente: UbicacionInterface): number => {
                         const { value } = ubicacionCliente
                         return value.PrecioEnvioUbicacion
@@ -37,7 +37,7 @@ const getTotalShippingOrder: FieldHook = async ({ data, originalDoc }) => {
                     if (clientLocationData) {
                         const getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
                         locationDataNumber = getLocationPrice
-                       const totalShippingPrice = Number(CantidadProductoPedido * locationDataNumber)
+                        const totalShippingPrice = Number(CantidadProductoPedido * locationDataNumber)
                         return totalShippingPrice
                     }
                 }
@@ -46,7 +46,7 @@ const getTotalShippingOrder: FieldHook = async ({ data, originalDoc }) => {
     } catch (error) {
         console.log('Error en la Funcion getTotalShippingOrder :', error)
     }
-  
+
 }
 
 
