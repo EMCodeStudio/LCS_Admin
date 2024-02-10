@@ -144,10 +144,21 @@ const Orders: CollectionConfig = {
             ]
         },
         {
+            name: "DetalleServicioPedido",
+            type: "textarea",
+            label: "Detalles del Servicio",
+            admin: {
+                condition: ({ TipoVentaPedido }) => TipoVentaPedido === 'service',
+                width: '100%',
+            },
+            required: false,
+        },
+        {
             type: 'row',
             fields: [
                 ProductServiceLocationField,
                 ClientLocationField,
+
             ]
         },
         {
@@ -184,7 +195,7 @@ const Orders: CollectionConfig = {
                                 }],
                             }
                         },
-                        
+
                         {
                             name: "DescuentoPedido",
                             type: "number",

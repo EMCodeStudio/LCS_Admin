@@ -35,7 +35,7 @@ const updateProductStock: CollectionBeforeChangeHook = async ({ data }) => {
                                 CantidadProducto: newStock
                             },
                         })
-                        console.log('Producto Stock Actualizado.')
+                        //console.log('Producto Stock Actualizado.')
                     } else {
                         console.log('CANTIDAD SOLICITADA SUPERA EL STOCK DISPONIBLE!.')
                     }

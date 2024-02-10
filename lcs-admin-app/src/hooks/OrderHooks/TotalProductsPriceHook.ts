@@ -7,7 +7,7 @@ const getTotalProductsOrder: FieldHook = ({ data, originalDoc }) => {
         const stateApprovalField = data.AprobacionEstadoPedido
         if (stateApprovalField === 'approved') {
             const { TotalProductosPedido } = originalDoc.DetallesPagoPedido
-            console.log('PRECIO TOTAL PROD SERV ORIGEN: ', TotalProductosPedido)
+            //console.log('PRECIO TOTAL PROD SERV ORIGEN: ', TotalProductosPedido)
             return TotalProductosPedido
         } else {
             if (!isNaN(CantidadProductoPedido) && !isNaN(PrecioProductoServicio)) {

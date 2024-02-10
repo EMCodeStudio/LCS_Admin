@@ -4,7 +4,7 @@ import getTotalShippingOrder from "../../../hooks/OrderHooks/TotalShippingPriceH
 const TotalShippingField: Field = {
     name: "TotalEnvioPedido", 
     type: "number", 
-    label: "$ Total Envio :",
+    label: "$ Total Costo Envio :",
     required: false,
     admin: {
         readOnly: true,

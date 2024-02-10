@@ -24,7 +24,7 @@ const getTotalPriceOrder: FieldHook = async ({ data, originalDoc }) => {
 
             if (stateApprovalField === 'approved') {
                 const { TotalPricioPedido } = originalDoc.DetallesPagoPedido
-                console.log('PRECIO TOTAL PEDIDO ORIGEN: ', TotalPricioPedido)
+                //console.log('PRECIO TOTAL PEDIDO ORIGEN: ', TotalPricioPedido)
                 return TotalPricioPedido
             } else {
                 if (productServiceResponse.docs && productServiceResponse.docs.length > 0) {

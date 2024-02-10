@@ -4,7 +4,7 @@ import getTotalProductsOrder from "../../../hooks/OrderHooks/TotalProductsPriceH
 const TotalProductsField: Field = {
     name: "TotalProductosPedido", 
     type: "number", 
-    label: "$ Total Productos :",
+    label: "$ Total Costo Productos :",
     required: false,
     admin: {
         readOnly: true,
