@@ -11,10 +11,10 @@ const getTotalShippingOrder: FieldHook = async ({ data, originalDoc }) => {
         if (data && data.TipoVentaPedido === 'product') {
             const { CantidadProductoPedido, PrecioEnvioPedido } = data.DetallesPagoPedido
             const stateApprovalField = data.AprobacionEstadoPedido
-            console.log('CANTIDAD Y PRECIO ENVIO: ', CantidadProductoPedido, ' y ', PrecioEnvioPedido)
+            //console.log('CANTIDAD Y PRECIO ENVIO: ', CantidadProductoPedido, ' y ', PrecioEnvioPedido)
             if (stateApprovalField === 'approved') {
                 const { TotalEnvioPedido } = originalDoc.DetallesPagoPedido
-                console.log('PRECIO TOTAL ENVIO ORIGEN: ', TotalEnvioPedido)
+                //console.log('PRECIO TOTAL ENVIO ORIGEN: ', TotalEnvioPedido)
                 return TotalEnvioPedido
             } else {
 
@@ -32,8 +32,8 @@ const getTotalShippingOrder: FieldHook = async ({ data, originalDoc }) => {
                         const { value } = ubicacionCliente
                         return value.PrecioEnvioUbicacion
                     }
+                    
                     let locationDataNumber: LocationPriceType = 0
-
                     if (clientLocationData) {
                         const getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
                         locationDataNumber = getLocationPrice

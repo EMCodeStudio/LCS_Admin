@@ -2,7 +2,7 @@ import { FieldHook } from "payload/types"
 import { LocationType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 import payload from "payload"
 
-const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
+/*const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
 
@@ -61,5 +61,28 @@ const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
         console.log('ERROR EN LA FUNCION getClientLocation:', error)
     }
 }
+*/
+
+
+
+
+const getClientLocation: FieldHook = async ({ data }) => {
+    try {
+        if (data) {
+
+            const clientFieldId = data.ClienteIdPedido;
+            const responseClientLocation = payload.findByID({
+                collection: 'clientes',
+                id: clientFieldId
+            })
+
+    
+        
+        }
+    } catch (error) {
+        console.log('ERROR EN LA FUNCION getClientLocation:', error)
+    }
+}
+
 
 export default getClientLocation

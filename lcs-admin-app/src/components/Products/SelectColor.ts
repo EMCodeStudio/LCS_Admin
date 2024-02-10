@@ -15,7 +15,7 @@ export const validateHexColor = (value: string): boolean | string => {
 
 const colorField: Field = {
     name: 'SeleccionColor',
-    label: 'Color Seleccionado',
+    label: 'Seleccion de Color: ',
     type: 'text',
     validate: validateHexColor,
     required: true,

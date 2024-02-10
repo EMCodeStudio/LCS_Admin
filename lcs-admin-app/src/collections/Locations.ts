@@ -14,10 +14,13 @@ const formatLocation: FieldHook = async ({ data }) => {
                 id: fieldMunicipalityLocationId
             })
             //console.log('DATA DE MUNICIPIO:', municipalityResponse)
-            let departmentData: string | undefined;
-            let municipalityData: string | undefined;
+            let departmentData: string | undefined
+            let municipalityData: string | undefined
+
             if (municipalityResponse) {
+
                 municipalityData = String((await municipalityResponse).NombreMunicipio)
+                
                 const departamentoAsociado = payload.findByID(
                     {
                         collection: "departamentos",
@@ -32,7 +35,7 @@ const formatLocation: FieldHook = async ({ data }) => {
             //console.log('NOMBRE DE MUNICIPIO:', municipalityData)
             if (departmentData && municipalityData) {
                 const formatedLocation = `${data.PaisUbicacion} - ${municipalityData} (${departmentData})`
-                return formatedLocation;
+                return formatedLocation
             }else{
                 //console.log('No se encontro el Departamento o el Municipio!')
             }
@@ -188,6 +191,6 @@ const Locations: CollectionConfig = {
         },
     ],
     timestamps: true,
-};
+}
 
-export default Locations;
+export default Locations

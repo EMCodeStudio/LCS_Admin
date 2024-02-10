@@ -184,6 +184,7 @@ const Orders: CollectionConfig = {
                                 }],
                             }
                         },
+                        
                         {
                             name: "DescuentoPedido",
                             type: "number",
