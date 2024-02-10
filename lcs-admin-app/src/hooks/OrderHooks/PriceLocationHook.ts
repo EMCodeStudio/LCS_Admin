@@ -12,27 +12,29 @@ const getLocationPrice: FieldHook = async ({ data, originalDoc }) => {
                 collection: 'clientes',
                 id: clientLocactionFieldId
             })
-            console.log('DATA CLIENTE:', clientLocationResponse)
+            //console.log('DATA CLIENTE:', clientLocationResponse)
 
 
             if (stateApprovalField === 'approved') {
                 const { PrecioEnvioPedido } = originalDoc.DetallesPagoPedido
                 return PrecioEnvioPedido
             } else {
+
+
                 let clientLocationData: unknown
                 if (clientLocationResponse) {
                     clientLocationData = clientLocationResponse.UbicacionCliente
-                    console.log('DATA CLIENTE UBICACION:', clientLocationData)
+                    //console.log('DATA CLIENTE UBICACION:', clientLocationData)
                     const formatLocationPriceData = (ubicacionCliente: UbicacionInterface): number => {
                         const { value } = ubicacionCliente
-                        const  ShippingPrice = value.PrecioEnvioUbicacion
-                        console.log('FORMAT CLIENTE PRECIO UBICACION:', ShippingPrice)
+                        const ShippingPrice = value.PrecioEnvioUbicacion
+                        //console.log('FORMAT CLIENTE PRECIO UBICACION:', ShippingPrice)
                         return ShippingPrice
                     }
 
-                    
+
                     let locationDataNumber: LocationPriceType = 0
-                    let getLocationPrice: number
+                    let getLocationPrice: LocationPriceType = 0
                     if (clientLocationData) {
                         getLocationPrice = formatLocationPriceData(clientLocationData as UbicacionInterface)
                         locationDataNumber = Number(getLocationPrice)

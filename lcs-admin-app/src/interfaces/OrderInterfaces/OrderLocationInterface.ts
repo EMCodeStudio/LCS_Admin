@@ -47,7 +47,7 @@ interface UbicacionInterfaceProdServ {
 
 
 type LocationType = string
-type LocationPriceType = number
+type LocationPriceType = number 
 
 
 export { UbicacionInterface,UbicacionInterfaceProdServ, LocationType, LocationPriceType }

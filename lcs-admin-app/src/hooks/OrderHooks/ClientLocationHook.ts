@@ -2,29 +2,26 @@ import { FieldHook } from "payload/types"
 import { LocationType, UbicacionInterface } from "../../interfaces/OrderInterfaces/OrderLocationInterface"
 import payload from "payload"
 
-/*const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
+const getClientLocation: FieldHook = async ({ data, originalDoc }) => {
     try {
         if (data) {
 
             const clientFieldId = data.ClienteIdPedido
-            // console.log('FIELD ID CLIENTE:', clientFieldId)
-
+            //console.log('FIELD ID CLIENTE:', clientFieldId)
             const locationProdServField = data.UbicacionProductoServicioPedido
-            // console.log('FIELD ID PRODUCT SERVICE UBICACION:', locationProdServField)
-
-            const responseClientLocation = await payload.find({
+            //console.log('FIELD ID PRODUCT SERVICE UBICACION:', locationProdServField)
+            const responseClientLocation = await payload.findByID({
                 collection: 'clientes',
-                where: {
-                    id: clientFieldId
-                }
+                id: clientFieldId
             })
             //console.log('DATA CLIENTE:', responseClientLocation)
 
             let locationDataString: LocationType = ''
+            let clientLocationData: unknown
+            if (responseClientLocation) {
 
-            if (responseClientLocation.docs && responseClientLocation.docs.length > 0) {
+                clientLocationData = responseClientLocation.UbicacionCliente
 
-                const clientLocationData = responseClientLocation.docs[0].UbicacionCliente
                 //console.log('DATA CLIENTE UBICACION:', clientLocationData)
 
                 const formatLocationClient = (ubicacionCliente: UbicacionInterface): string => {
@@ -39,9 +36,10 @@ import payload from "payload"
 
                 if (data.AprobacionEstadoPedido === 'approved') {
                     const locationClientData = originalDoc.UbicacionClientePedido
-                    console.log('DATA CLIENTE UBICACION  RETURN ORIGEN: ', locationClientData)
+                    //console.log('DATA CLIENTE UBICACION  RETURN ORIGEN: ', locationClientData)
                     return locationClientData
                 } else {
+
                     if (locationDataString) {
                         const valueCaseClientLocation = locationDataString
                         const foundedClientLocation = locationProdServField.includes(valueCaseClientLocation)
@@ -61,28 +59,7 @@ import payload from "payload"
         console.log('ERROR EN LA FUNCION getClientLocation:', error)
     }
 }
-*/
 
-
-
-
-const getClientLocation: FieldHook = async ({ data }) => {
-    try {
-        if (data) {
-
-            const clientFieldId = data.ClienteIdPedido;
-            const responseClientLocation = payload.findByID({
-                collection: 'clientes',
-                id: clientFieldId
-            })
-
-    
-        
-        }
-    } catch (error) {
-        console.log('ERROR EN LA FUNCION getClientLocation:', error)
-    }
-}
 
 
 export default getClientLocation
