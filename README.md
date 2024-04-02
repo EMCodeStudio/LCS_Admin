@@ -106,7 +106,3 @@ Reset Password POST: <http://localhost:3000/api/usuarios/reset-password>
 - npm run start
 - <http://localhost:3000/admin/login>
 
-# Creating User
-
-- <test.admin@lcsoluciones.com>
-- lcsoluciones123456
